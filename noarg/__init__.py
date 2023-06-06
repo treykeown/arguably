@@ -59,13 +59,12 @@ from typing import (
 
 from docstring_parser import parse as docparse
 
-if sys.version_info < (3, 10):
+if sys.version_info >= (3, 10):
     from types import UnionType
 else:
 
     class UnionType:
         """Stub this out, we only use it for issubclass() checks"""
-
 
 ########################################################################################################################
 ########################################################################################################################
