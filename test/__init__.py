@@ -1,7 +1,7 @@
 import enum
 import sys
 from io import StringIO
-from typing import Any, Callable
+from typing import Any, Callable, Optional
 
 import noarg
 
@@ -21,8 +21,8 @@ def run_cli_and_manual(
     func: Callable,
     argv: list[str],
     args: list[Any],
-    kwargs: dict[str, Any] | None = None,
-    noarg_kwargs: dict[str, Any] | None = None,
+    kwargs: Optional[dict[str, Any]] = None,
+    noarg_kwargs: Optional[dict[str, Any]] = None,
 ):
     if noarg_kwargs is None:
         noarg_kwargs = dict()

@@ -1,6 +1,6 @@
 import sys
 from io import StringIO
-from typing import Callable
+from typing import Callable, Union
 
 import pytest
 
@@ -34,7 +34,7 @@ def _chmod_no_rwx(iobuf: StringIO, chmod_impl: Callable) -> None:
     assert cli == manual
 
 
-def _chmod_all_rwx(iobuf: StringIO, chmod_impl: Callable, permissions: Permissions | PermissionsAlt) -> None:
+def _chmod_all_rwx(iobuf: StringIO, chmod_impl: Callable, permissions: Union[Permissions, PermissionsAlt]) -> None:
     argv = ["script.sh", "-rwx"]
     args = ["script.sh"]
     kwargs = dict(flags=(permissions.READ | permissions.WRITE | permissions.EXECUTE))

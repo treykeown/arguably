@@ -4,7 +4,7 @@ import io
 import sys
 from io import StringIO
 from pathlib import Path
-from typing import Generator, Callable, Annotated, cast
+from typing import Generator, Callable, Annotated, cast, Optional
 
 import pytest
 
@@ -160,7 +160,7 @@ def scope_advanced(iobuf: StringIO) -> dict[str, Callable]:
             iobuf.write("__root__ loud\n")
 
     @noarg.command
-    def add(*numbers: Annotated[int, noarg.arg.required()], coords: tuple[int, int, int] | None = None) -> None:
+    def add(*numbers: Annotated[int, noarg.arg.required()], coords: Optional[tuple[int, int, int]] = None) -> None:
         """
         adds a bunch of numbers together
         :param numbers: the numbers {NUMS} to add
@@ -325,7 +325,7 @@ def scope_annotated(iobuf: StringIO) -> dict[str, Callable]:
         from_: str,
         cc: list[str],
         *to: str,
-        bcc: list[str] | None = None,
+        bcc: Optional[list[str]] = None,
     ):
         """
         emails people
@@ -351,7 +351,7 @@ def scope_annotated(iobuf: StringIO) -> dict[str, Callable]:
         from_: str,
         *to: Annotated[str, noarg.arg.required()],
         cc: list[str],
-        bcc: list[str] | None = None,
+        bcc: Optional[list[str]] = None,
     ):
         """
         emails people
@@ -373,7 +373,7 @@ def scope_annotated(iobuf: StringIO) -> dict[str, Callable]:
             iobuf.write(f"bcc: {bcc_address}\n")
 
     @noarg.command
-    def goodbye(*, path: Annotated[str | None, noarg.arg.missing("~/goodbye.log")] = None) -> None:
+    def goodbye(*, path: Annotated[Optional[str], noarg.arg.missing("~/goodbye.log")] = None) -> None:
         """
         writes a goodbye
         :param path: [-p] path to log to
