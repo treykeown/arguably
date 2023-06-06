@@ -39,7 +39,7 @@ import re
 import sys
 from dataclasses import dataclass, field
 from gettext import gettext
-from types import UnionType
+
 from typing import (
     Callable,
     cast,
@@ -58,6 +58,13 @@ from typing import (
 )
 
 from docstring_parser import parse as docparse
+
+if sys.version_info < (3, 10):
+    from types import UnionType
+else:
+
+    class UnionType:
+        """Stub this out, we only use it for issubclass() checks"""
 
 
 ########################################################################################################################
@@ -613,6 +620,26 @@ class _CommandArg:
     ANY_COUNT = -1  # Used in the `count` field for an argument that can take any number of values, `*args`
 
     @staticmethod
+    def _normalize_type_union(
+        function_name: str,
+        param: inspect.Parameter,
+        value_type: type,
+    ) -> type:
+        """
+        We break this out because Python 3.10 seems to want to wrap `Annotated[Optional[...` in another `Optional`, so
+        we call this twice.
+        """
+        if isinstance(value_type, UnionType) or get_origin(value_type) is Union:
+            filtered_types = [x for x in get_args(value_type) if x is not type(None)]
+            if len(filtered_types) != 1:
+                raise NoArgException(
+                    f"Function parameter `{param.name}` in `{function_name}` is an unsupported type. It must be either "
+                    f"a single, non-generic type or a Union with None."
+                )
+            value_type = filtered_types[0]
+        return value_type
+
+    @staticmethod
     def normalize_type(
         function_name: str,
         param: inspect.Parameter,
@@ -641,6 +668,9 @@ class _CommandArg:
             # No type hint. Guess type from default value, if any other than None. Otherwise, default to string.
             value_type = type(param.default) if param.default not in [param.empty, None] else str
 
+        # Extra call to normalize a union here, see note in `_normalize_type_union`
+        value_type = _CommandArg._normalize_type_union(function_name, param, value_type)
+
         # Handle annotated types
         if get_origin(value_type) == Annotated:
             type_args = get_args(value_type)
@@ -655,15 +685,8 @@ class _CommandArg:
                     )
                 modifiers.append(type_arg)
 
-        # Validate Unions
-        if isinstance(value_type, UnionType):
-            filtered_types = [x for x in get_args(value_type) if x is not type(None)]
-            if len(filtered_types) != 1:
-                raise NoArgException(
-                    f"Function parameter `{param.name}` in `{function_name}` is an unsupported type. It must be either "
-                    f"a single, non-generic type or a Union with None."
-                )
-            value_type = filtered_types[0]
+        # Normalize Union with None
+        value_type = _CommandArg._normalize_type_union(function_name, param, value_type)
 
         # Validate list/tuple and error on other parameterized types
         origin = get_origin(value_type)
@@ -775,6 +798,7 @@ class _Command:
         return f"{self.name.replace(' ', '_')}{'_' if len(self.name) > 0 else ''}{command_metavar}"
 
 
+@dataclass(frozen=True)
 class _CommandArgModifier(abc.ABC):
     """A class that encapsulates a change to the kwargs dict to be passed to parser.add_argument()"""
 
@@ -787,7 +811,7 @@ class _CommandArgModifier(abc.ABC):
         """Modifies the kwargs passed to parser.add_argument()"""
 
 
-@dataclass
+@dataclass(frozen=True)
 class _MissingArgDefaultModifier(_CommandArgModifier):
     """Allows an option to be a flag, passing a default value instead of a value provided via the command line"""
 
@@ -797,6 +821,7 @@ class _MissingArgDefaultModifier(_CommandArgModifier):
         kwargs_dict |= dict(nargs="?", const=self.missing_value)
 
 
+@dataclass(frozen=True)
 class _CountedModifier(_CommandArgModifier):
     """Counts the number of times a flag is provided"""
 
@@ -813,6 +838,7 @@ class _CountedModifier(_CommandArgModifier):
             del kwargs_dict["nargs"]
 
 
+@dataclass(frozen=True)
 class _RequiredModifier(_CommandArgModifier):
     """Marks an input as required. In the case of a variadic positional arg, uses the '+' symbol to represent this."""
 
@@ -828,6 +854,7 @@ class _RequiredModifier(_CommandArgModifier):
             kwargs_dict |= dict(required=True)
 
 
+@dataclass(frozen=True)
 class _ListModifier(_CommandArgModifier):
     """Sets up noarg list handling. Sensitive to the `_RequiredModifier`."""
 
@@ -843,7 +870,7 @@ class _ListModifier(_CommandArgModifier):
         kwargs_dict |= dict(action=_CommaSeparatedListAction)
 
 
-@dataclass
+@dataclass(frozen=True)
 class _TupleModifier(_CommandArgModifier):
     """Sets up noarg tuple handling"""
 
@@ -853,6 +880,7 @@ class _TupleModifier(_CommandArgModifier):
         kwargs_dict |= dict(nargs=len(self.tuple_arg), action=_CommaSeparatedTupleAction, type=self.tuple_arg)
 
 
+@dataclass(frozen=True)
 class _BuilderModifier(_CommandArgModifier):
     """Sets up noarg builder"""
 
@@ -860,7 +888,7 @@ class _BuilderModifier(_CommandArgModifier):
         kwargs_dict |= dict(action=_BuildTypeAction)
 
 
-@dataclass
+@dataclass(frozen=True)
 class _HandlerModifier(_CommandArgModifier):
     """
     Allows full user control over how an input is handled, a function should be passed in to parse the string from the
@@ -873,7 +901,7 @@ class _HandlerModifier(_CommandArgModifier):
         kwargs_dict |= dict(type=self.handler)
 
 
-@dataclass
+@dataclass(frozen=True)
 class _ChoicesModifier(_CommandArgModifier):
     """Restricts inputs to one of a given set of choices"""
 
