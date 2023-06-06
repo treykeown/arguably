@@ -53,6 +53,8 @@ from typing import (
     get_origin,
     get_type_hints,
     Iterable,
+    Union,
+    Optional,
 )
 
 from docstring_parser import parse as docparse
@@ -136,12 +138,12 @@ class _HelpFormatter(argparse.HelpFormatter):
 class _ArgumentParser(argparse.ArgumentParser):
     """ArgumentParser modified for noarg"""
 
-    def __init__(self, *args: Any, output: TextIO | None = None, **kwargs: Any):
+    def __init__(self, *args: Any, output: Optional[TextIO] = None, **kwargs: Any):
         """Adds output redirection capabilites"""
         super().__init__(*args, **kwargs)
         self._output = output
 
-    def _print_message(self, message: str, file: IO[str] | None = None) -> None:
+    def _print_message(self, message: str, file: Optional[IO[str]] = None) -> None:
         """Allows redirecting all prints"""
         if message:
             # argparse.ArgumentParser defaults to sys.stderr in this function, though most seems to go to stdout
@@ -204,7 +206,7 @@ class _ArgumentParser(argparse.ArgumentParser):
             raise argparse.ArgumentError(action, msg % args)
 
 
-def _split_unquoted(unsplit: str, delimeter: str, limit: int | float = math.inf) -> list[str]:
+def _split_unquoted(unsplit: str, delimeter: str, limit: Union[int, float] = math.inf) -> list[str]:
     """Splits text at a delimiter, as long as that delimiter is not quoted (either single ' or double quotes ")."""
     assert len(delimeter) == 1
     assert limit > 0
@@ -233,7 +235,7 @@ def _split_unquoted(unsplit: str, delimeter: str, limit: int | float = math.inf)
     return result
 
 
-def _normalize_action_input(values: str | Sequence[Any] | None) -> list[str]:
+def _normalize_action_input(values: Union[str, Sequence[Any], None]) -> list[str]:
     """Normalize `values` input to be a list"""
     if values is None:
         return list()
@@ -272,8 +274,8 @@ class _CommaSeparatedTupleAction(argparse.Action):
         self,
         parser: argparse.ArgumentParser,
         namespace: argparse.Namespace,
-        values: str | Sequence[Any] | None,
-        option_string: str | None = None,
+        values: Union[str, Sequence[Any], None],
+        option_string: Optional[str] = None,
     ) -> None:
         values = _normalize_action_input(values)
         if len(values) != 0:
@@ -319,8 +321,8 @@ class _CommaSeparatedListAction(argparse._ExtendAction):  # noqa
         self,
         parser: argparse.ArgumentParser,
         namespace: argparse.Namespace,
-        values: str | Sequence[Any] | None,
-        option_string: str | None = None,
+        values: Union[str, Sequence[Any], None],
+        option_string: Optional[str] = None,
     ) -> None:
         values = _normalize_action_input(values)
 
@@ -341,7 +343,7 @@ class _CommaSeparatedListAction(argparse._ExtendAction):  # noqa
 class _BuildTypeSpec:
     """Subtype and kwargs that specify how to build a class, created by `_BuildTypeAction` and consumed later."""
 
-    subtype: str | None
+    subtype: Optional[str]
     kwargs: dict[str, Any]
 
 
@@ -360,8 +362,8 @@ class _BuildTypeAction(argparse.Action):
         self,
         parser: argparse.ArgumentParser,
         namespace: argparse.Namespace,
-        values: str | Sequence[Any] | None,
-        option_string: str | None = None,
+        values: Union[str, Sequence[Any], None],
+        option_string: Optional[str] = None,
     ) -> None:
         values = _normalize_action_input(values)
 
@@ -405,8 +407,8 @@ class _EnumFlagAction(argparse.Action):
         self,
         parser: argparse.ArgumentParser,
         namespace: argparse.Namespace,
-        values: str | Sequence[Any] | None,
-        option_string: str | None = None,
+        values: Union[str, Sequence[Any], None],
+        option_string: Optional[str] = None,
     ) -> None:
         flag_info = cast(_EnumFlagInfo, self.const)
         value = flag_info.value
@@ -423,7 +425,7 @@ def _unwrap_quotes(qs: str) -> str:
     return qs
 
 
-def _find_alias(used_aliases: Collection[str], name: str) -> str | None:
+def _find_alias(used_aliases: Collection[str], name: str) -> Optional[str]:
     """
     Simple algorithm for automatically finding an alias for a parameter. There are better ways, but this works for now.
     Iterates over each character in a parameter, tries both lowercase and uppercase variants. Returns the first one
@@ -471,7 +473,7 @@ def _normalize_name(name: str, spaces: bool = True) -> str:
 class _EnumFlagInfo:
     """Used similarly to _CommandArg, but for entries in an `enum.Flag`."""
 
-    option: tuple[str] | tuple[str, str]
+    option: Union[tuple[str], tuple[str, str]]
     arg_name: str
     value: Any
     description: str
@@ -531,7 +533,7 @@ def _info_for_flags(arg_name: str, flag_class: type[enum.Flag]) -> list[_EnumFla
             options.insert(0, f"-{alias_match.group(1)}")
 
         result.append(
-            _EnumFlagInfo(cast(tuple[str] | tuple[str, str], tuple(options)), arg_name, item, arg_description)
+            _EnumFlagInfo(cast(Union[tuple[str], tuple[str, str]], tuple(options)), arg_name, item, arg_description)
         )
     return result
 
@@ -566,7 +568,7 @@ class _CommandDecoratorInfo:
     """Used for keeping a reference to everything marked with @noarg.command"""
 
     function: Callable
-    alias: str | None = None
+    alias: Optional[str] = None
 
     @property
     def name(self) -> str:
@@ -588,9 +590,9 @@ class _SubtypeDecoratorInfo:
     """Used for keeping a reference to everything marked with @noarg.subtype"""
 
     type_: type
-    alias: str | None = None
+    alias: Optional[str] = None
     ignore: bool = False
-    factory: Callable | None = None
+    factory: Optional[Callable] = None
 
 
 @dataclass
@@ -603,9 +605,9 @@ class _CommandArg:
     arg_value_type: type
     description: str
     count: int = 1
-    alias: str | None = None
+    alias: Optional[str] = None
     default: Any = _NoDefault
-    metavars: list[str] | None = None
+    metavars: Optional[list[str]] = None
     modifiers: list[_CommandArgModifier] = field(default_factory=list)
 
     ANY_COUNT = -1  # Used in the `count` field for an argument that can take any number of values, `*args`
@@ -719,10 +721,10 @@ class _Command:
     description: str = ""
     args: list[_CommandArg] = field(default_factory=list)
     arg_map: dict[str, _CommandArg] = field(init=False)
-    alias: str | None = None
+    alias: Optional[str] = None
 
     has_positional_args: bool = False
-    variadic_positional_arg: str | None = None
+    variadic_positional_arg: Optional[str] = None
 
     def __post_init__(self) -> None:
         self.arg_map = dict()
@@ -755,13 +757,12 @@ class _Command:
                 arg_value = _context.resolve_subtype(arg_value_type, arg_value, param_name)
 
             # Add to either args or kwargs
-            match param.kind:
-                case param.POSITIONAL_ONLY | param.POSITIONAL_OR_KEYWORD:
-                    args.append(arg_value)
-                case param.VAR_POSITIONAL:
-                    args.extend(arg_value)
-                case _:
-                    kwargs[param_to_arg_name[param_name]] = arg_value
+            if param.kind in [param.POSITIONAL_ONLY, param.POSITIONAL_OR_KEYWORD]:
+                args.append(arg_value)
+            elif param.kind == param.VAR_POSITIONAL:
+                args.extend(arg_value)
+            else:
+                kwargs[param_to_arg_name[param_name]] = arg_value
 
         # Call the function
         return self.function(*args, **kwargs)
@@ -876,7 +877,7 @@ class _HandlerModifier(_CommandArgModifier):
 class _ChoicesModifier(_CommandArgModifier):
     """Restricts inputs to one of a given set of choices"""
 
-    choices: Iterable[str | enum.Enum]
+    choices: Iterable[Union[str, enum.Enum]]
 
     def modify_arg_dict(self, command_: _Command, arg_: _CommandArg, kwargs_dict: dict[str, Any]) -> None:
         first = next(iter(self.choices))
@@ -915,20 +916,20 @@ class _ContextOptions:
     :ivar output: Where argparse output should be written - can write to a file, stderr, or anything similar.
     """
 
-    name: str | None
+    name: Optional[str]
 
     # Behavior options
     call_ancestors: bool
     auto_alias_cmds: bool
     auto_alias_params: bool
-    version_flag: bool | list[str]
+    version_flag: Union[bool, list[str]]
 
     # Formatting options
     show_defaults: bool
     command_metavar: str
     max_description_offset: int
     max_width: int
-    output: TextIO | None
+    output: Optional[TextIO]
 
     def __post_init__(self) -> None:
         # When running as a module, show the script name as the module path.
@@ -966,7 +967,7 @@ class _Context:
         self._is_calling_target = True
 
         # Used for handling `error()`, keeps a reference to the parser for the current command
-        self._current_parser: argparse.ArgumentParser | None = None
+        self._current_parser: Optional[argparse.ArgumentParser] = None
 
         # These are really only set and used in the run() method
         self._commands: dict[str, _Command] = dict()
@@ -1135,7 +1136,9 @@ class _Context:
             variadic_positional_arg,
         )
 
-    def set_up_enum(self, enum_type: type[enum.Enum], members: list[enum.Enum] | None = None) -> dict[str, enum.Enum]:
+    def set_up_enum(
+        self, enum_type: type[enum.Enum], members: Optional[list[enum.Enum]] = None
+    ) -> dict[str, enum.Enum]:
         if enum_type not in self._enum_mapping:
             enum_name_dict: dict[str, enum.Enum] = dict()
             self._enum_mapping[enum_type] = enum_name_dict
@@ -1303,16 +1306,16 @@ class _Context:
 
     def run(
         self,
-        name: str | None = None,
+        name: Optional[str] = None,
         call_ancestors: bool = False,
         auto_alias_cmds: bool = False,
         auto_alias_params: bool = False,
-        version_flag: bool | tuple[str] | tuple[str, str] = False,
+        version_flag: Union[bool, tuple[str], tuple[str, str]] = False,
         show_defaults: bool = True,
         max_description_offset: int = 60,
         max_width: int = 120,
         command_metavar: str = "command",
-        output: TextIO | None = None,
+        output: Optional[TextIO] = None,
     ) -> Any:
         """Set up the argument parser, parse argv, and run the appropriate command(s)"""
 
@@ -1337,7 +1340,7 @@ class _Context:
         self._parsers["__root__"] = root_parser
 
         # Add version flags if necessary
-        argparse_version_flags: tuple | tuple[str] | tuple[str, str] = tuple()
+        argparse_version_flags: Union[tuple, tuple[str], tuple[str, str]] = tuple()
         if self._options.version_flag:
             if not hasattr(__main__, "__version__"):
                 raise NoArgException("__version__ must be defined if version_flag is set")
@@ -1547,11 +1550,11 @@ error = _context.error
 
 
 def command(
-    func: Callable | None = None,
+    func: Optional[Callable] = None,
     /,
     *,
     # Arguments below are passed through to `_CommandDecoratorInfo`
-    alias: str | None = None,
+    alias: Optional[str] = None,
 ) -> Callable:
     """
     Mark a decorated function as a command. If multiple functions are decorated with this, they will be available as
@@ -1568,12 +1571,12 @@ def command(
 
 
 def subtype(
-    cls: type | None = None,
+    cls: Optional[type] = None,
     /,
     *,
     # Arguments from `_CommandDecoratorInfo`. Here for IDE help.
     alias: str,
-) -> Callable[[type], type] | type:
+) -> Union[Callable[[type], type], type]:
     """
     Mark a decorated class as a subtype that should be buildable for a parameter using arg.builder(). The alias
     parameter is required.
@@ -1603,7 +1606,7 @@ class arg:
         return _CountedModifier()
 
     @staticmethod
-    def choices(*choices_: str | enum.Enum) -> _ChoicesModifier:
+    def choices(*choices_: Union[str, enum.Enum]) -> _ChoicesModifier:
         """Allows specifying a fixed number of choices"""
         if len(choices_) == 0:
             raise NoArgException("At least one choice is required for `noarg.arg.choices()`")
