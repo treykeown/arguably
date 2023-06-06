@@ -8,7 +8,7 @@ homepage = "https://github.com/jfktrey/noarg"
 repository = "https://github.com/jfktrey/noarg"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 docstring-parser = "^0.15"
 
 [tool.poetry.group.dev.dependencies]
