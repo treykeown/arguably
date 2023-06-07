@@ -23,3 +23,10 @@ repos:
     hooks:
     -   id: mypy
         exclude: ^test/
+-   repo: local
+    hooks:
+    -   id: pypi_readme
+        name: PyPI README
+        entry: python3 assets/make_pypi_readme.py
+        language: system
+        files: ^README\.md$
