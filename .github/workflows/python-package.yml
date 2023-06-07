@@ -51,12 +51,16 @@ jobs:
         . .venv/bin/activate
         pytest test --cov arguably --cov-report html --cov-report json
 
+    - name: Remove gitignore for coverage publish (latest Python version only)
+      if: ${{ matrix.python-version == env.latest-python-version }}
+      run: rm htmlcov/.gitignore
+
     - name: Publish coverage (latest Python version only)
       if: ${{ matrix.python-version == env.latest-python-version }}
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./htmlcov/
+        publish_dir: htmlcov
         destination_dir: coverage
 
     - name: Extract coverage for badge (latest Python version only)
