@@ -27,10 +27,9 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        sudo apt update
-        sudo apt install -y jq
+        sudo apt-get install -y jq
         python -m pip install --upgrade pip
-        python -m pip install poetry flake8 pytest
+        python -m pip install poetry
         poetry config virtualenvs.in-project true
         poetry install
     - name: Lint with ruff
@@ -44,7 +43,7 @@ jobs:
     - name: Test with pytest
       run: |
         . .venv/bin/activate
-        pytest
+        pytest test --cov arguably --cov-report html --cov-report json
     - name: Upload coverage
       uses: actions/upload-artifact@v3
       with:
