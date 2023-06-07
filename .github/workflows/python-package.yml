@@ -51,12 +51,12 @@ jobs:
         . .venv/bin/activate
         pytest test --cov arguably --cov-report html --cov-report json
 
-    - name: Upload coverage (latest Python version only)
-      if: ${{ matrix.python-version == env.latest-python-version }}
-      uses: actions/upload-artifact@v3
+    - name: Publish coverage (latest Python version only)
+      uses: peaceiris/actions-gh-pages@v3
       with:
-        name: coverage
-        path: htmlcov/
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./htmlcov/
+        destination_dir: coverage
 
     - name: Extract coverage for badge (latest Python version only)
       if: ${{ matrix.python-version == env.latest-python-version }}
