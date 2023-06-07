@@ -4,7 +4,7 @@ from typing import Callable
 
 import pytest
 
-import noarg
+import arguably
 from . import get_and_clear_io, run_cli_and_manual
 
 
@@ -13,7 +13,7 @@ def test_help(iobuf: StringIO, scope_advanced: dict[str, Callable]) -> None:
 
     sys.argv.extend(argv)
     with pytest.raises(SystemExit):
-        noarg.run(output=iobuf, name="advanced")
+        arguably.run(output=iobuf, name="advanced")
     cli = get_and_clear_io(iobuf)
 
     assert cli.startswith("usage: advanced [-h] [--loud] command ...\n")
@@ -28,7 +28,7 @@ def test_hey_you_help(iobuf: StringIO, scope_advanced: dict[str, Callable]) -> N
 
     sys.argv.extend(argv)
     with pytest.raises(SystemExit):
-        noarg.run(output=iobuf, name="advanced")
+        arguably.run(output=iobuf, name="advanced")
     cli = get_and_clear_io(iobuf)
 
     assert cli.startswith("usage: advanced hey-you [-h] name")
@@ -119,7 +119,7 @@ def test_add_help(iobuf: StringIO, scope_advanced: dict[str, Callable]) -> None:
 
     sys.argv.extend(argv)
     with pytest.raises(SystemExit):
-        noarg.run(output=iobuf, name="advanced")
+        arguably.run(output=iobuf, name="advanced")
     cli = get_and_clear_io(iobuf)
 
     assert cli.startswith("usage: advanced add [-h] [-c X,Y,Z] NUMS [NUMS ...]\n")

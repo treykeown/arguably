@@ -37,7 +37,7 @@ jobs:
     - name: Check with mypy
       run: |
         . .venv/bin/activate
-        mypy noarg/
+        mypy arguably/
     - name: Test with pytest
       run: |
         . .venv/bin/activate

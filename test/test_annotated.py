@@ -5,7 +5,7 @@ from typing import Callable
 
 import pytest
 
-import noarg
+import arguably
 from . import run_cli_and_manual, get_and_clear_io
 
 
@@ -58,7 +58,7 @@ def test_high_five_required(iobuf: StringIO, scope_annotated: dict[str, Callable
 
     sys.argv.extend(argv)
     with pytest.raises(SystemExit):
-        noarg.run(output=iobuf, name="advanced")
+        arguably.run(output=iobuf, name="advanced")
     cli = get_and_clear_io(iobuf)
 
     assert cli.startswith("usage: advanced high-five [-h] people [people ...]")
@@ -123,7 +123,7 @@ def test_goodbye_flag(iobuf: StringIO, scope_annotated: dict[str, Callable]) -> 
     argv = ["goodbye", "--path"]
 
     sys.argv.extend(argv)
-    noarg.run(output=iobuf)
+    arguably.run(output=iobuf)
     cli = get_and_clear_io(iobuf)
 
     assert "path: ~/goodbye.log\n" in cli
@@ -156,7 +156,7 @@ def test_say_alt_failure(iobuf: StringIO, scope_annotated: dict[str, Callable]) 
 
     sys.argv.extend(argv)
     with pytest.raises(SystemExit):
-        noarg.run(output=iobuf, name="advanced")
+        arguably.run(output=iobuf, name="advanced")
     cli = get_and_clear_io(iobuf)
 
     assert cli.startswith("usage: advanced say-alt [-h] {hi,bye}\n")

@@ -3,7 +3,7 @@ import sys
 from io import StringIO
 from typing import Any, Callable, Optional
 
-import noarg
+import arguably
 
 
 MANUAL = True
@@ -22,16 +22,16 @@ def run_cli_and_manual(
     argv: list[str],
     args: list[Any],
     kwargs: Optional[dict[str, Any]] = None,
-    noarg_kwargs: Optional[dict[str, Any]] = None,
+    arguably_kwargs: Optional[dict[str, Any]] = None,
 ):
-    if noarg_kwargs is None:
-        noarg_kwargs = dict()
+    if arguably_kwargs is None:
+        arguably_kwargs = dict()
 
     func(*args, **kwargs)
     manual = get_and_clear_io(iobuf)
 
     sys.argv.extend(argv)
-    noarg.run(output=iobuf, **noarg_kwargs)
+    arguably.run(output=iobuf, **arguably_kwargs)
     cli = get_and_clear_io(iobuf)
 
     return cli, manual

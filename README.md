@@ -1,13 +1,12 @@
 <p align="center">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/treykeown/noarg/main/assets/noarg_white.png">
-      <img alt="noarg logo" src="https://raw.githubusercontent.com/treykeown/noarg/main/assets/noarg_black.png">
+      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/treykeown/arguably/main/assets/arguably_white.png">
+      <img alt="arguably logo" src="https://raw.githubusercontent.com/treykeown/arguably/main/assets/arguably_black.png">
     </picture>
 </p>
 
 <p align="center">
     <em>
-        noarg = no arg(parse)<br>
         turns functions into command line interfaces
     </em>
 </p>
@@ -17,17 +16,17 @@
 </p>
 <hr>
 
-`noarg` solves this problem:
+`arguably` solves this problem:
 1. You've written a Python script
 2. Now you want to pass in parameters from the command line
 3. You don't want to read the docs for your favorite argument parsing library *again*
 
-By leveraging as many Python idioms as possible, `noarg` keeps its API small and memorable without sacrificing
-funcitonality. `noarg` uses functions and their docstrings to automatically set up argparse. Notably, `noarg`
+By leveraging as many Python idioms as possible, `arguably` keeps its API small and memorable without sacrificing
+funcitonality. `arguably` uses functions and their docstrings to automatically set up argparse. Notably, `arguably`
 maps your function signature to a command-line interface like this:
 
 ```python
-@noarg.command
+@arguably.command
 def some_function(required, not_required="foo", *others, option="bar"):
     ...
 ```
@@ -38,8 +37,8 @@ def some_function(required, not_required="foo", *others, option="bar"):
 usage: script [--option OPTION] required [not-required] [others ...]
 ```
 
-In short, `noarg` turns your function's **positional parameters** into **positional command-line arguments**, and your
-function's **keyword-only arguments** into **command-line options**. From the example above:
+In short, `arguably` turns your function's **positional parameters** into **positional command-line arguments**, and
+your function's **keyword-only arguments** into **command-line options**. From the example above:
 
 | Name           | Type                                | Becomes                         | Usage               |
 |----------------|-------------------------------------|---------------------------------|---------------------|
@@ -48,15 +47,15 @@ function's **keyword-only arguments** into **command-line options**. From the ex
 | `others`       | positional, variadic (like `*args`) | the rest of the positional args | `[others ...]`      |
 | `option`       | keyword-only argument               | an option                       | `[--option OPTION]` |
 
-`noarg` also enables you to easily add subcommands - just annotate more than one function with `@noarg.command`. You can
-even have nested subcommands (more on that later).
+`arguably` also enables you to easily add subcommands - just annotate more than one function with `@arguably.command`.
+You can even have nested subcommands (more on that later).
 
-`noarg` reads type annotations and automatically converts arguments to the declared types. It has smart handling for
+`arguably` reads type annotations and automatically converts arguments to the declared types. It has smart handling for
 `tuple`, `list`, `enum.Enum`, and `enum.Flag`. There are also a few special behaviors you can attach to a parameter
-via `Annotated[]` and the `noarg.arg.*` functions.
+via `Annotated[]` and the `arguably.arg.*` functions.
 
-`noarg` parses docstrings to generate descriptions for your commands and parameters. If you want to give a parameter the
-alias `-X`, prefix its docstring description with `[-X]`. Wrapping a word in `{}` changes the *metavar* that gets
+`arguably` parses docstrings to generate descriptions for your commands and parameters. If you want to give a parameter
+the alias `-X`, prefix its docstring description with `[-X]`. Wrapping a word in `{}` changes the *metavar* that gets
 printed (this is what's shown in the usage string after an option name, don't worry if you aren't familiar with this).
 For example:
 
@@ -65,9 +64,9 @@ For example:
 """docstrings for the file become the description for the script."""
 __version__ = "1.0.0"  # You can also set `version_flag=True` to add a version flag, it will read `__version__`
 
-import noarg
+import arguably
 
-@noarg.command(alias="h")
+@arguably.command(alias="h")
 def hello(name: str, *, lastname: str | None = None):
     """
     says hello to you
@@ -77,7 +76,7 @@ def hello(name: str, *, lastname: str | None = None):
     full_name = name if lastname is None else f"{name} {lastname}"
     print(f"Hello, {full_name}!")
 
-@noarg.command(alias="g")
+@arguably.command(alias="g")
 def goodbye(name: str, *, is_sad: bool = False):
     """
     says goodbye to you
@@ -89,7 +88,7 @@ def goodbye(name: str, *, is_sad: bool = False):
         print(f"It's sad to see you go!")
 
 if __name__ == "__main__":
-    noarg.run(version_flag=True)
+    arguably.run(version_flag=True)
 ```
 
 <p align="center"><b><em>becomes</em></b></p>

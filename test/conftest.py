@@ -8,7 +8,7 @@ from typing import Generator, Callable, Annotated, cast, Optional
 
 import pytest
 
-import noarg
+import arguably
 from . import MANUAL, Permissions, PermissionsAlt, HiBye
 
 
@@ -17,10 +17,10 @@ from . import MANUAL, Permissions, PermissionsAlt, HiBye
 
 
 @pytest.fixture(autouse=True)
-def noarg_context(request) -> Generator:
-    # wipe noarg without creating a new instance
-    noarg._context.__dict__.clear()
-    noarg._context.__init__()
+def arguably_context(request) -> Generator:
+    # wipe arguably without creating a new instance
+    arguably._context.__dict__.clear()
+    arguably._context.__init__()
 
     # wipe sys.argv
     sys.argv.clear()
@@ -40,7 +40,7 @@ def iobuf() -> StringIO:
 
 @pytest.fixture
 def fn_basic(iobuf: StringIO) -> Callable:
-    @noarg.command
+    @arguably.command
     def basic():
         iobuf.write("basic\n")
 
@@ -53,7 +53,7 @@ def fn_basic(iobuf: StringIO) -> Callable:
 
 @pytest.fixture
 def fn_hello(iobuf: StringIO) -> Callable:
-    @noarg.command
+    @arguably.command
     def hello(name, age=30, *, howdy=False, lastname=None) -> None:
         """
         says hello to you
@@ -76,7 +76,7 @@ def fn_hello(iobuf: StringIO) -> Callable:
 
 @pytest.fixture
 def fn_chmod(iobuf: StringIO) -> Callable:
-    @noarg.command
+    @arguably.command
     def chmod(
         file: Path,
         *,
@@ -96,7 +96,7 @@ def fn_chmod(iobuf: StringIO) -> Callable:
 
 @pytest.fixture
 def fn_chmod_alt(iobuf: StringIO) -> Callable:
-    @noarg.command
+    @arguably.command
     def chmod_alt(
         file: Path,
         *,
@@ -116,7 +116,7 @@ def fn_chmod_alt(iobuf: StringIO) -> Callable:
 
 @pytest.fixture
 def fn_say(iobuf: StringIO) -> Callable:
-    @noarg.command
+    @arguably.command
     def say(which: HiBye) -> None:
         """
         say hi or bye
@@ -129,8 +129,8 @@ def fn_say(iobuf: StringIO) -> Callable:
 
 @pytest.fixture
 def fn_say_annotated_enum(iobuf: StringIO) -> Callable:
-    @noarg.command
-    def say_enum(which: Annotated[HiBye, noarg.arg.choices(HiBye.HI, HiBye.BYE)]) -> None:
+    @arguably.command
+    def say_enum(which: Annotated[HiBye, arguably.arg.choices(HiBye.HI, HiBye.BYE)]) -> None:
         """
         say hi or bye
         :param which: which to say
@@ -146,28 +146,28 @@ def fn_say_annotated_enum(iobuf: StringIO) -> Callable:
 
 @pytest.fixture
 def scope_advanced(iobuf: StringIO) -> dict[str, Callable]:
-    @noarg.command
+    @arguably.command
     def __root__(*, loud: bool = False):
         """
         advanced test
         :param loud: make it loud
         """
         if not MANUAL:
-            assert not noarg.is_target()
+            assert not arguably.is_target()
         iobuf.write("> root\n")
 
         if loud:
             iobuf.write("__root__ loud\n")
 
-    @noarg.command
-    def add(*numbers: Annotated[int, noarg.arg.required()], coords: Optional[tuple[int, int, int]] = None) -> None:
+    @arguably.command
+    def add(*numbers: Annotated[int, arguably.arg.required()], coords: Optional[tuple[int, int, int]] = None) -> None:
         """
         adds a bunch of numbers together
         :param numbers: the numbers {NUMS} to add
         :param coords: [-c] coordinates {X,Y,Z} updated with the sum
         """
         if not MANUAL:
-            assert noarg.is_target()
+            assert arguably.is_target()
         iobuf.write("> add\n")
 
         total = sum(numbers)
@@ -175,7 +175,7 @@ def scope_advanced(iobuf: StringIO) -> dict[str, Callable]:
         if coords is not None:
             iobuf.write(f"add coords: {coords[0]+total}, {coords[1]+total}, {coords[2]+total}\n")
 
-    @noarg.command
+    @arguably.command
     def give(
         *,
         slowly: bool = False,
@@ -187,17 +187,17 @@ def scope_advanced(iobuf: StringIO) -> dict[str, Callable]:
         iobuf.write("> give\n")
         if slowly:
             iobuf.write("give slowly\n")
-        if noarg.is_target():
+        if arguably.is_target():
             iobuf.write("give is main\n")
 
-    @noarg.command(alias="a")
+    @arguably.command(alias="a")
     def give__ascii() -> None:
         """gives ascii"""
         if not MANUAL:
-            assert noarg.is_target()
+            assert arguably.is_target()
         iobuf.write("> give ascii\n")
 
-    @noarg.command
+    @arguably.command
     def give__zen(
         *,
         rotten: bool = False,
@@ -207,22 +207,22 @@ def scope_advanced(iobuf: StringIO) -> dict[str, Callable]:
         :param rotten: makes the zen rotten
         """
         if not MANUAL:
-            assert noarg.is_target()
+            assert arguably.is_target()
         iobuf.write("> give zen\n")
 
         if rotten:
             iobuf.write("give zen rotten\n")
 
-    @noarg.command
+    @arguably.command
     def do__a_dance() -> None:
         """
         does a dance
         """
         if not MANUAL:
-            assert noarg.is_target()
+            assert arguably.is_target()
         iobuf.write("> do a-dance\n")
 
-    @noarg.command(alias="h")
+    @arguably.command(alias="h")
     def hey_you(
         name: str,
     ) -> None:
@@ -231,7 +231,7 @@ def scope_advanced(iobuf: StringIO) -> dict[str, Callable]:
         :param name: your name
         """
         if not MANUAL:
-            assert noarg.is_target()
+            assert arguably.is_target()
         iobuf.write("> hey-you\n")
         iobuf.write(f"hey-you name: {name}")
 
@@ -252,14 +252,14 @@ def scope_annotated(iobuf: StringIO) -> dict[str, Callable]:
         def __repr__(self):
             return f"{self.__class__.__name__}()"
 
-    @noarg.subtype(alias="none")
+    @arguably.subtype(alias="none")
     class NoLogger(Logger):
         """will not log"""
 
         def log(self, message: str) -> None:
             iobuf.write(f"~none: {message}\n")
 
-    @noarg.subtype(alias="term")
+    @arguably.subtype(alias="term")
     class TerminalLogger(Logger):
         """terminal logger"""
 
@@ -280,15 +280,15 @@ def scope_annotated(iobuf: StringIO) -> dict[str, Callable]:
         def __repr__(self):
             return f"{self.__class__.__name__}(path={self._path})"
 
-    noarg.subtype(FileLogger, alias="file")
+    arguably.subtype(FileLogger, alias="file")
 
     @dataclasses.dataclass
     class Complex:
         foo: int
         bar: str
 
-    @noarg.command
-    def log(message: str = "Howdy, there!", *, logger: Annotated[Logger, noarg.arg.builder()] = NoLogger()) -> None:
+    @arguably.command
+    def log(message: str = "Howdy, there!", *, logger: Annotated[Logger, arguably.arg.builder()] = NoLogger()) -> None:
         """
         logs a hello
         :param message: message to log
@@ -296,31 +296,31 @@ def scope_annotated(iobuf: StringIO) -> dict[str, Callable]:
         """
         logger.log(message)
 
-    @noarg.command
-    def dataclass(dc: Annotated[Complex, noarg.arg.builder()]) -> None:
+    @arguably.command
+    def dataclass(dc: Annotated[Complex, arguably.arg.builder()]) -> None:
         """
         build a dataclass
         :param dc: spec for dataclass
         """
         iobuf.write(f"dataclass: {dc}\n")
 
-    @noarg.command
-    def explain(*, verbose: Annotated[int, noarg.arg.count()] = 0):
+    @arguably.command
+    def explain(*, verbose: Annotated[int, arguably.arg.count()] = 0):
         """
         explain something
         :param verbose: [-v] be verbose
         """
         iobuf.write(f"verbosity: {verbose}\n")
 
-    @noarg.command
-    def high_five(*people: Annotated[str, noarg.arg.required()]):
+    @arguably.command
+    def high_five(*people: Annotated[str, arguably.arg.required()]):
         """
         high-fives people
         :param people: who to high-five
         """
         iobuf.write(f"people: {','.join(people)}\n")
 
-    @noarg.command
+    @arguably.command
     def email_alt(
         from_: str,
         cc: list[str],
@@ -346,10 +346,10 @@ def scope_annotated(iobuf: StringIO) -> dict[str, Callable]:
         for bcc_address in bcc:
             iobuf.write(f"bcc: {bcc_address}\n")
 
-    @noarg.command
+    @arguably.command
     def email(
         from_: str,
-        *to: Annotated[str, noarg.arg.required()],
+        *to: Annotated[str, arguably.arg.required()],
         cc: list[str],
         bcc: Optional[list[str]] = None,
     ):
@@ -372,24 +372,24 @@ def scope_annotated(iobuf: StringIO) -> dict[str, Callable]:
         for bcc_address in bcc:
             iobuf.write(f"bcc: {bcc_address}\n")
 
-    @noarg.command
-    def goodbye(*, path: Annotated[Optional[str], noarg.arg.missing("~/goodbye.log")] = None) -> None:
+    @arguably.command
+    def goodbye(*, path: Annotated[Optional[str], arguably.arg.missing("~/goodbye.log")] = None) -> None:
         """
         writes a goodbye
         :param path: [-p] path to log to
         """
         iobuf.write(f"path: {path}\n")
 
-    @noarg.command
-    def handle_it(squared: Annotated[int, noarg.arg.handler(lambda x: int(x) ** 2)] = 0):
+    @arguably.command
+    def handle_it(squared: Annotated[int, arguably.arg.handler(lambda x: int(x) ** 2)] = 0):
         """
         magical int squaring
         :param squared: int to square
         """
         iobuf.write(f"squared: {squared}\n")
 
-    @noarg.command
-    def say_alt(which: Annotated[str, noarg.arg.choices("hi", "bye")]) -> None:
+    @arguably.command
+    def say_alt(which: Annotated[str, arguably.arg.choices("hi", "bye")]) -> None:
         """
         say hi or bye
         :param which: which to say

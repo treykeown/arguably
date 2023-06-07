@@ -4,7 +4,7 @@ from typing import Callable, Union
 
 import pytest
 
-import noarg
+import arguably
 from . import get_and_clear_io, run_cli_and_manual, Permissions, PermissionsAlt, HiBye
 
 
@@ -17,7 +17,7 @@ def _chmod_no_args(iobuf: StringIO) -> None:
 
     sys.argv.extend(argv)
     with pytest.raises(SystemExit):
-        noarg.run(output=iobuf)
+        arguably.run(output=iobuf)
     cli = get_and_clear_io(iobuf)
 
     assert cli.endswith("error: the following arguments are required: file\n")
@@ -50,7 +50,7 @@ def _chmod_help(iobuf: StringIO, test_name: str) -> None:
 
     sys.argv.extend(argv)
     with pytest.raises(SystemExit):
-        noarg.run(output=iobuf)
+        arguably.run(output=iobuf)
     cli = get_and_clear_io(iobuf)
 
     assert f"usage: {test_name} [-h] [-r] [-w] [-x] file" in cli
@@ -108,7 +108,7 @@ def test_say_help(iobuf: StringIO, fn_say: Callable) -> None:
 
     sys.argv.extend(argv)
     with pytest.raises(SystemExit):
-        noarg.run(output=iobuf)
+        arguably.run(output=iobuf)
     cli = get_and_clear_io(iobuf)
 
     assert cli.startswith(f"usage: {test_say_help.__name__} [-h] {{hi,bye}}")

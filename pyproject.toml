@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "noarg"
+name = "arguably"
 version = "1.0.0"
-description = "no arg(parse) - automatically turns functions into command line interfaces"
-authors = ["Trey Keown <trey@keown.io>"]
+description = "turns functions into command line interfaces"
+authors = ["treykeown <2755914+treykeown@users.noreply.github.com>"]
 readme = "README.md"
-homepage = "https://github.com/jfktrey/noarg"
-repository = "https://github.com/jfktrey/noarg"
+homepage = "https://github.com/treykeown/arguably"
+repository = "https://github.com/treykeown/arguably"
 
 [tool.poetry.dependencies]
 python = "^3.9"

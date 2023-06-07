@@ -4,7 +4,7 @@ from typing import Callable
 
 import pytest
 
-import noarg
+import arguably
 from . import get_and_clear_io, run_cli_and_manual
 
 
@@ -13,8 +13,8 @@ from . import get_and_clear_io, run_cli_and_manual
 
 
 def test_no_commands(iobuf: StringIO) -> None:
-    with pytest.raises(noarg.NoArgException, match="At least one command is required"):
-        noarg.run(output=iobuf)
+    with pytest.raises(arguably.ArguablyException, match="At least one command is required"):
+        arguably.run(output=iobuf)
 
 
 ########################################################################################################################
@@ -26,7 +26,7 @@ def test_basic_help(iobuf: StringIO, fn_basic: Callable) -> None:
 
     sys.argv.extend(argv)
     with pytest.raises(SystemExit):
-        noarg.run(output=iobuf)
+        arguably.run(output=iobuf)
     cli = get_and_clear_io(iobuf)
 
     assert cli.startswith(f"usage: {test_basic_help.__name__} [-h]\n")
@@ -49,7 +49,7 @@ def test_basic_too_many_args(iobuf: StringIO, fn_basic: Callable) -> None:
 
     sys.argv.extend(argv)
     with pytest.raises(SystemExit):
-        noarg.run(output=iobuf)
+        arguably.run(output=iobuf)
     cli = get_and_clear_io(iobuf)
 
     assert cli.endswith("error: unrecognized arguments: foobar\n")
@@ -60,7 +60,7 @@ def test_basic_unknown_opt(iobuf: StringIO, fn_basic: Callable) -> None:
 
     sys.argv.extend(argv)
     with pytest.raises(SystemExit):
-        noarg.run(output=iobuf)
+        arguably.run(output=iobuf)
     cli = get_and_clear_io(iobuf)
 
     assert cli.endswith("error: unrecognized arguments: --foo bar\n")
@@ -75,7 +75,7 @@ def test_hello_no_args(iobuf: StringIO, fn_hello: Callable) -> None:
 
     sys.argv.extend(argv)
     with pytest.raises(SystemExit):
-        noarg.run(output=iobuf)
+        arguably.run(output=iobuf)
     cli = get_and_clear_io(iobuf)
 
     assert cli.endswith("error: the following arguments are required: name\n")
@@ -106,7 +106,7 @@ def test_hello_wrong_type(iobuf: StringIO, fn_hello: Callable) -> None:
 
     sys.argv.extend(argv)
     with pytest.raises(SystemExit):
-        noarg.run(output=iobuf)
+        arguably.run(output=iobuf)
     cli = get_and_clear_io(iobuf)
 
     assert cli.endswith("error: argument age: invalid int value: 'Doe'\n")
@@ -148,7 +148,7 @@ def test_hello_help(iobuf: StringIO, fn_hello: Callable) -> None:
 
     sys.argv.extend(argv)
     with pytest.raises(SystemExit):
-        noarg.run(output=iobuf)
+        arguably.run(output=iobuf)
     cli = get_and_clear_io(iobuf)
 
     assert cli.startswith(f"usage: {test_hello_help.__name__} [-h] [-H] [-l SURNAME] name [age]")
@@ -163,7 +163,7 @@ def test_hello_help(iobuf: StringIO, fn_hello: Callable) -> None:
 
 
 def test_auto_alias_help(iobuf: StringIO) -> None:
-    @noarg.command
+    @arguably.command
     def autoaliased(*, foo: int, foo2: str, foo3: float, foo4: list):
         pass
 
@@ -171,7 +171,7 @@ def test_auto_alias_help(iobuf: StringIO) -> None:
 
     sys.argv.extend(argv)
     with pytest.raises(SystemExit):
-        noarg.run(output=iobuf, auto_alias_params=True)
+        arguably.run(output=iobuf, auto_alias_params=True)
     cli = get_and_clear_io(iobuf)
 
     assert ", --foo " in cli
@@ -181,19 +181,19 @@ def test_auto_alias_help(iobuf: StringIO) -> None:
 
 
 def test_error(iobuf: StringIO) -> None:
-    @noarg.command
+    @arguably.command
     def foo():
         pass
 
-    @noarg.command
+    @arguably.command
     def bar():
-        noarg.error("!!!")
+        arguably.error("!!!")
 
     argv = ["bar"]
 
     sys.argv.extend(argv)
     with pytest.raises(SystemExit):
-        noarg.run(output=iobuf, auto_alias_params=True)
+        arguably.run(output=iobuf, auto_alias_params=True)
     cli = get_and_clear_io(iobuf)
 
     assert f"{test_error.__name__} bar: error: !!!\n" in cli
@@ -204,7 +204,7 @@ def test_version(iobuf: StringIO) -> None:
 
     __main__.__version__ = "1.2.3"
 
-    @noarg.command
+    @arguably.command
     def foo():
         pass
 
@@ -212,7 +212,7 @@ def test_version(iobuf: StringIO) -> None:
 
     sys.argv.extend(argv)
     with pytest.raises(SystemExit):
-        noarg.run(output=iobuf, version_flag=True)
+        arguably.run(output=iobuf, version_flag=True)
     cli = get_and_clear_io(iobuf)
 
     assert f"{test_version.__name__} 1.2.3\n" == cli
@@ -223,7 +223,7 @@ def test_version_flags(iobuf: StringIO) -> None:
 
     __main__.__version__ = "1.2.3"
 
-    @noarg.command
+    @arguably.command
     def foo():
         pass
 
@@ -231,7 +231,7 @@ def test_version_flags(iobuf: StringIO) -> None:
 
     sys.argv.extend(argv)
     with pytest.raises(SystemExit):
-        noarg.run(output=iobuf, version_flag=("-V", "--ver"))
+        arguably.run(output=iobuf, version_flag=("-V", "--ver"))
     cli = get_and_clear_io(iobuf)
 
     assert f"{test_version_flags.__name__} 1.2.3\n" == cli
