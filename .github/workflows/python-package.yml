@@ -52,6 +52,7 @@ jobs:
         pytest test --cov arguably --cov-report html --cov-report json
 
     - name: Publish coverage (latest Python version only)
+      if: ${{ matrix.python-version == env.latest-python-version }}
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
