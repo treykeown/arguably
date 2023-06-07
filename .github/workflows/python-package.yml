@@ -12,12 +12,13 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         python-version: ["3.9", "3.10", "3.11"]
+    env:
+      latest-python-version: "3.11"
 
     steps:
     - uses: actions/checkout@v3
@@ -45,13 +46,16 @@ jobs:
         . .venv/bin/activate
         pytest test --cov arguably --cov-report html --cov-report json
     - name: Upload coverage
+      if: ${{ matrix.python-version == env.latest-python-version }}
       uses: actions/upload-artifact@v3
       with:
         name: coverage
         path: htmlcov/
     - name: Extract coverage for badge
+      if: ${{ matrix.python-version == env.latest-python-version }}
       run: echo "COVERAGE_PERCENT=$(jq '.totals.percent_covered_display' < coverage.json | tr -d '"')" >> $GITHUB_ENV
     - name: Coverage badge
+      if: ${{ matrix.python-version == env.latest-python-version }}
       uses: Schneegans/dynamic-badges-action@v1.6.0
       with:
         auth: ${{ secrets.GIST_SECRET }}
