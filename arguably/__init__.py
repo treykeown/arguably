@@ -1370,7 +1370,7 @@ class _Context:
         # Grab the description
         import __main__
 
-        description = "" if __main__.__doc__ is None else __main__.__doc__.partition("\n\n")[0]
+        description = "" if __main__.__doc__ is None else __main__.__doc__.partition("\n\n\n")[0]
 
         # Set up the root parser
         root_parser = _ArgumentParser(
