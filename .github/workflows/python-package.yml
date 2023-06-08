@@ -29,8 +29,8 @@ jobs:
     - name: List nox sessions
       id: set-matrix
       run: |
-        echo "::set-output name=matrix::$(nox -s get_versions -- test)"
-        echo "::set-output name=latest::$(nox -s get_latest_version -- test)"
+        echo "matrix=$(nox -s get_versions -- test)" >> $GITHUB_OUTPUT
+        echo "latest=$(nox -s get_latest_version -- test)" >> $GITHUB_OUTPUT
 
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
@@ -43,7 +43,7 @@ jobs:
       matrix:
         python-version: ${{ fromJson(needs.setup.outputs.matrix) }}
     env:
-      latest-python-version: ${{ needs.setup.outputs.latest }}
+      latest-python-version: ${{ fromJson(needs.setup.outputs.latest) }}
 
     steps:
     - uses: actions/checkout@v3
