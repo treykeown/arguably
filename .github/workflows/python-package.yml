@@ -12,7 +12,6 @@ on:
 
 jobs:
   setup:
-    name: Setup
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -37,8 +36,7 @@ jobs:
       matrix: ${{ steps.nox-sessions.outputs.matrix }}
       latest: ${{ steps.nox-sessions.outputs.latest }}
 
-  install-lint:
-    name: Install and Lint
+  test:
     needs: setup
     runs-on: ubuntu-latest
     strategy:
@@ -77,65 +75,6 @@ jobs:
     - name: Run tests
       run: nox -s test-${{ matrix.python-version }}
     - name: Remove gitignore for coverage publish (latest Python version only)
-      run: rm htmlcov/.gitignore
-
-    - name: Publish coverage (latest Python version only)
-      if: ${{ matrix.python-version == env.latest-python-version }}
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: htmlcov
-        destination_dir: coverage
-
-    - name: Extract coverage for badge (latest Python version only)
-      if: ${{ matrix.python-version == env.latest-python-version }}
-      run: echo "COVERAGE_PERCENT=$(jq '.totals.percent_covered_display' < coverage.json | tr -d '"')" >> $GITHUB_ENV
-
-    - name: Coverage badge (latest Python version only)
-      if: ${{ matrix.python-version == env.latest-python-version }}
-      uses: Schneegans/dynamic-badges-action@v1.6.0
-      with:
-        auth: ${{ secrets.GIST_SECRET }}
-        gistID: f493b14288af4e8358ea8578c393213a
-        filename: arguably-coverage-badge.json
-        label: Coverage
-        message: ${{ env.COVERAGE_PERCENT }}%
-        valColorRange: ${{ env.COVERAGE_PERCENT }}
-        minColorRange: 50
-        maxColorRange: 90
-
-  test:
-    name: Run Tests
-    needs: setup
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ${{ fromJson(needs.setup.outputs.matrix) }}
-    env:
-      latest-python-version: ${{ fromJson(needs.setup.outputs.latest) }}
-
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Set up Python 3.11
-      uses: actions/setup-python@v3
-      with:
-        python-version: 3.11
-
-    - name: Install dependencies
-      run: |
-        sudo apt-get install -y jq
-        python -m pip install --upgrade pip
-        python -m pip install poetry nox
-        poetry config virtualenvs.in-project true
-        poetry install
-
-    - name: Run tests for ${{ matrix.python-version }}
-      run: nox -s test-${{ matrix.python-version }}
-
-    - name: Remove gitignore for coverage publish (latest Python version only)
-      if: ${{ matrix.python-version == env.latest-python-version }}
       run: rm htmlcov/.gitignore
 
     - name: Publish coverage (latest Python version only)
