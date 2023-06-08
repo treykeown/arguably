@@ -4,7 +4,8 @@
 
 <p align="center">
     <em>
-        turns functions into command line interfaces
+        the best CLI library, arguably<br>
+        turns your functions into command line interfaces
     </em>
 </p>
 

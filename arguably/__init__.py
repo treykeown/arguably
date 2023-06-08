@@ -544,6 +544,7 @@ def _info_for_flags(arg_name: str, flag_class: Type[enum.Flag]) -> List[_EnumFla
             break
 
         if not found and item.name in enum_member_docs:
+            # noinspection PyTypeChecker
             arg_description = enum_member_docs[item.name]
 
         # Extract the alias from the docstring for the flag item
@@ -1015,6 +1016,10 @@ class _Context:
         self._parsers: Dict[str, argparse.ArgumentParser] = dict()
         self._subparsers: Dict[str, Any] = dict()
 
+    def reset(self) -> None:
+        self.__dict__.clear()
+        self.__init__()  # type: ignore[misc]
+
     def add_command(self, **kwargs: Any) -> None:
         """Invoked by `@arguably.command`, saves info about a command to include when the parser is set up."""
         info = _CommandDecoratorInfo(**kwargs)
@@ -1467,6 +1472,7 @@ class _Context:
         # Resolve the command that needs to be called
         if only_one_cmd:
             cmd = next(iter(self._commands.values()))
+            self._current_parser = self._parsers["__root__"]
         else:
             # Find the actual command we need to execute by traversing the subparser tree. Call each stop along the way
             # if the call_ancestors option is set to True.

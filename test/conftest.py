@@ -24,9 +24,8 @@ else:
 
 @pytest.fixture(autouse=True)
 def arguably_context(request) -> Generator:
-    # wipe arguably without creating a new instance
-    arguably._context.__dict__.clear()
-    arguably._context.__init__()
+    # reset arguably
+    arguably._context.reset()
 
     # wipe sys.argv
     sys.argv.clear()
