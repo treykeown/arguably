@@ -26,11 +26,11 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install nox
 
-    - name: list all test sessions
+    - name: List nox sessions
       id: set-matrix
       run: |
-        echo "::set-output name=matrix::$(nox -s get_versions -- tests)"
-        echo "::set-output name=latest::$(nox -s get_latest_version -- tests)"
+        echo "::set-output name=matrix::$(nox -s get_versions -- test)"
+        echo "::set-output name=latest::$(nox -s get_latest_version -- test)"
 
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
