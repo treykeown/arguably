@@ -33,8 +33,8 @@ jobs:
         echo "latest=$(nox -s get_latest_version -- test)" >> $GITHUB_OUTPUT
 
     outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
-      latest: ${{ steps.set-matrix.outputs.latest }}
+      matrix: ${{ steps.nox-sessions.outputs.matrix }}
+      latest: ${{ steps.nox-sessions.outputs.latest }}
 
   test:
     needs: setup
