@@ -59,6 +59,7 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install poetry nox
         poetry config virtualenvs.in-project true
+        poetry install
 
     - name: Lint with ruff
       run: |
