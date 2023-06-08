@@ -1,19 +1,34 @@
 import itertools
 import json
+import re
+from typing import Any, Optional, Tuple
 
 import nox
 
 
-@nox.session(python=False)
-def gha_list(session: nox.Session) -> None:
-    """(mandatory arg: <base_session_name>) Prints all sessions available for <base_session_name>, for GithubActions."""
+nox.options.sessions = ["test"]
 
-    # get the desired base session to generate the list for
+
+@nox.session(python=["3.8", "3.9", "3.10", "3.11"])
+def test(session: nox.Session) -> None:
+    session.run("poetry", "install", external=True)
+    session.run("pytest", "test", "--cov", "arguably", "--cov-report", "html", "--cov-report", "json")
+
+
+########################################################################################################################
+# For GitHub Actions
+# Taken from https://stackoverflow.com/a/66747360
+
+
+def _get_session_func(session: nox.Session) -> Any:
+    """get the desired base session to generate the list for"""
     if len(session.posargs) != 1:
         raise ValueError("This session has a mandatory argument: <base_session_name>")
-    session_func = globals()[session.posargs[0]]
+    return globals()[session.posargs[0]]
 
-    # list all sessions for this base session
+
+def _get_session_versions(session_func: Any) -> list[str]:
+    """list all sessions for this base session"""
     try:
         session_func.parametrize
     except AttributeError:
@@ -24,17 +39,29 @@ def gha_list(session: nox.Session) -> None:
             for py, param in itertools.product(session_func.python, session_func.parametrize)
         ]
 
-    # print the list so that it can be caught by GHA.
-    # Note that json.dumps is optional since this is a list of string.
-    # However it is to remind us that GHA expects a well-formatted json list of strings.
-    print(json.dumps(sessions_list))
+    return sessions_list
 
 
-@nox.session(python=["3.8", "3.9", "3.10", "3.11"])
-def test(session: nox.Session) -> None:
-    session.run("poetry", "install", external=True)
+@nox.session(python=False)
+def get_versions(session: nox.Session) -> None:
+    """(mandatory arg: <base_session_name>) prints all sessions for <base_session_name> for Github Actions"""
+    session_func = _get_session_func(session)
+    print(json.dumps([x.partition("-")[2] for x in _get_session_versions(session_func)]))
 
-    session.run("pytest", "test", "--cov", "arguably", "--cov-report", "html", "--cov-report", "json")
 
-
-nox.options.sessions = ["test"]
+@nox.session(python=False)
+def get_latest_version(session: nox.Session) -> None:
+    """(mandatory arg: <base_session_name>) prints the latest session for <base_session_name> for Github Actions"""
+    session_func = _get_session_func(session)
+    cpython_matcher = re.compile(r"[0-9.]+")
+    latest: Optional[Tuple[int, ...]] = None
+    versions = _get_session_versions(session_func)
+    prefix: str = "".join(next(iter(versions)).partition("-")[0:2])
+    for version in versions:
+        version = version.removeprefix(prefix)
+        if cpython_matcher.match(version):
+            version_tuple = tuple(int(x) for x in version.split("."))
+            if latest is None or version_tuple > latest:
+                latest = version_tuple
+    assert latest is not None
+    print(json.dumps(".".join(str(x) for x in latest)))

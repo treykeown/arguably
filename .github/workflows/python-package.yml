@@ -14,23 +14,23 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+    - uses: actions/checkout@v3
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
-        with:
-          python-version: ${{ matrix.python-version }}
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.11
 
-      - name: Install dependencies
-        run: |
-          sudo apt-get install -y jq
-          python -m pip install --upgrade pip
-          python -m pip install poetry nox
-          poetry config virtualenvs.in-project true
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install nox
 
-      - name: list all test sessions
-        id: set-matrix
-        run: echo "::set-output name=matrix::$(nox -s gha_list -- tests)"
+    - name: list all test sessions
+      id: set-matrix
+      run: |
+        echo "::set-output name=matrix::$(nox -s get_versions -- tests)"
+        echo "::set-output name=latest::$(nox -s get_latest_version -- tests)"
 
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
@@ -43,9 +43,23 @@ jobs:
       matrix:
         python-version: ${{ fromJson(needs.setup.outputs.matrix) }}
     env:
-      latest-python-version: "3.11"
+      latest-python-version: ${{ needs.setup.outputs.latest }}
 
     steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get install -y jq
+        python -m pip install --upgrade pip
+        python -m pip install poetry nox
+        poetry config virtualenvs.in-project true
+
     - name: Lint with ruff
       run: |
         . .venv/bin/activate
@@ -57,18 +71,12 @@ jobs:
         mypy arguably/
 
     - name: Run tests
-      run: nox -s ${{ matrix.python-version }}
-
-  coverage:
-    needs: test
-    if: ${{ matrix.python-version == env.latest-python-version }}
-    runs-on: ubuntu-latest
-
-    steps:
+      run: nox -s test-${{ matrix.python-version }}
     - name: Remove gitignore for coverage publish (latest Python version only)
       run: rm htmlcov/.gitignore
 
     - name: Publish coverage (latest Python version only)
+      if: ${{ matrix.python-version == env.latest-python-version }}
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -76,9 +84,11 @@ jobs:
         destination_dir: coverage
 
     - name: Extract coverage for badge (latest Python version only)
+      if: ${{ matrix.python-version == env.latest-python-version }}
       run: echo "COVERAGE_PERCENT=$(jq '.totals.percent_covered_display' < coverage.json | tr -d '"')" >> $GITHUB_ENV
 
     - name: Coverage badge (latest Python version only)
+      if: ${{ matrix.python-version == env.latest-python-version }}
       uses: Schneegans/dynamic-badges-action@v1.6.0
       with:
         auth: ${{ secrets.GIST_SECRET }}
