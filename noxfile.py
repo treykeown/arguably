@@ -1,7 +1,7 @@
 import itertools
 import json
 import re
-from typing import Any, Optional, Tuple
+from typing import Any, Optional, Tuple, List
 
 import nox
 
@@ -27,7 +27,7 @@ def _get_session_func(session: nox.Session) -> Any:
     return globals()[session.posargs[0]]
 
 
-def _get_session_versions(session_func: Any) -> list[str]:
+def _get_session_versions(session_func: Any) -> List[str]:
     """list all sessions for this base session"""
     try:
         session_func.parametrize
