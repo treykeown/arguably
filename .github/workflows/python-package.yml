@@ -27,19 +27,14 @@ jobs:
         python -m pip install nox
 
     - name: List nox sessions
-      id: set-matrix
+      id: nox-sessions
       run: |
-        nox -s get_versions -- test
         echo "matrix=$(nox -s get_versions -- test)" >> $GITHUB_OUTPUT
-
-    - name: Get latest version
-      id: set-latest
-      run: |
-        nox -s get_latest_version -- test
         echo "latest=$(nox -s get_latest_version -- test)" >> $GITHUB_OUTPUT
 
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
+      latest: ${{ steps.set-matrix.outputs.latest }}
 
   test:
     needs: setup
