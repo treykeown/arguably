@@ -11,31 +11,41 @@ on:
   workflow_dispatch:
 
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get install -y jq
+          python -m pip install --upgrade pip
+          python -m pip install poetry nox
+          poetry config virtualenvs.in-project true
+
+      - name: list all test sessions
+        id: set-matrix
+        run: echo "::set-output name=matrix::$(nox -s gha_list -- tests)"
+
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+
   test:
+    needs: setup
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9", "3.10", "3.11"]
+        python-version: ${{ fromJson(needs.setup.outputs.matrix) }}
     env:
       latest-python-version: "3.11"
 
     steps:
-    - uses: actions/checkout@v3
-
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
-
-    - name: Install dependencies
-      run: |
-        sudo apt-get install -y jq
-        python -m pip install --upgrade pip
-        python -m pip install poetry
-        poetry config virtualenvs.in-project true
-        poetry install
-
     - name: Lint with ruff
       run: |
         . .venv/bin/activate
@@ -46,17 +56,19 @@ jobs:
         . .venv/bin/activate
         mypy arguably/
 
-    - name: Test with pytest
-      run: |
-        . .venv/bin/activate
-        pytest test --cov arguably --cov-report html --cov-report json
+    - name: Run tests
+      run: nox -s ${{ matrix.python-version }}
 
+  coverage:
+    needs: test
+    if: ${{ matrix.python-version == env.latest-python-version }}
+    runs-on: ubuntu-latest
+
+    steps:
     - name: Remove gitignore for coverage publish (latest Python version only)
-      if: ${{ matrix.python-version == env.latest-python-version }}
       run: rm htmlcov/.gitignore
 
     - name: Publish coverage (latest Python version only)
-      if: ${{ matrix.python-version == env.latest-python-version }}
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -64,11 +76,9 @@ jobs:
         destination_dir: coverage
 
     - name: Extract coverage for badge (latest Python version only)
-      if: ${{ matrix.python-version == env.latest-python-version }}
       run: echo "COVERAGE_PERCENT=$(jq '.totals.percent_covered_display' < coverage.json | tr -d '"')" >> $GITHUB_ENV
 
     - name: Coverage badge (latest Python version only)
-      if: ${{ matrix.python-version == env.latest-python-version }}
       uses: Schneegans/dynamic-badges-action@v1.6.0
       with:
         auth: ${{ secrets.GIST_SECRET }}

@@ -1,7 +1,7 @@
 import sys
 from io import StringIO
 from pathlib import Path
-from typing import Callable
+from typing import Callable, Dict
 
 import pytest
 
@@ -9,7 +9,7 @@ import arguably
 from . import run_cli_and_manual, get_and_clear_io
 
 
-def test_log(iobuf: StringIO, scope_annotated: dict[str, Callable]) -> None:
+def test_log(iobuf: StringIO, scope_annotated: Dict[str, Callable]) -> None:
     argv = ["log", "--logger", "file,path=foo.txt"]
     args = []
     kwargs = dict(logger=scope_annotated["FileLogger"](path=Path("foo.txt")))
@@ -20,7 +20,7 @@ def test_log(iobuf: StringIO, scope_annotated: dict[str, Callable]) -> None:
     assert cli == manual
 
 
-def test_dataclass(iobuf: StringIO, scope_annotated: dict[str, Callable]) -> None:
+def test_dataclass(iobuf: StringIO, scope_annotated: Dict[str, Callable]) -> None:
     argv = ["dataclass", "foo=10,bar=test"]
     args = [scope_annotated["Complex"](10, "test")]
     kwargs = dict()
@@ -31,7 +31,7 @@ def test_dataclass(iobuf: StringIO, scope_annotated: dict[str, Callable]) -> Non
     assert cli == manual
 
 
-def test_explain_none(iobuf: StringIO, scope_annotated: dict[str, Callable]) -> None:
+def test_explain_none(iobuf: StringIO, scope_annotated: Dict[str, Callable]) -> None:
     argv = ["explain"]
     args = []
     kwargs = dict()
@@ -42,7 +42,7 @@ def test_explain_none(iobuf: StringIO, scope_annotated: dict[str, Callable]) -> 
     assert cli == manual
 
 
-def test_explain(iobuf: StringIO, scope_annotated: dict[str, Callable]) -> None:
+def test_explain(iobuf: StringIO, scope_annotated: Dict[str, Callable]) -> None:
     argv = ["explain", "-vvv", "-v"]
     args = []
     kwargs = dict(verbose=4)
@@ -53,7 +53,7 @@ def test_explain(iobuf: StringIO, scope_annotated: dict[str, Callable]) -> None:
     assert cli == manual
 
 
-def test_high_five_required(iobuf: StringIO, scope_annotated: dict[str, Callable]) -> None:
+def test_high_five_required(iobuf: StringIO, scope_annotated: Dict[str, Callable]) -> None:
     argv = ["high-five"]
 
     sys.argv.extend(argv)
@@ -65,7 +65,7 @@ def test_high_five_required(iobuf: StringIO, scope_annotated: dict[str, Callable
     assert "error: the following arguments are required: people\n" in cli
 
 
-def test_email_alt(iobuf: StringIO, scope_annotated: dict[str, Callable]) -> None:
+def test_email_alt(iobuf: StringIO, scope_annotated: Dict[str, Callable]) -> None:
     argv = ["email-alt", "john@doe.co", 'test@example.com,foo@bar.biz,"Last, First" <first@last.name>']
     args = ["john@doe.co"]
     kwargs = dict(cc=["test@example.com", "foo@bar.biz", '"Last, First" <first@last.name>'], bcc=[])
@@ -75,7 +75,7 @@ def test_email_alt(iobuf: StringIO, scope_annotated: dict[str, Callable]) -> Non
     assert cli == manual
 
 
-def test_email(iobuf: StringIO, scope_annotated: dict[str, Callable]) -> None:
+def test_email(iobuf: StringIO, scope_annotated: Dict[str, Callable]) -> None:
     argv = [
         "email",
         "john@doe.co",
@@ -97,7 +97,7 @@ def test_email(iobuf: StringIO, scope_annotated: dict[str, Callable]) -> None:
     assert cli == manual
 
 
-def test_say_alt(iobuf: StringIO, scope_annotated: dict[str, Callable]) -> None:
+def test_say_alt(iobuf: StringIO, scope_annotated: Dict[str, Callable]) -> None:
     argv = ["say-alt", "hi"]
     args = ["hi"]
     kwargs = dict()
@@ -108,7 +108,7 @@ def test_say_alt(iobuf: StringIO, scope_annotated: dict[str, Callable]) -> None:
     assert cli == manual
 
 
-def test_goodbye_none(iobuf: StringIO, scope_annotated: dict[str, Callable]) -> None:
+def test_goodbye_none(iobuf: StringIO, scope_annotated: Dict[str, Callable]) -> None:
     argv = ["goodbye"]
     args = []
     kwargs = dict()
@@ -119,7 +119,7 @@ def test_goodbye_none(iobuf: StringIO, scope_annotated: dict[str, Callable]) -> 
     assert cli == manual
 
 
-def test_goodbye_flag(iobuf: StringIO, scope_annotated: dict[str, Callable]) -> None:
+def test_goodbye_flag(iobuf: StringIO, scope_annotated: Dict[str, Callable]) -> None:
     argv = ["goodbye", "--path"]
 
     sys.argv.extend(argv)
@@ -129,7 +129,7 @@ def test_goodbye_flag(iobuf: StringIO, scope_annotated: dict[str, Callable]) -> 
     assert "path: ~/goodbye.log\n" in cli
 
 
-def test_goodbye_option(iobuf: StringIO, scope_annotated: dict[str, Callable]) -> None:
+def test_goodbye_option(iobuf: StringIO, scope_annotated: Dict[str, Callable]) -> None:
     argv = ["goodbye", "--path", "~/alt.txt"]
     args = []
     kwargs = dict(path="~/alt.txt")
@@ -140,7 +140,7 @@ def test_goodbye_option(iobuf: StringIO, scope_annotated: dict[str, Callable]) -
     assert cli == manual
 
 
-def test_handle_it(iobuf: StringIO, scope_annotated: dict[str, Callable]) -> None:
+def test_handle_it(iobuf: StringIO, scope_annotated: Dict[str, Callable]) -> None:
     argv = ["handle-it", "5"]
     args = [25]
     kwargs = dict()
@@ -151,7 +151,7 @@ def test_handle_it(iobuf: StringIO, scope_annotated: dict[str, Callable]) -> Non
     assert cli == manual
 
 
-def test_say_alt_failure(iobuf: StringIO, scope_annotated: dict[str, Callable]) -> None:
+def test_say_alt_failure(iobuf: StringIO, scope_annotated: Dict[str, Callable]) -> None:
     argv = ["say-alt", "howdy"]
 
     sys.argv.extend(argv)

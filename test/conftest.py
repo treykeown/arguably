@@ -4,12 +4,18 @@ import io
 import sys
 from io import StringIO
 from pathlib import Path
-from typing import Generator, Callable, Annotated, cast, Optional
+from typing import Generator, Callable, cast, Optional, List, Dict, Tuple
 
 import pytest
 
 import arguably
 from . import MANUAL, Permissions, PermissionsAlt, HiBye
+
+# Annotated is 3.9 and up
+if sys.version_info >= (3, 9):
+    from typing import Annotated
+else:
+    from typing_extensions import Annotated
 
 
 ########################################################################################################################
@@ -145,7 +151,7 @@ def fn_say_annotated_enum(iobuf: StringIO) -> Callable:
 
 
 @pytest.fixture
-def scope_advanced(iobuf: StringIO) -> dict[str, Callable]:
+def scope_advanced(iobuf: StringIO) -> Dict[str, Callable]:
     @arguably.command
     def __root__(*, loud: bool = False):
         """
@@ -160,7 +166,7 @@ def scope_advanced(iobuf: StringIO) -> dict[str, Callable]:
             iobuf.write("__root__ loud\n")
 
     @arguably.command
-    def add(*numbers: Annotated[int, arguably.arg.required()], coords: Optional[tuple[int, int, int]] = None) -> None:
+    def add(*numbers: Annotated[int, arguably.arg.required()], coords: Optional[Tuple[int, int, int]] = None) -> None:
         """
         adds a bunch of numbers together
         :param numbers: the numbers {NUMS} to add
@@ -235,7 +241,7 @@ def scope_advanced(iobuf: StringIO) -> dict[str, Callable]:
         iobuf.write("> hey-you\n")
         iobuf.write(f"hey-you name: {name}")
 
-    return cast(dict[str, Callable], {k: v for k, v in locals().items() if k != "iobuf"})
+    return cast(Dict[str, Callable], {k: v for k, v in locals().items() if k != "iobuf"})
 
 
 ########################################################################################################################
@@ -243,7 +249,7 @@ def scope_advanced(iobuf: StringIO) -> dict[str, Callable]:
 
 
 @pytest.fixture
-def scope_annotated(iobuf: StringIO) -> dict[str, Callable]:
+def scope_annotated(iobuf: StringIO) -> Dict[str, Callable]:
     class Logger(abc.ABC):
         @abc.abstractmethod
         def log(self, message: str) -> None:
@@ -323,9 +329,9 @@ def scope_annotated(iobuf: StringIO) -> dict[str, Callable]:
     @arguably.command
     def email_alt(
         from_: str,
-        cc: list[str],
+        cc: List[str],
         *to: str,
-        bcc: Optional[list[str]] = None,
+        bcc: Optional[List[str]] = None,
     ):
         """
         emails people
@@ -350,8 +356,8 @@ def scope_annotated(iobuf: StringIO) -> dict[str, Callable]:
     def email(
         from_: str,
         *to: Annotated[str, arguably.arg.required()],
-        cc: list[str],
-        bcc: Optional[list[str]] = None,
+        cc: List[str],
+        bcc: Optional[List[str]] = None,
     ):
         """
         emails people
@@ -396,4 +402,4 @@ def scope_annotated(iobuf: StringIO) -> dict[str, Callable]:
         """
         iobuf.write(f"which: {which}\n")
 
-    return cast(dict[str, Callable], {k: v for k, v in locals().items() if k != "iobuf"})
+    return cast(Dict[str, Callable], {k: v for k, v in locals().items() if k != "iobuf"})

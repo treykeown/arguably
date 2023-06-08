@@ -1,6 +1,6 @@
 import sys
 from io import StringIO
-from typing import Callable
+from typing import Callable, Dict
 
 import pytest
 
@@ -8,7 +8,7 @@ import arguably
 from . import get_and_clear_io, run_cli_and_manual
 
 
-def test_help(iobuf: StringIO, scope_advanced: dict[str, Callable]) -> None:
+def test_help(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
     argv = ["-h"]
 
     sys.argv.extend(argv)
@@ -23,7 +23,7 @@ def test_help(iobuf: StringIO, scope_advanced: dict[str, Callable]) -> None:
     assert "  --loud         make it loud (default: False)" in cli
 
 
-def test_hey_you_help(iobuf: StringIO, scope_advanced: dict[str, Callable]) -> None:
+def test_hey_you_help(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
     argv = ["h", "-h"]
 
     sys.argv.extend(argv)
@@ -36,7 +36,7 @@ def test_hey_you_help(iobuf: StringIO, scope_advanced: dict[str, Callable]) -> N
     assert "name        your name" in cli
 
 
-def test_hey_you(iobuf: StringIO, scope_advanced: dict[str, Callable]) -> None:
+def test_hey_you(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
     argv = ["hey-you", "John"]
     args = ["John"]
     kwargs = dict()
@@ -47,7 +47,7 @@ def test_hey_you(iobuf: StringIO, scope_advanced: dict[str, Callable]) -> None:
     assert cli == manual
 
 
-def test_give(iobuf: StringIO, scope_advanced: dict[str, Callable]) -> None:
+def test_give(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
     argv = ["give"]
     args = []
     kwargs = dict()
@@ -59,7 +59,7 @@ def test_give(iobuf: StringIO, scope_advanced: dict[str, Callable]) -> None:
     assert cli == manual
 
 
-def test_give_zen(iobuf: StringIO, scope_advanced: dict[str, Callable]) -> None:
+def test_give_zen(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
     argv = ["give", "zen", "--rotten"]
     args = []
     kwargs = dict(rotten=True)
@@ -71,7 +71,7 @@ def test_give_zen(iobuf: StringIO, scope_advanced: dict[str, Callable]) -> None:
     assert cli == manual
 
 
-def test_give_zen_ancestor(iobuf: StringIO, scope_advanced: dict[str, Callable]) -> None:
+def test_give_zen_ancestor(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
     argv = ["give", "--slowly", "zen", "--rotten"]
     args = []
     kwargs = dict(rotten=True)
@@ -90,7 +90,7 @@ def test_give_zen_ancestor(iobuf: StringIO, scope_advanced: dict[str, Callable])
     assert cli_lines == manual_lines
 
 
-def test_do__a_dance(iobuf: StringIO, scope_advanced: dict[str, Callable]) -> None:
+def test_do__a_dance(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
     argv = ["do", "a-dance"]
     args = []
     kwargs = dict()
@@ -101,7 +101,7 @@ def test_do__a_dance(iobuf: StringIO, scope_advanced: dict[str, Callable]) -> No
     assert cli == manual
 
 
-def test_add(iobuf: StringIO, scope_advanced: dict[str, Callable]) -> None:
+def test_add(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
     argv = ["add", "1", "1", "2", "3", "--coords", "10,20,30"]
     args = [1, 1, 2, 3]
     kwargs = dict(coords=(10, 20, 30))
@@ -114,7 +114,7 @@ def test_add(iobuf: StringIO, scope_advanced: dict[str, Callable]) -> None:
     assert cli == manual
 
 
-def test_add_help(iobuf: StringIO, scope_advanced: dict[str, Callable]) -> None:
+def test_add_help(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
     argv = ["add", "-h"]
 
     sys.argv.extend(argv)

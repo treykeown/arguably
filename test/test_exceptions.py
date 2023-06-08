@@ -1,6 +1,6 @@
 import sys
 from io import StringIO
-from typing import Callable
+from typing import Callable, Dict
 
 import pytest
 
@@ -27,7 +27,7 @@ def test_bad_enum_val(iobuf: StringIO, fn_say: Callable) -> None:
     assert "error: argument which: invalid choice: 'badval' (choose from 'hi', 'bye')" in cli
 
 
-def test_bad_choices_val(iobuf: StringIO, scope_annotated: dict[str, Callable]) -> None:
+def test_bad_choices_val(iobuf: StringIO, scope_annotated: Dict[str, Callable]) -> None:
     argv = ["say-alt", "badval"]
 
     sys.argv.extend(argv)
@@ -49,7 +49,7 @@ def test_bad_choices_annotated_enum_val(iobuf: StringIO, fn_say_annotated_enum: 
     assert "error: argument which: invalid choice: 'badval' (choose from 'hi', 'bye')" in cli
 
 
-def test_missing_key(iobuf: StringIO, scope_annotated: dict[str, Callable]) -> None:
+def test_missing_key(iobuf: StringIO, scope_annotated: Dict[str, Callable]) -> None:
     argv = ["log", "--logger", "file"]
 
     sys.argv.extend(argv)

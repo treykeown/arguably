@@ -1,7 +1,7 @@
 import enum
 import sys
 from io import StringIO
-from typing import Any, Callable, Optional
+from typing import Any, Callable, Optional, Dict, List
 
 import arguably
 
@@ -19,10 +19,10 @@ def get_and_clear_io(iobuf: StringIO):
 def run_cli_and_manual(
     iobuf: StringIO,
     func: Callable,
-    argv: list[str],
-    args: list[Any],
-    kwargs: Optional[dict[str, Any]] = None,
-    arguably_kwargs: Optional[dict[str, Any]] = None,
+    argv: List[str],
+    args: List[Any],
+    kwargs: Optional[Dict[str, Any]] = None,
+    arguably_kwargs: Optional[Dict[str, Any]] = None,
 ):
     if arguably_kwargs is None:
         arguably_kwargs = dict()
