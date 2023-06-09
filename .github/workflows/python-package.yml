@@ -12,6 +12,7 @@ on:
 
 jobs:
   setup:
+    name: Setup
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -37,6 +38,7 @@ jobs:
       latest: ${{ steps.nox-sessions.outputs.latest }}
 
   test:
+    name: Test
     needs: setup
     runs-on: ubuntu-latest
     strategy:
@@ -64,10 +66,12 @@ jobs:
 
     - name: Run tests
       run: nox -s test-${{ matrix.python-version }}
-    - name: Remove gitignore for coverage publish (latest Python version only)
+
+    - name: (${{ env.latest-python-version }} only) Remove gitignore for coverage publish
+      if: ${{ matrix.python-version == env.latest-python-version }}
       run: rm htmlcov/.gitignore
 
-    - name: Publish coverage (latest Python version only)
+    - name: (${{ env.latest-python-version }} only) Publish coverage
       if: ${{ matrix.python-version == env.latest-python-version }}
       uses: peaceiris/actions-gh-pages@v3
       with:
@@ -75,11 +79,11 @@ jobs:
         publish_dir: htmlcov
         destination_dir: coverage
 
-    - name: Extract coverage for badge (latest Python version only)
+    - name: (${{ env.latest-python-version }} only) Extract coverage for badge
       if: ${{ matrix.python-version == env.latest-python-version }}
       run: echo "COVERAGE_PERCENT=$(jq '.totals.percent_covered_display' < coverage.json | tr -d '"')" >> $GITHUB_ENV
 
-    - name: Coverage badge (latest Python version only)
+    - name: (${{ env.latest-python-version }} only) Coverage badge
       if: ${{ matrix.python-version == env.latest-python-version }}
       uses: Schneegans/dynamic-badges-action@v1.6.0
       with:
