@@ -2,6 +2,7 @@ import importlib.util
 import inspect
 import multiprocessing
 import sys
+import warnings
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional, List, Dict, Any, cast, Callable
@@ -11,11 +12,40 @@ import arguably
 
 @dataclass
 class LoadAndRunResult:
+    """Result from load_and_run"""
+
     error: Optional[str] = None
     exception: Optional[BaseException] = None
 
 
+def warn(message: str, function: Callable) -> None:
+    """Provide a warning. We avoid using logging, since we're just a library, so we issue through `warnings`."""
+
+    source_file = inspect.getsourcefile(function)
+    if source_file is None:
+        warnings.warn(message, arguably.ArguablyWarning)
+        return
+
+    # Skip lines before the `def`. Should be cleaned up in the future.
+    source_lines, line_number = inspect.getsourcelines(function)
+    for line in source_lines:
+        if "def " not in line:
+            line_number += 1
+        break
+
+    # Issue the warning
+    warnings.warn_explicit(
+        message,
+        arguably.ArguablyWarning,
+        source_file,
+        line_number,
+    )
+
+
 def _get_callable_methods(cls: type) -> List[Callable]:
+    """
+    Gets all the callable methods from a function - __init__, classmethods, and staticmethods. Skips abstractmethods.
+    """
     callable_methods = []
 
     for name, method in vars(cls).items():
@@ -59,10 +89,10 @@ def _load_and_run_inner(file: Path, *args: str) -> LoadAndRunResult:
         # Add classmethods and staticmethods
         for callable_method in _get_callable_methods(cls):
             if inspect.ismethod(callable_method):
-                # We have to access .__func__ for the bound @classmethod
+                # We have to set through .__func__ for the bound @classmethod
                 callable_method = cast(classmethod, callable_method)  # type: ignore[assignment]
-                real_names[callable_method] = callable_method.__func__.__name__
-                callable_method.__func__.__name__ = f"{cls.__name__}.{callable_method.__func__.__name__}"
+                real_names[callable_method] = callable_method.__name__
+                callable_method.__func__.__name__ = f"{cls.__name__}.{callable_method.__name__}"
             else:
                 real_names[callable_method] = callable_method.__name__
                 callable_method.__name__ = f"{cls.__name__}.{callable_method.__name__}"
@@ -70,7 +100,11 @@ def _load_and_run_inner(file: Path, *args: str) -> LoadAndRunResult:
 
     # Add all functions to arguably
     for function in functions:
-        arguably.command(function)
+        try:
+            arguably.command(function)
+        except arguably.ArguablyException as e:
+            warn(f"Unable to add function {function.__name__}: {str(e)}", function)
+            continue
 
         # If it's a classmethod or staticmethod, revert the name
         if function in real_names:

@@ -23,7 +23,7 @@
 3. You don't want to read the docs for your favorite argument parsing library *again*
 
 By leveraging as many Python idioms as possible, `arguably` keeps its API small and memorable without sacrificing
-funcitonality. `arguably` uses functions and their docstrings to automatically set up argparse. Notably, `arguably`
+functionality. `arguably` uses functions and their docstrings to automatically set up argparse. Notably, `arguably`
 maps your function signature to a command-line interface like this:
 
 ```python

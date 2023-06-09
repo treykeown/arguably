@@ -62,6 +62,8 @@ from typing import (
 
 from docstring_parser import parse as docparse
 
+from arguably.util import warn
+
 # Annotated is 3.9 and up
 if sys.version_info >= (3, 9):
     from typing import Annotated, get_type_hints, get_args, get_origin
@@ -1062,7 +1064,11 @@ class _Context:
             docs = docparse(func.__doc__)
             processed_description = "" if docs.short_description is None else docs.short_description
 
-        hints = get_type_hints(func, include_extras=True)
+        try:
+            hints = get_type_hints(func, include_extras=True)
+        except NameError as e:
+            hints = {}
+            warn(f"Unable to resolve type hints for function {processed_name}: {str(e)}", func)
 
         # Will be filled in as we loop over all parameters
         processed_args: List[_CommandArg] = list()
@@ -1596,8 +1602,12 @@ _context = _Context()
 # arguably API
 
 
+class ArguablyWarning(UserWarning):
+    """Raised when a decorated function is incorrectly set up in some way, but arguably can continue"""
+
+
 class ArguablyException(Exception):
-    """Raised when an annotated function is incorrectly set up in some way"""
+    """Raised when a decorated function is incorrectly set up in some way"""
 
 
 run = _context.run
