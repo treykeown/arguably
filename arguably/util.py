@@ -123,7 +123,7 @@ def _load_and_run_inner(file: Path, *args: str, debug: bool) -> LoadAndRunResult
     sys.argv.extend(args)
 
     # Run and return success
-    arguably.run(name=file.stem, always_subcommand=True, show_types=True, show_defaults=True, debug=debug)
+    arguably.run(name=file.stem, always_subcommand=True, show_types=True, show_defaults=True)
     return LoadAndRunResult()
 
 
