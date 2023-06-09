@@ -4,7 +4,7 @@ import multiprocessing
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional, List, Union, Dict, Any
+from typing import Optional, List, Union, Dict, Any, cast
 
 import arguably
 
@@ -60,9 +60,11 @@ def _load_and_run_inner(file: Path, *args: str) -> LoadAndRunResult:
         for callable_method in _get_callable_methods(cls):
             if inspect.ismethod(callable_method):
                 # We have to access .__func__ for the bound @classmethod
+                callable_method = cast(classmethod, callable_method)
                 real_names[callable_method] = callable_method.__func__.__name__
                 callable_method.__func__.__name__ = f"{cls.__name__}.{callable_method.__func__.__name__}"
             else:
+                callable_method = cast(staticmethod, callable_method)
                 real_names[callable_method] = callable_method.__name__
                 callable_method.__name__ = f"{cls.__name__}.{callable_method.__name__}"
             functions.append(callable_method)
