@@ -62,18 +62,18 @@ from typing import (
 
 from docstring_parser import parse as docparse
 
-from arguably.util import warn
+from arguably.util import warn, logger
 
 # Annotated is 3.9 and up
 if sys.version_info >= (3, 9):
     from typing import Annotated, get_type_hints, get_args, get_origin
-else:
+else:  # pragma: no cover
     from typing_extensions import Annotated, get_type_hints, get_args, get_origin
 
 # UnionType is the new type for the `A | B` type syntax, which is 3.10 and up
 if sys.version_info >= (3, 10):
     from types import UnionType
-else:
+else:  # pragma: no cover
 
     class UnionType:
         """Stub this out, we only use it for issubclass() checks"""
@@ -934,6 +934,7 @@ class _ContextOptions:
 
     :ivar name: Name of the script/program. Defaults to the filename or module name (depending on invocation method).
 
+    :ivar debug: Normally false. If true, will log all calls to argparse and will log how commands are called.
     :ivar call_ancestors: Normally false. If true, `git init` will first call `git()`, then `git__init()`. Calls all
         members of the hierarchy. This allows parents to handle options. Parents can determine if they are actually the
         target command (instead of being called through the heirarchy) through the `is_target()` method.
@@ -958,6 +959,7 @@ class _ContextOptions:
     name: Optional[str]
 
     # Behavior options
+    debug: bool
     call_ancestors: bool
     always_subcommand: bool
     auto_alias_cmds: bool
@@ -1237,8 +1239,21 @@ class _Context:
                     )
                 parser.set_defaults(**{arg_.arg_name: arg_.default})
                 for entry in _info_for_flags(arg_.arg_name, arg_.arg_value_type):
+                    if self._options.debug:
+                        logger.debug(
+                            f'Parser({parser.prog.partition(" ")[2]!r}).add_argument('
+                            f"*{entry.option!r}, "
+                            f"action={_EnumFlagAction!r}, "
+                            f"const={entry!r}, "
+                            f"nargs={0!r}, "
+                            f"help={entry.description!r},)"
+                        )
                     parser.add_argument(
-                        *entry.option, action=_EnumFlagAction, const=entry, nargs=0, help=entry.description
+                        *entry.option,
+                        action=_EnumFlagAction,
+                        const=entry,
+                        nargs=0,
+                        help=entry.description,
                     )
                 continue
 
@@ -1317,6 +1332,12 @@ class _Context:
                 modifier.modify_arg_dict(cmd, arg_, add_arg_kwargs)
 
             # Add the argument to the parser
+            if self._options.debug:
+                logger.debug(
+                    f'Parser({parser.prog.partition(" ")[2]!r}).add_argument('
+                    f"*{arg_names!r}, "
+                    f"**{add_arg_kwargs!r})"
+                )
             parser.add_argument(*arg_names, **add_arg_kwargs)
 
     def _build_subparser_tree(self, command_decorator_info: _CommandDecoratorInfo) -> str:
@@ -1335,8 +1356,19 @@ class _Context:
             if ancestor not in self._parsers:
                 # Dummy parser - since there's nothing to run, require the subparser.
                 required_subparser = True
+                if self._options.debug:
+                    logger.debug(
+                        f"Subparsers({prev_ancestor!r}).add_parser("
+                        f'{ancestor.split(" ")[-1]!r}, '
+                        f'help={""!r}, '
+                        f"formatter_class={self._formatter!r}, "
+                        f"**{self._extra_argparser_options!r},)"
+                    )
                 self._parsers[ancestor] = self._subparsers[prev_ancestor].add_parser(
-                    ancestor.split(" ")[-1], help="", formatter_class=self._formatter, **self._extra_argparser_options
+                    ancestor.split(" ")[-1],
+                    help="",
+                    formatter_class=self._formatter,
+                    **self._extra_argparser_options,
                 )
             if ancestor not in self._subparsers:
                 # Add subparser to the parent command's parser.
@@ -1344,6 +1376,14 @@ class _Context:
                 if ancestor_cmd.has_positional_args:
                     raise ArguablyException(
                         f"Command `{ancestor}` cannot have both subcommands and positional arguments."
+                    )
+                if self._options.debug:
+                    logger.debug(
+                        f"Parser({ancestor!r}).add_subparsers("
+                        f"parser_class={_ArgumentParser!r}, "
+                        f"dest={ancestor_cmd.get_subcommand_metavar(self._options.command_metavar)!r}, "
+                        f"metavar={self._options.command_metavar!r}, "
+                        f"required={required_subparser!r},)"
                     )
                 self._subparsers[ancestor] = self._parsers[ancestor].add_subparsers(
                     parser_class=_ArgumentParser,
@@ -1366,6 +1406,7 @@ class _Context:
     def run(
         self,
         name: Optional[str] = None,
+        debug: bool = False,
         call_ancestors: bool = False,
         always_subcommand: bool = False,
         auto_alias_cmds: bool = False,
@@ -1392,6 +1433,14 @@ class _Context:
         description = "" if __main__.__doc__ is None else __main__.__doc__.partition("\n\n\n")[0]
 
         # Set up the root parser
+        if self._options.debug:
+            logger.debug(
+                f'Initializing {"__root__"!r} parser: _ArgumentParser('
+                f"prog={self._options.name!r}, "
+                f"description={description!r}, "
+                f"formatter_class={self._formatter!r}, "
+                f"**{self._extra_argparser_options!r})"
+            )
         root_parser = _ArgumentParser(
             prog=self._options.name,
             description=description,
@@ -1409,9 +1458,15 @@ class _Context:
                 argparse_version_flags = self._options.version_flag
             else:
                 argparse_version_flags = ("--version",)
-            root_parser.add_argument(
-                *argparse_version_flags, action="version", version=f"%(prog)s {__main__.__version__}"
-            )
+            version_string = f"%(prog)s {__main__.__version__}"
+            if self._options.debug:
+                logger.debug(
+                    f'Parser({"__root__"!r}).add_argument('
+                    f"*{argparse_version_flags!r}, "
+                    f'action={"version"!r}, '
+                    f"version={version_string!r})"
+                )
+            root_parser.add_argument(*argparse_version_flags, action="version", version=version_string)
 
         # Check the number of commands we have
         only_one_cmd = (len(self._command_decorator_info) == 1) and not self._options.always_subcommand
@@ -1448,6 +1503,16 @@ class _Context:
 
             # Add the parser for the command
             if not only_one_cmd and cmd.name != "__root__":
+                if self._options.debug:
+                    logger.debug(
+                        f"Subparsers({parent_name!r}).add_parser("
+                        f'{cmd.name.split(" ")[-1]!r}, '
+                        f"aliases={[cmd.alias] if cmd.alias is not None else []!r}, "
+                        f"help={cmd.description!r}, "
+                        f"description={cmd.description!r}, "
+                        f"formatter_class={self._formatter!r}, "
+                        f"**{self._extra_argparser_options!r})"
+                    )
                 self._parsers[cmd.name] = self._subparsers[parent_name].add_parser(
                     cmd.name.split(" ")[-1],
                     aliases=[cmd.alias] if cmd.alias is not None else [],

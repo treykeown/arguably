@@ -1,5 +1,6 @@
 import importlib.util
 import inspect
+import logging
 import multiprocessing
 import sys
 import warnings
@@ -8,6 +9,9 @@ from pathlib import Path
 from typing import Optional, List, Dict, Any, cast, Callable
 
 import arguably
+
+
+logger = logging.getLogger("arguably")
 
 
 @dataclass
@@ -57,7 +61,10 @@ def _get_callable_methods(cls: type) -> List[Callable]:
     return callable_methods
 
 
-def _load_and_run_inner(file: Path, *args: str) -> LoadAndRunResult:
+def _load_and_run_inner(file: Path, *args: str, debug: bool) -> LoadAndRunResult:
+    if debug:
+        logging.basicConfig(level=logging.DEBUG, format="%(pathname)s:%(lineno)d: %(message)s")
+
     # Load the specified file
     spec = importlib.util.spec_from_file_location("_arguably_imported", str(file))
     assert spec is not None
@@ -113,18 +120,16 @@ def _load_and_run_inner(file: Path, *args: str) -> LoadAndRunResult:
             else:
                 function.__name__ = real_names[function]
 
-    # Remove argv[0] - the filename becomes argv[0].
-    del sys.argv[:1]
     sys.argv.extend(args)
 
     # Run and return success
-    arguably.run(name=file.stem, always_subcommand=True, show_types=True, show_defaults=True)
+    arguably.run(name=file.stem, always_subcommand=True, show_types=True, show_defaults=True, debug=debug)
     return LoadAndRunResult()
 
 
-def load_and_run(results: multiprocessing.Queue, file: Path, argv: List[str]) -> None:
+def load_and_run(results: multiprocessing.Queue, file: Path, argv: List[str], debug: bool) -> None:
     """Load the specified file, register all callable top-level functions, classmethods, and staticmethods, then run"""
     try:
-        results.put(_load_and_run_inner(file, *argv))
+        results.put(_load_and_run_inner(file, *argv, debug=debug))
     except BaseException as e:
         results.put(LoadAndRunResult(exception=e))
