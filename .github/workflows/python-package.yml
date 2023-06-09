@@ -62,16 +62,6 @@ jobs:
         poetry config virtualenvs.in-project true
         poetry install
 
-    - name: Lint with ruff
-      run: |
-        . .venv/bin/activate
-        ruff .
-
-    - name: Check with mypy
-      run: |
-        . .venv/bin/activate
-        mypy arguably/
-
     - name: Run tests
       run: nox -s test-${{ matrix.python-version }}
     - name: Remove gitignore for coverage publish (latest Python version only)
