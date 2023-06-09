@@ -10,16 +10,15 @@ import arguably
 from arguably.util import load_and_run, LoadAndRunResult
 
 
-subcommand_argv: List[str] = []
+args_for_file: List[str] = []
 
 
 @arguably.command
-def main(file: Path, target: str, *args: str) -> None:
+def main(file: Path, *args: str) -> None:
     """
     run functions from any python file
     :param file: the file to load
-    :param target: the funciton or class to run
-    :param args: arguments for the target
+    :param args: the function to run, and any arguments
     """
 
     # Check that the user-specified file exists
@@ -31,7 +30,7 @@ def main(file: Path, target: str, *args: str) -> None:
     # A result object will be passed back in the queue
     multiprocessing.set_start_method("spawn")
     results_queue: multiprocessing.Queue[LoadAndRunResult] = multiprocessing.Queue()
-    proc = multiprocessing.Process(target=load_and_run, args=(results_queue, file, target, subcommand_argv))
+    proc = multiprocessing.Process(target=load_and_run, args=(results_queue, file, args_for_file))
 
     # Run the external process
     proc.start()
@@ -53,9 +52,9 @@ if __name__ == "__main__":
     # We strip off the rest of the arguments - if we were doing things normally, this wouldn't be required - however,
     # we're effectively adding a subcommand without telling argparse, which will cause issues if there are any --options
     # passed in.
-    if len(sys.argv) > 3:
-        subcommand_argv = sys.argv[3:]
-        del sys.argv[3:]
+    if len(sys.argv) > 2:
+        args_for_file = sys.argv[2:]
+        del sys.argv[2:]
 
     # Run it
     arguably.run(name="arguably")

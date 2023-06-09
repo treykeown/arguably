@@ -589,20 +589,13 @@ class _CommandDecoratorInfo:
 
     function: Callable
     alias: Optional[str] = None
+    name: str = field(init=False)
 
-    @property
-    def name(self) -> str:
-        """
-        We need to know the name pretty early on, so the method to calculate it lives here. This calculates the name as
-        the user should see it. Rules:
-          * `__root__` is left as-is
-          * Leading or trailing `_` are stripped.
-          * `__` becomes space ` `
-          * `_` becomes `-`
-        """
+    def __post_init__(self) -> None:
         if self.function.__name__ == "__root__":
-            return "__root__"
-        return _normalize_name(self.function.__name__)
+            self.name = "__root__"
+        else:
+            self.name = _normalize_name(self.function.__name__)
 
 
 @dataclass
@@ -942,6 +935,8 @@ class _ContextOptions:
     :ivar call_ancestors: Normally false. If true, `git init` will first call `git()`, then `git__init()`. Calls all
         members of the hierarchy. This allows parents to handle options. Parents can determine if they are actually the
         target command (instead of being called through the heirarchy) through the `is_target()` method.
+    :ivar always_subcommand: Normally false. If true, will force a subcommand interface to be used, even if there's only
+        one command.
     :ivar auto_alias_cmds: Normally false. If true, will automatically create a short alias for every command. See
         `_find_alias` for implementation.
     :ivar auto_alias_params: Normally false. If true, will automatically create a short alias for every parameter
@@ -950,6 +945,7 @@ class _ContextOptions:
         the root parser.
 
     :ivar show_defaults: Show default values for optional arguments.
+    :ivar show_types: Show the type of each argument.
     :ivar command_metavar: Allows you to change how the subcommand placeholder appears in the usage string.
     :ivar max_description_offset: The maximum number of columns before argument descriptions are printed. Equivalent to
         `max_help_position` in argparse.
@@ -961,12 +957,14 @@ class _ContextOptions:
 
     # Behavior options
     call_ancestors: bool
+    always_subcommand: bool
     auto_alias_cmds: bool
     auto_alias_params: bool
     version_flag: Union[bool, List[str]]
 
     # Formatting options
     show_defaults: bool
+    show_types: bool
     command_metavar: str
     max_description_offset: int
     max_width: int
@@ -1054,16 +1052,17 @@ class _Context:
         """Takes the decorator info and return a processed command"""
 
         processed_name = info.name
+        func = info.function.__init__ if isinstance(info.function, type) else info.function  # type: ignore[misc]
 
         # Get the description from the docstring
-        if info.function.__doc__ is None:
+        if func.__doc__ is None:
             docs = None
             processed_description = ""
         else:
-            docs = docparse(info.function.__doc__)
+            docs = docparse(func.__doc__)
             processed_description = "" if docs.short_description is None else docs.short_description
 
-        hints = get_type_hints(info.function, include_extras=True)
+        hints = get_type_hints(func, include_extras=True)
 
         # Will be filled in as we loop over all parameters
         processed_args: List[_CommandArg] = list()
@@ -1241,23 +1240,26 @@ class _Context:
             add_arg_kwargs: Dict[str, Any] = dict(type=arg_.arg_value_type)
 
             arg_description = arg_.description
+            description_extras = []
+
+            # Show arg type?
+            if self._options.show_types:
+                description_extras.append(f"type: {arg_.arg_value_type.__name__}")
 
             # `default` value?
             if arg_.input_method.is_optional and arg_.default is not _NoDefault:
                 add_arg_kwargs.update(default=arg_.default)
                 if self._options.show_defaults:
-                    if len(arg_description) > 0:
-                        arg_description += " "
                     if isinstance(arg_.default, enum.Enum):
-                        arg_description += f"(default: {_normalize_name(arg_.default.name, spaces=False)})"
+                        description_extras.append(f"default: {_normalize_name(arg_.default.name, spaces=False)}")
                     elif isinstance(arg_.default, str):
                         str_default = arg_.default
                         # Use the string repr if it contains spaces, contains a newline, or is zero-length
                         if (" " in str_default) or ("\n" in str_default) or (len(str_default) == 0):
                             str_default = repr(str_default)
-                        arg_description += f"(default: {str_default})"
+                        description_extras.append(f"default: {str_default}")
                     else:
-                        arg_description += f"(default: {arg_.default})"
+                        description_extras.append(f"default: {arg_.default}")
 
             # Number of arguments `nargs`?
             if arg_.count is _CommandArg.ANY_COUNT:
@@ -1298,6 +1300,10 @@ class _Context:
                     del add_arg_kwargs["type"]
 
             # Set the help description
+            if len(description_extras) > 0:
+                if len(arg_description) > 0:
+                    arg_description += " "
+                arg_description += f"({', '.join(description_extras)})"
             add_arg_kwargs.update(help=arg_description)
 
             # Run modifiers for this arg
@@ -1355,10 +1361,12 @@ class _Context:
         self,
         name: Optional[str] = None,
         call_ancestors: bool = False,
+        always_subcommand: bool = False,
         auto_alias_cmds: bool = False,
         auto_alias_params: bool = False,
         version_flag: Union[bool, Tuple[str], Tuple[str, str]] = False,
         show_defaults: bool = True,
+        show_types: bool = False,
         max_description_offset: int = 60,
         max_width: int = 120,
         command_metavar: str = "command",
@@ -1400,7 +1408,7 @@ class _Context:
             )
 
         # Check the number of commands we have
-        only_one_cmd = len(self._command_decorator_info) == 1
+        only_one_cmd = (len(self._command_decorator_info) == 1) and not self._options.always_subcommand
         if len(self._command_decorator_info) == 0:
             raise ArguablyException("At least one command is required")
 
