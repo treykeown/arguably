@@ -6,7 +6,7 @@ import sys
 import warnings
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional, List, Dict, Any, cast, Callable
+from typing import Optional, List, Dict, Any, cast, Callable, Tuple
 
 import arguably
 
@@ -20,6 +20,23 @@ class LoadAndRunResult:
 
     error: Optional[str] = None
     exception: Optional[BaseException] = None
+
+
+@dataclass
+class ArgSpec:
+    args: Tuple[Any, ...]
+    kwargs: Dict[str, Any]
+
+
+def log_args(logger_fn: Callable, msg: str, fn_name: str, *args: Any, **kwargs: Any) -> ArgSpec:
+    args_str = ", ".join(repr(a) for a in args)
+    kwargs_str = ", ".join(f"{k}={repr(v)}" for k, v in kwargs.items())
+    if len(args_str) == 0 or len(kwargs_str) == 0:
+        full_arg_string = f"{args_str}{kwargs_str}"
+    else:
+        full_arg_string = f"{args_str}, {kwargs_str}"
+    logger_fn(f"{msg}{fn_name}({full_arg_string})")
+    return ArgSpec(args, kwargs)
 
 
 def warn(message: str, function: Callable) -> None:

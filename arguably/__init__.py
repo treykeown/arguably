@@ -62,7 +62,7 @@ from typing import (
 
 from docstring_parser import parse as docparse
 
-from arguably.util import warn, logger
+from arguably.util import warn, logger, log_args
 
 # Annotated is 3.9 and up
 if sys.version_info >= (3, 9):
@@ -1237,21 +1237,18 @@ class _Context:
                     )
                 parser.set_defaults(**{arg_.arg_name: arg_.default})
                 for entry in _info_for_flags(arg_.arg_name, arg_.arg_value_type):
-                    logger.debug(
-                        f'Parser({parser.prog.partition(" ")[2]!r}).add_argument('
-                        f"*{entry.option!r}, "
-                        f"action={_EnumFlagAction!r}, "
-                        f"const={entry!r}, "
-                        f"nargs={0!r}, "
-                        f"help={entry.description!r},)"
-                    )
-                    parser.add_argument(
+                    argspec = log_args(
+                        logger.debug,
+                        f"Parser({repr(parser.prog.partition(' ')[2])}).",
+                        parser.add_argument.__name__,
+                        # Args for the call are below:
                         *entry.option,
                         action=_EnumFlagAction,
                         const=entry,
                         nargs=0,
                         help=entry.description,
                     )
+                    parser.add_argument(*argspec.args, **argspec.kwargs)
                 continue
 
             # Optional kwargs for parser.add_argument
@@ -1329,10 +1326,15 @@ class _Context:
                 modifier.modify_arg_dict(cmd, arg_, add_arg_kwargs)
 
             # Add the argument to the parser
-            logger.debug(
-                f'Parser({parser.prog.partition(" ")[2]!r}).add_argument(' f"*{arg_names!r}, " f"**{add_arg_kwargs!r})"
+            argspec = log_args(
+                logger.debug,
+                f"Parser({repr(parser.prog.partition(' ')[2])}).",
+                parser.add_argument.__name__,
+                # Args for the call are below:
+                *arg_names,
+                **add_arg_kwargs,
             )
-            parser.add_argument(*arg_names, **add_arg_kwargs)
+            parser.add_argument(*argspec.args, **argspec.kwargs)
 
     def _build_subparser_tree(self, command_decorator_info: _CommandDecoratorInfo) -> str:
         """Builds up the subparser tree for a given `_CommandDecoratorInfo`. Inserts dummy entries to `self._parsers`
@@ -1350,19 +1352,17 @@ class _Context:
             if ancestor not in self._parsers:
                 # Dummy parser - since there's nothing to run, require the subparser.
                 required_subparser = True
-                logger.debug(
-                    f"Subparsers({prev_ancestor!r}).add_parser("
-                    f'{ancestor.split(" ")[-1]!r}, '
-                    f'help={""!r}, '
-                    f"formatter_class={self._formatter!r}, "
-                    f"**{self._extra_argparser_options!r},)"
-                )
-                self._parsers[ancestor] = self._subparsers[prev_ancestor].add_parser(
+                argspec = log_args(
+                    logger.debug,
+                    f"Subparsers({repr(prev_ancestor)}).",
+                    self._subparsers[prev_ancestor].add_parser.__name__,
+                    # Args for the call are below:
                     ancestor.split(" ")[-1],
                     help="",
                     formatter_class=self._formatter,
                     **self._extra_argparser_options,
                 )
+                self._parsers[ancestor] = self._subparsers[prev_ancestor].add_parser(*argspec.args, **argspec.kwargs)
             if ancestor not in self._subparsers:
                 # Add subparser to the parent command's parser.
                 ancestor_cmd = self._commands[ancestor]
@@ -1370,19 +1370,17 @@ class _Context:
                     raise ArguablyException(
                         f"Command `{ancestor}` cannot have both subcommands and positional arguments."
                     )
-                logger.debug(
-                    f"Parser({ancestor!r}).add_subparsers("
-                    f"parser_class={_ArgumentParser!r}, "
-                    f"dest={ancestor_cmd.get_subcommand_metavar(self._options.command_metavar)!r}, "
-                    f"metavar={self._options.command_metavar!r}, "
-                    f"required={required_subparser!r},)"
-                )
-                self._subparsers[ancestor] = self._parsers[ancestor].add_subparsers(
+                argspec = log_args(
+                    logger.debug,
+                    f"Parser({repr(ancestor)}).",
+                    self._parsers[ancestor].add_subparsers.__name__,
+                    # Args for the call are below:
                     parser_class=_ArgumentParser,
                     dest=ancestor_cmd.get_subcommand_metavar(self._options.command_metavar),
                     metavar=self._options.command_metavar,
                     required=required_subparser,
                 )
+                self._subparsers[ancestor] = self._parsers[ancestor].add_subparsers(*argspec.args, **argspec.kwargs)
             prev_ancestor = ancestor
         return prev_ancestor
 
@@ -1424,19 +1422,17 @@ class _Context:
         description = "" if __main__.__doc__ is None else __main__.__doc__.partition("\n\n\n")[0]
 
         # Set up the root parser
-        logger.debug(
-            f'Initializing {"__root__"!r} parser: _ArgumentParser('
-            f"prog={self._options.name!r}, "
-            f"description={description!r}, "
-            f"formatter_class={self._formatter!r}, "
-            f"**{self._extra_argparser_options!r})"
-        )
-        root_parser = _ArgumentParser(
+        argspec = log_args(
+            logger.debug,
+            f"Initializing {repr('__root__')} parser: ",
+            _ArgumentParser.__name__,
+            # Args for the call are below:
             prog=self._options.name,
             description=description,
             formatter_class=self._formatter,
             **self._extra_argparser_options,
         )
+        root_parser = _ArgumentParser(*argspec.args, **argspec.kwargs)
         self._parsers["__root__"] = root_parser
 
         # Add version flags if necessary
@@ -1449,13 +1445,16 @@ class _Context:
             else:
                 argparse_version_flags = ("--version",)
             version_string = f"%(prog)s {__main__.__version__}"
-            logger.debug(
-                f'Parser({"__root__"!r}).add_argument('
-                f"*{argparse_version_flags!r}, "
-                f'action={"version"!r}, '
-                f"version={version_string!r})"
+            argspec = log_args(
+                logger.debug,
+                f"Parser({repr('__root__')}).",
+                root_parser.add_argument.__name__,
+                # Args for the call are below:
+                *argparse_version_flags,
+                action="version",
+                version=version_string,
             )
-            root_parser.add_argument(*argparse_version_flags, action="version", version=version_string)
+            root_parser.add_argument(*argspec.args, **argspec.kwargs)
 
         # Check the number of commands we have
         only_one_cmd = (len(self._command_decorator_info) == 1) and not self._options.always_subcommand
@@ -1492,16 +1491,11 @@ class _Context:
 
             # Add the parser for the command
             if not only_one_cmd and cmd.name != "__root__":
-                logger.debug(
-                    f"Subparsers({parent_name!r}).add_parser("
-                    f'{cmd.name.split(" ")[-1]!r}, '
-                    f"aliases={[cmd.alias] if cmd.alias is not None else []!r}, "
-                    f"help={cmd.description!r}, "
-                    f"description={cmd.description!r}, "
-                    f"formatter_class={self._formatter!r}, "
-                    f"**{self._extra_argparser_options!r})"
-                )
-                self._parsers[cmd.name] = self._subparsers[parent_name].add_parser(
+                argspec = log_args(
+                    logger.debug,
+                    f"Subparsers({repr(parent_name)}).",
+                    self._subparsers[parent_name].add_parser.__name__,
+                    # Args for the call are below:
                     cmd.name.split(" ")[-1],
                     aliases=[cmd.alias] if cmd.alias is not None else [],
                     help=cmd.description,
@@ -1509,6 +1503,7 @@ class _Context:
                     formatter_class=self._formatter,
                     **self._extra_argparser_options,
                 )
+                self._parsers[cmd.name] = self._subparsers[parent_name].add_parser(*argspec.args, **argspec.kwargs)
 
             # Add the arguments to the command's parser
             try:
