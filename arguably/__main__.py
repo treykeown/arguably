@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import List
 
 import arguably
-from .util import load_and_run, LoadAndRunResult
+from ._util import load_and_run, LoadAndRunResult
 
 args_for_file: List[str] = []
 argv_cut_index = 2
