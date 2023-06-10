@@ -140,7 +140,9 @@ class CommandArg:
 
         # Validate list/tuple and error on other parameterized types
         origin = util.get_origin(value_type)
-        if origin == list:
+        if (isinstance(value_type, type) and issubclass(value_type, list)) or (
+            isinstance(origin, type) and issubclass(origin, list)
+        ):
             type_args = util.get_args(value_type)
             if len(type_args) == 0:
                 value_type = str
@@ -152,7 +154,9 @@ class CommandArg:
             else:
                 value_type = type_args[0]
             modifiers.append(mods.ListModifier())
-        elif origin == tuple:
+        elif (isinstance(value_type, type) and issubclass(value_type, tuple)) or (
+            isinstance(origin, type) and issubclass(origin, tuple)
+        ):
             if param.kind in [param.VAR_KEYWORD, param.VAR_POSITIONAL]:
                 raise util.ArguablyException(
                     f"Function parameter `{param.name}` in `{function_name}` is an *args or **kwargs, which should "

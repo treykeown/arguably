@@ -58,3 +58,17 @@ def test_missing_key(iobuf: StringIO, scope_annotated: Dict[str, Callable]) -> N
     cli = get_and_clear_io(iobuf)
 
     assert "error: the following keys are required for logger: path (Path)\n" in cli
+
+
+def test_raw_tuple(iobuf: StringIO) -> None:
+    with pytest.raises(
+        arguably.ArguablyException,
+        match="Function parameter `a` in `foo` is a tuple but doesn't specify the type of its items, which arguably "
+        "requires.",
+    ):
+
+        @arguably.command()
+        def foo(a: tuple):
+            pass
+
+        arguably.run()
