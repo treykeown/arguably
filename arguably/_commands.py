@@ -221,22 +221,16 @@ class Command:
         args = list()
         kwargs = dict()
 
-        filtered_args = dict()
-        for k, v in parsed_args.items():
-            if k in self.arg_map:
-                filtered_args[self.arg_map[k].func_arg_name] = v
-        func_to_cli = {self.arg_map[k].func_arg_name: k for k in self.arg_map}
+        filtered_args = {k: v for k, v in parsed_args.items() if k in self.arg_map}
 
-        for func_arg_name, param in inspect.signature(self.function).parameters.items():
-            arg_value = filtered_args[func_arg_name]
-
-            # Add to either args or kwargs
-            if param.kind in [param.POSITIONAL_ONLY, param.POSITIONAL_OR_KEYWORD]:
-                args.append(arg_value)
-            elif param.kind == param.VAR_POSITIONAL:
-                args.extend(arg_value)
+        # Add to either args or kwargs
+        for arg in self.args:
+            if arg.input_method.is_positional and not arg.is_variadic:
+                args.append(filtered_args[arg.cli_arg_name])
+            elif arg.input_method.is_positional and arg.is_variadic:
+                args.extend(filtered_args[arg.cli_arg_name])
             else:
-                kwargs[func_to_cli[func_arg_name]] = arg_value
+                kwargs[arg.func_arg_name] = filtered_args[arg.cli_arg_name]
 
         # Call the function
         return self.function(*args, **kwargs)
