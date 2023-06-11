@@ -9,10 +9,12 @@ import math
 import multiprocessing
 import re
 import sys
+import time
 import warnings
 from dataclasses import dataclass
+from io import StringIO
 from pathlib import Path
-from typing import Callable, cast, Any, Collection, Union, Optional, List, Dict, Type, Tuple
+from typing import Callable, cast, Any, Collection, Union, Optional, List, Dict, Type, Tuple, TextIO
 
 from docstring_parser import parse as docparse
 
@@ -192,6 +194,61 @@ def info_for_flags(cli_arg_name: str, flag_class: Type[enum.Flag]) -> List[EnumF
 # For __main__
 
 
+class RedirectedIO(StringIO):
+    def __init__(self, pipe: Any) -> None:
+        super().__init__()
+        self.pipe = pipe
+
+    def write(self, s: str) -> int:
+        self.pipe.send(s)
+        return len(s)
+
+
+def capture_stdout_stderr(stdout_writer: Any, stderr_writer: Any, target: Callable, args: Tuple[Any, ...]) -> None:
+    sys.stdout = RedirectedIO(stdout_writer)
+    sys.stderr = RedirectedIO(stderr_writer)
+
+    target(*args)
+
+    sys.stdout = sys.__stdout__
+    sys.stderr = sys.__stderr__
+
+
+def io_redirector(proc: multiprocessing.Process, pipe: Any, file: TextIO) -> None:
+    while True:
+        try:
+            recv = pipe.recv().strip()
+            if recv:
+                print(recv, file=file)
+        except OSError:
+            if not proc.is_alive():
+                break
+            time.sleep(0.05)
+        except EOFError:
+            break
+
+
+def run_redirected_io(mp_ctx: multiprocessing.context.SpawnContext, target: Callable, args: Tuple[Any, ...]) -> None:
+    """Redirects the subprocess's stdout/stderr back to THIS process's stdout/stderr"""
+    from threading import Thread
+
+    # Set up multiprocessing so we can launch a new process to load the file
+    # We redirect stdout and stderr back to us and print in threads
+    stdout_reader, stdout_writer = mp_ctx.Pipe()
+    stderr_reader, stderr_writer = mp_ctx.Pipe()
+
+    proc = mp_ctx.Process(target=capture_stdout_stderr, args=(stdout_writer, stderr_writer, target, args))
+
+    # Run the external process
+    proc.start()
+    Thread(target=io_redirector, args=(proc, stdout_reader, sys.stdout)).start()
+    Thread(target=io_redirector, args=(proc, stderr_reader, sys.stderr)).start()
+    proc.join()
+
+    stderr_reader.close()
+    stderr_writer.close()
+
+
 @dataclass
 class LoadAndRunResult:
     """Result from load_and_run"""
@@ -204,6 +261,13 @@ class LoadAndRunResult:
 class ArgSpec:
     args: Tuple[Any, ...]
     kwargs: Dict[str, Any]
+
+
+def get_parser_name(prog_name: str) -> str:
+    nice_name = prog_name.partition(" ")[2]
+    if nice_name == "":
+        return "__root__"
+    return nice_name
 
 
 def log_args(logger_fn: Callable, msg: str, fn_name: str, *args: Any, **kwargs: Any) -> ArgSpec:
@@ -267,6 +331,7 @@ def load_and_run_inner(file: Path, *args: str, debug: bool) -> LoadAndRunResult:
     assert spec is not None
     assert spec.loader is not None
     module = importlib.util.module_from_spec(spec)
+    sys.modules["_arguably_imported"] = module
     spec.loader.exec_module(module)
 
     # Collect all callables (classes and functions)
@@ -306,6 +371,13 @@ def load_and_run_inner(file: Path, *args: str, debug: bool) -> LoadAndRunResult:
 
     # Add all functions to arguably
     for function in functions:
+        try:
+            # Heuristic for determining what is close enough to a class or function
+            inspect.signature(function)
+            get_type_hints(function, include_extras=True)
+        except TypeError:
+            continue
+
         try:
             arguably.command(function)
         except arguably.ArguablyException as e:

@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import List
 
 import arguably
-from ._util import load_and_run, LoadAndRunResult
+from ._util import load_and_run, LoadAndRunResult, run_redirected_io
 
 args_for_file: List[str] = []
 argv_cut_index = 2
@@ -26,20 +26,15 @@ def main(file: Path, *args: str, debug: bool = False) -> None:
     if not file.exists():
         arguably.error(f"file {str(file)} does not exist")
 
-    # Set up multiprocessing so we can launch a new process to load the file
-    # A result object will be passed back in the queue
-    multiprocessing.set_start_method("spawn")
-    results_queue: multiprocessing.Queue[LoadAndRunResult] = multiprocessing.Queue()
-    proc = multiprocessing.Process(target=load_and_run, args=(results_queue, file, args_for_file, debug))
-
     # Prepare argv for the invocation of arguably in the subprocess
     del sys.argv[:1]  # Remove argv[0] - the filename becomes argv[0].
     if debug:
         sys.argv.remove("--debug")
 
-    # Run the external process
-    proc.start()
-    proc.join()
+    # Run `load_and_run` on the file in a spawned process
+    mp_ctx = multiprocessing.get_context("spawn")
+    results_queue: multiprocessing.Queue[LoadAndRunResult] = mp_ctx.Queue()
+    run_redirected_io(mp_ctx, load_and_run, (results_queue, file, args_for_file, debug))
 
     # Check the results
     try:

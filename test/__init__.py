@@ -1,7 +1,11 @@
 import enum
+import runpy
+
+import pytest
 import sys
+from contextlib import contextmanager
 from io import StringIO
-from typing import Any, Callable, Optional, Dict, List
+from typing import Any, Callable, Optional, Dict, List, Iterator
 
 import arguably
 
@@ -35,6 +39,34 @@ def run_cli_and_manual(
     cli = get_and_clear_io(iobuf)
 
     return cli, manual
+
+
+def run_cli_and_manual_main(
+    capsys: pytest.CaptureFixture,
+    file: str,
+    func: Callable,
+    argv: List[str],
+    args: List[Any],
+    kwargs: Optional[Dict[str, Any]] = None,
+):
+    func(*args, **kwargs)
+    manual_out, manual_err = capsys.readouterr()
+
+    with append_argv(file, *argv):
+        runpy.run_module("arguably", run_name="__main__")
+    cli_out, cli_err = capsys.readouterr()
+
+    return cli_out, manual_out
+
+
+@contextmanager
+def append_argv(*args: str) -> Iterator[None]:
+    appended_len = len(args)
+    sys.argv.extend(args)
+    try:
+        yield
+    finally:
+        del sys.argv[:-appended_len]
 
 
 class Permissions(enum.Flag):

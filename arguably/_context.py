@@ -24,6 +24,7 @@ from ._util import (
     find_alias,
     info_for_flags,
     get_ancestors,
+    get_parser_name,
 )
 
 
@@ -333,7 +334,7 @@ class _Context:
                 for entry in info_for_flags(arg_.cli_arg_name, arg_.arg_value_type):
                     argspec = log_args(
                         logger.debug,
-                        f"Parser({repr(parser.prog.partition(' ')[2])}).",
+                        f"Parser({repr(get_parser_name(parser.prog))}).",
                         parser.add_argument.__name__,
                         # Args for the call are below:
                         *entry.option,
@@ -377,7 +378,7 @@ class _Context:
 
             # Number of arguments `nargs`?
             if arg_.is_variadic:
-                add_arg_kwargs.update(nargs="*")
+                add_arg_kwargs.update(nargs="*", default=list())
             elif arg_.input_method is InputMethod.OPTIONAL_POSITIONAL:
                 add_arg_kwargs.update(nargs="?")
 
@@ -427,7 +428,7 @@ class _Context:
             # Add the argument to the parser
             argspec = log_args(
                 logger.debug,
-                f"Parser({repr(parser.prog.partition(' ')[2])}).",
+                f"Parser({repr(get_parser_name(parser.prog))}).",
                 parser.add_argument.__name__,
                 # Args for the call are below:
                 *cli_arg_names,

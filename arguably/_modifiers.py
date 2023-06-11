@@ -61,6 +61,8 @@ class RequiredModifier(CommandArgModifier):
     def modify_arg_dict(self, command: cmds.Command, arg_: cmds.CommandArg, kwargs_dict: Dict[str, Any]) -> None:
         if arg_.is_variadic:
             kwargs_dict.update(nargs="+")
+            if "default" in kwargs_dict:
+                del kwargs_dict["default"]
         else:
             kwargs_dict.update(required=True)
 
