@@ -4,7 +4,7 @@ import abc
 import enum
 import inspect
 from dataclasses import dataclass
-from typing import Callable, Any, Iterable, Union, List, Dict
+from typing import Callable, Any, Union, List, Dict, Tuple
 
 import arguably._argparse_extensions as ap_ext
 import arguably._commands as cmds
@@ -118,9 +118,16 @@ class HandlerModifier(CommandArgModifier):
 class ChoicesModifier(CommandArgModifier):
     """Restricts inputs to one of a given set of choices"""
 
-    choices: Iterable[Union[str, enum.Enum]]
+    choices: Tuple[Union[str, enum.Enum], ...]
 
     def check_valid(self, value_type: type, param: inspect.Parameter, function_name: str) -> None:
+        if len(self.choices) == 0:
+            raise util.ArguablyException("At least one choice is required for `arguably.arg.choices()`")
+
+        first_type = type(self.choices[0])
+        if not all(issubclass(type(c), first_type) or issubclass(first_type, type(c)) for c in self.choices):
+            raise util.ArguablyException("Choices must all be of the same type")
+
         for choice in self.choices:
             if not isinstance(choice, value_type):
                 raise util.ArguablyException(
@@ -152,11 +159,6 @@ class arg:
     @staticmethod
     def choices(*choices_: Union[str, enum.Enum]) -> ChoicesModifier:
         """Allows specifying a fixed number of choices"""
-        if len(choices_) == 0:
-            raise util.ArguablyException("At least one choice is required for `arguably.arg.choices()`")
-        first_type = type(choices_[0])
-        if not all(issubclass(type(c), first_type) or issubclass(first_type, type(c)) for c in choices_):
-            raise util.ArguablyException("Choices must all be of the same type")
         return ChoicesModifier(choices_)
 
     @staticmethod
