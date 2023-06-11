@@ -349,6 +349,6 @@ class EnumFlagAction(argparse.Action):
         flag_info = cast(util.EnumFlagInfo, self.const)
         value = flag_info.value
 
-        if ctx.context.check_and_set_enum_flag_default_status(parser, flag_info.arg_name):
-            value |= getattr(namespace, flag_info.arg_name)
-        setattr(namespace, flag_info.arg_name, value)
+        if ctx.context.check_and_set_enum_flag_default_status(parser, flag_info.cli_arg_name):
+            value |= getattr(namespace, flag_info.cli_arg_name)
+        setattr(namespace, flag_info.cli_arg_name, value)

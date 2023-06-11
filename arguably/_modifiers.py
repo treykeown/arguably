@@ -41,7 +41,7 @@ class CountedModifier(CommandArgModifier):
         if arg_.input_method != cmds.InputMethod.OPTION:
             raise util.ArguablyException(
                 f"`arguably.Counted` should only be used on {cmds.InputMethod.OPTION.name}, but was used on "
-                f"{arg_.param_name}, which is {arg_.input_method.name}."
+                f"{arg_.func_arg_name}, which is {arg_.input_method.name}."
             )
         kwargs_dict.update(action="count")
         if "type" in kwargs_dict:
@@ -59,7 +59,7 @@ class RequiredModifier(CommandArgModifier):
             raise util.ArguablyException("Cannot mark a bool as required.")
 
     def modify_arg_dict(self, command: cmds.Command, arg_: cmds.CommandArg, kwargs_dict: Dict[str, Any]) -> None:
-        if command.variadic_positional_arg == arg_.param_name:
+        if command.variadic_positional_arg == arg_.func_arg_name:
             kwargs_dict.update(nargs="+")
         else:
             kwargs_dict.update(required=True)
@@ -89,7 +89,7 @@ class TupleModifier(CommandArgModifier):
 
     def modify_arg_dict(self, command: cmds.Command, arg_: cmds.CommandArg, kwargs_dict: Dict[str, Any]) -> None:
         if arg_.metavars is None:
-            kwargs_dict.update(metavar=",".join([arg_.arg_name] * len(self.tuple_arg)))
+            kwargs_dict.update(metavar=",".join([arg_.cli_arg_name] * len(self.tuple_arg)))
         kwargs_dict.update(nargs=len(self.tuple_arg), action=ap_ext.CommaSeparatedTupleAction, type=self.tuple_arg)
 
 

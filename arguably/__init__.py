@@ -18,9 +18,6 @@ d8,   ,d8b,,dP     Y8,,d8,   ,d8I,d8b,  ,d8b,,d8,   ,d8b,,d8b,  ,d8b,,d8b, ,d8b,
 arguably is a tool for handling command-line input in Python. It is a layer on top of argparse that lets you use a
 function definition and a docstring to handle inputs any way a script would require.
 
-Note that, for the purposes of this module, `param` refers to a parameter to a method, and `arg` refers to arguments
-passed in to argparse via the command line.
-
 Any time a user setting up arguably messes up, an ArguablyException will be raised. Any time a user on the command line
 messes up, an error message will be printed (as is normally done with argparse).
 

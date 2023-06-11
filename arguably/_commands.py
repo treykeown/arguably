@@ -54,8 +54,8 @@ class SubtypeDecoratorInfo:
 class CommandArg:
     """A single argument to a given command"""
 
-    param_name: str
-    arg_name: str
+    func_arg_name: str
+    cli_arg_name: str
     input_method: InputMethod
     arg_value_type: type
     description: str
@@ -94,8 +94,8 @@ class CommandArg:
         hints: Dict[str, Any],
     ) -> Tuple[type, List[mods.CommandArgModifier]]:
         """
-        Normalizes the parameter type. Most of the logic here is validation. Explanation of what's returned for a given
-        parameter type:
+        Normalizes the function argument type. Most of the logic here is validation. Explanation of what's returned for
+        a given function argument type:
           * SomeType                    ->  value_type=SomeType, modifiers=[]
           * int | None                  ->  value_type=int, modifiers=[]
           * Tuple[float, float]         ->  value_type=type(None), modifiers=[_TupleModifier([float, float])]
@@ -206,12 +206,12 @@ class Command:
     def __post_init__(self) -> None:
         self.arg_map = dict()
         for arg_ in self.args:
-            if arg_.arg_name in self.arg_map:
+            if arg_.cli_arg_name in self.arg_map:
                 raise util.ArguablyException(
-                    f"Function parameter `{arg_.param_name}` in `{self.name}` conflicts with "
-                    f"`{self.arg_map[arg_.arg_name].param_name}`, both names simplify to `{arg_.arg_name}`"
+                    f"Function parameter `{arg_.func_arg_name}` in `{self.name}` conflicts with "
+                    f"`{self.arg_map[arg_.cli_arg_name].func_arg_name}`, both names simplify to `{arg_.cli_arg_name}`"
                 )
-            self.arg_map[arg_.arg_name] = arg_
+            self.arg_map[arg_.cli_arg_name] = arg_
 
     def call(self, parsed_args: Dict[str, Any]) -> Any:
         """Filters arguments from argparse to only include the ones used by this command, then calls it"""
@@ -222,11 +222,11 @@ class Command:
         filtered_args = dict()
         for k, v in parsed_args.items():
             if k in self.arg_map:
-                filtered_args[self.arg_map[k].param_name] = v
-        param_to_arg_name = {self.arg_map[k].param_name: k for k in self.arg_map}
+                filtered_args[self.arg_map[k].func_arg_name] = v
+        func_to_cli = {self.arg_map[k].func_arg_name: k for k in self.arg_map}
 
-        for param_name, param in inspect.signature(self.function).parameters.items():
-            arg_value = filtered_args[param_name]
+        for func_arg_name, param in inspect.signature(self.function).parameters.items():
+            arg_value = filtered_args[func_arg_name]
 
             # Add to either args or kwargs
             if param.kind in [param.POSITIONAL_ONLY, param.POSITIONAL_OR_KEYWORD]:
@@ -234,7 +234,7 @@ class Command:
             elif param.kind == param.VAR_POSITIONAL:
                 args.extend(arg_value)
             else:
-                kwargs[param_to_arg_name[param_name]] = arg_value
+                kwargs[func_to_cli[func_arg_name]] = arg_value
 
         # Call the function
         return self.function(*args, **kwargs)

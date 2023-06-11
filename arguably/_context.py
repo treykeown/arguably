@@ -136,16 +136,16 @@ class _Context:
         type_ = SubtypeDecoratorInfo(**kwargs)
         self._subtype_init_info.append(type_)
 
-    def find_subtype(self, param_type: type) -> List[SubtypeDecoratorInfo]:
-        return [bi for bi in self._subtype_init_info if issubclass(bi.type_, param_type)]
+    def find_subtype(self, func_arg_type: type) -> List[SubtypeDecoratorInfo]:
+        return [bi for bi in self._subtype_init_info if issubclass(bi.type_, func_arg_type)]
 
     def is_calling_target(self) -> bool:
         """Aliased by `arguably.is_target`. Only useful when `invoke_ancestors=True`, it lets a command know whether
         it's the main targeted command or just an ancestor of the targeted command."""
         return self._is_calling_target
 
-    def check_and_set_enum_flag_default_status(self, parser: argparse.ArgumentParser, arg_name: str) -> bool:
-        key = (parser, arg_name)
+    def check_and_set_enum_flag_default_status(self, parser: argparse.ArgumentParser, cli_arg_name: str) -> bool:
+        key = (parser, cli_arg_name)
         present = key in self._enum_flag_default_cleared
         self._enum_flag_default_cleared.add(key)
         return present
@@ -183,8 +183,8 @@ class _Context:
         variadic_positional_arg = None
 
         # Iterate over all parameters
-        for param_name, param in inspect.signature(info.function).parameters.items():
-            arg_name = normalize_name(param_name, spaces=False)
+        for func_arg_name, param in inspect.signature(info.function).parameters.items():
+            cli_arg_name = normalize_name(func_arg_name, spaces=False)
             arg_default = NoDefault if param.default is param.empty else param.default
 
             # Handle variadic arguments
@@ -193,7 +193,7 @@ class _Context:
                 raise ArguablyException(f"`{processed_name}` is using **kwargs, which is not supported")
             if param.kind is param.VAR_POSITIONAL:
                 arg_count = CommandArg.ANY_COUNT
-                variadic_positional_arg = param_name
+                variadic_positional_arg = func_arg_name
 
             # Get the type and normalize it
             arg_value_type, modifiers = CommandArg.normalize_type(processed_name, param, hints)
@@ -208,7 +208,7 @@ class _Context:
                 ds_matches = [ds_p for ds_p in docs.params if ds_p.arg_name == param.name]
                 if len(ds_matches) > 1:
                     raise ArguablyException(
-                        f"Multiple docstring entries for parameter `{param.name}` in " f"`{processed_name}`"
+                        f"Function parameter `{param.name}` in " f"`{processed_name}` has multiple docstring entries."
                     )
                 if len(ds_matches) == 1:
                     ds_info = ds_matches[0]
@@ -268,8 +268,8 @@ class _Context:
             # Finished processing this arg
             processed_args.append(
                 CommandArg(
-                    param_name,
-                    arg_name,
+                    func_arg_name,
+                    cli_arg_name,
                     input_method,
                     arg_value_type,
                     arg_description,
@@ -323,26 +323,26 @@ class _Context:
 
         for arg_ in cmd.args:
             if arg_.input_method.is_positional:
-                if arg_.param_name == self._options.command_metavar:
+                if arg_.func_arg_name == self._options.command_metavar:
                     raise ArguablyException(
-                        f"Function argument `{arg_.param_name}` in `{cmd.name}` is named the same as `command_metavar`."
-                        f" Either change the parameter name or set the `command_metavar` option to something other than"
-                        f' "{arg_.param_name}" when calling arguably.run()'
+                        f"Function argument `{arg_.func_arg_name}` in `{cmd.name}` is named the same as "
+                        f"`command_metavar`. Either change the parameter name or set the `command_metavar` option to "
+                        f"something other than `{arg_.func_arg_name}` when calling arguably.run()"
                     )
             # Short-circuit, different path for enum.Flag. We add multiple options, one for each flag entry
             if issubclass(arg_.arg_value_type, enum.Flag):
                 if arg_.input_method.is_positional:
                     raise ArguablyException(
-                        f"Function argument `{arg_.param_name}` in `{cmd.name}` is both positional and an enum.Flag. "
-                        f"Positional enum flags are unsupported, since they are turned into options."
+                        f"Function argument `{arg_.func_arg_name}` in `{cmd.name}` is both positional and an enum.Flag."
+                        f" Positional enum flags are unsupported, since they are turned into options."
                     )
                 if arg_.default is NoDefault:
                     raise ArguablyException(
-                        f"Function argument `{arg_.param_name}` in `{cmd.name}` is an enum.Flag. Due to implementation "
-                        f"limitations, all enum.Flag parameters must have a default value."
+                        f"Function argument `{arg_.func_arg_name}` in `{cmd.name}` is an enum.Flag. Due to "
+                        f"implementation limitations, all enum.Flag parameters must have a default value."
                     )
-                parser.set_defaults(**{arg_.arg_name: arg_.default})
-                for entry in info_for_flags(arg_.arg_name, arg_.arg_value_type):
+                parser.set_defaults(**{arg_.cli_arg_name: arg_.default})
+                for entry in info_for_flags(arg_.cli_arg_name, arg_.arg_value_type):
                     argspec = log_args(
                         logger.debug,
                         f"Parser({repr(parser.prog.partition(' ')[2])}).",
@@ -407,18 +407,20 @@ class _Context:
                 mapping = self.set_up_enum(arg_.arg_value_type)
                 add_arg_kwargs.update(choices=[n for n in mapping])
 
-            arg_names: Tuple[str, ...] = (arg_.arg_name,)
+            cli_arg_names: Tuple[str, ...] = (arg_.cli_arg_name,)
 
             # Special handling for optional arguments
             if arg_.input_method is InputMethod.OPTION:
-                arg_names = (f"--{arg_.arg_name}",) if arg_.alias is None else (f"-{arg_.alias}", f"--{arg_.arg_name}")
+                cli_arg_names = (
+                    (f"--{arg_.cli_arg_name}",) if arg_.alias is None else (f"-{arg_.alias}", f"--{arg_.cli_arg_name}")
+                )
 
             # `bool` should be flags
             if issubclass(arg_.arg_value_type, bool):
                 if arg_.input_method is not InputMethod.OPTION or arg_.default is NoDefault:
                     raise ArguablyException(
-                        f"Function argument `{arg_.param_name}` in `{cmd.name}` is a `bool`. Boolean parameters must "
-                        f"have a default value and be an optional, not a positional, argument."
+                        f"Function parameter `{arg_.func_arg_name}` in `{cmd.name}` is a `bool`. Boolean parameters "
+                        f"must have a default value and be an optional, not a positional, argument."
                     )
                 # Use `store_true` or `store_false` for bools
                 add_arg_kwargs.update(action="store_true" if arg_.default is False else "store_false")
@@ -442,7 +444,7 @@ class _Context:
                 f"Parser({repr(parser.prog.partition(' ')[2])}).",
                 parser.add_argument.__name__,
                 # Args for the call are below:
-                *arg_names,
+                *cli_arg_names,
                 **add_arg_kwargs,
             )
             parser.add_argument(*argspec.args, **argspec.kwargs)
@@ -701,7 +703,7 @@ class _Context:
         return result
 
     def _build_subtype(
-        self, subtype_info: SubtypeDecoratorInfo, type_spec: BuildTypeSpec, parent_param_name: str
+        self, subtype_info: SubtypeDecoratorInfo, type_spec: BuildTypeSpec, parent_func_arg_name: str
     ) -> Any:
         type_ = subtype_info.type_
         factory = subtype_info.factory or type_.__call__
@@ -720,46 +722,46 @@ class _Context:
             for key in missing_required_keys:
                 arg_value_type, modifiers = CommandArg.normalize_type(type_.__name__, params[key], hints)
                 missing_specs.append(f"{key} ({arg_value_type.__name__})")
-            self.error(f"the following keys are required for {parent_param_name}: {', '.join(missing_specs)}")
+            self.error(f"the following keys are required for {parent_func_arg_name}: {', '.join(missing_specs)}")
 
         # Iterate over all parameters
-        for param_name, param in inspect.signature(template).parameters.items():
+        for func_arg_name, param in inspect.signature(template).parameters.items():
             try:
-                arg_name = normalize_name(param_name)
-                if arg_name == "self":
+                func_arg_name = normalize_name(func_arg_name)
+                if func_arg_name == "self":
                     continue
-                param_value = type_spec.kwargs[arg_name]
-                del type_spec.kwargs[arg_name]
+                param_value = type_spec.kwargs[func_arg_name]
+                del type_spec.kwargs[func_arg_name]
                 arg_value_type, modifiers = CommandArg.normalize_type(type_.__name__, param, hints)
             except ArguablyException:
-                raise ArguablyException(f"Error processing parameter {param_name} of subtype {type_.__name__}")
+                raise ArguablyException(f"Error processing parameter {func_arg_name} of subtype {type_.__name__}")
             if len(modifiers) > 0:
                 raise ArguablyException(
-                    f"Error processing parameter {param_name} of subtype {type_.__name__}: Cannot use modifiers "
+                    f"Error processing parameter {func_arg_name} of subtype {type_.__name__}: Cannot use modifiers "
                     f"on subtypes"
                 )
-            normalized_kwargs[param_name] = arg_value_type(param_value)
+            normalized_kwargs[func_arg_name] = arg_value_type(param_value)
 
         # The calls to .error() cause an exit
         if len(type_spec.kwargs) > 1:
-            self.error(f"unexpected keys for {parent_param_name}: {', '.join(type_spec.kwargs)}")
+            self.error(f"unexpected keys for {parent_func_arg_name}: {', '.join(type_spec.kwargs)}")
         elif len(type_spec.kwargs) > 0:
-            self.error(f"unexpected key for {parent_param_name}: {next(iter(type_spec.kwargs))}")
+            self.error(f"unexpected key for {parent_func_arg_name}: {next(iter(type_spec.kwargs))}")
 
         return factory(**normalized_kwargs)
 
-    def resolve_subtype(self, arg_value_type: type, type_spec: BuildTypeSpec, param_name: str) -> Any:
+    def resolve_subtype(self, arg_value_type: type, type_spec: BuildTypeSpec, func_arg_name: str) -> Any:
         options = self.find_subtype(arg_value_type)
         if len(options) == 0:
             options = [SubtypeDecoratorInfo(arg_value_type)]
         if len(options) == 1:
-            return self._build_subtype(options[0], type_spec, param_name)
+            return self._build_subtype(options[0], type_spec, func_arg_name)
         matches = [op for op in options if op.alias == type_spec.subtype]
         if len(matches) == 0:
-            self.error(f"unknown subtype `{type_spec.subtype}` for {param_name}")
+            self.error(f"unknown subtype `{type_spec.subtype}` for {func_arg_name}")
         if len(matches) > 1:
             raise ArguablyException(f"More than one match for subtype `{type_spec.subtype}` of type {arg_value_type}")
-        return self._build_subtype(matches[0], type_spec, param_name)
+        return self._build_subtype(matches[0], type_spec, func_arg_name)
 
 
 context = _Context()

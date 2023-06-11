@@ -123,7 +123,7 @@ class EnumFlagInfo:
     """Used similarly to _CommandArg, but for entries in an `enum.Flag`."""
 
     option: Union[Tuple[str], Tuple[str, str]]
-    arg_name: str
+    cli_arg_name: str
     value: Any
     description: str
 
@@ -149,7 +149,7 @@ def get_enum_member_docs(enum_class: Type[enum.Enum]) -> Dict[str, str]:
     return result
 
 
-def info_for_flags(arg_name: str, flag_class: Type[enum.Flag]) -> List[EnumFlagInfo]:
+def info_for_flags(cli_arg_name: str, flag_class: Type[enum.Flag]) -> List[EnumFlagInfo]:
     """Generates a list of `_EnumFlagInfo` corresponding to all flags in an `enum.Flag`."""
     result = list()
     docs = docparse(flag_class.__doc__ or "")
@@ -183,7 +183,7 @@ def info_for_flags(arg_name: str, flag_class: Type[enum.Flag]) -> List[EnumFlagI
             options.insert(0, f"-{alias_match.group(1)}")
 
         result.append(
-            EnumFlagInfo(cast(Union[Tuple[str], Tuple[str, str]], tuple(options)), arg_name, item, arg_description)
+            EnumFlagInfo(cast(Union[Tuple[str], Tuple[str, str]], tuple(options)), cli_arg_name, item, arg_description)
         )
     return result
 
