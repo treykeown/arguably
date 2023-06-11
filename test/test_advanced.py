@@ -126,3 +126,27 @@ def test_add_help(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
     assert "adds a bunch of numbers together\n" in cli
     assert "  NUMS                the numbers NUMS to add\n" in cli
     assert "  -c, --coords X,Y,Z  coordinates X,Y,Z updated with the sum (default: None)\n" in cli
+
+
+def test_mixed_tuple(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
+    argv = ["mixed-tuple", "foo,10,123.45"]
+    args = [("foo", 10, 123.45)]
+    kwargs = dict()
+
+    cli, manual = run_cli_and_manual(iobuf, scope_advanced["mixed_tuple"], argv, args, kwargs)
+
+    assert "> mixed-tuple\n" in cli
+    assert "'foo', 10, 123.45\n" in cli
+    assert cli == manual
+
+
+def test_mixed_tuple_help(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
+    argv = ["mixed-tuple", "-h"]
+
+    sys.argv.extend(argv)
+    with pytest.raises(SystemExit):
+        arguably.run(output=iobuf, name="advanced", show_types=True)
+    cli = get_and_clear_io(iobuf)
+
+    assert cli.startswith("usage: advanced mixed-tuple [-h] val,val,val\n")
+    assert "  val,val,val  the values (type: str,int,float)" in cli

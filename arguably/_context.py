@@ -365,7 +365,12 @@ class _Context:
 
             # Show arg type?
             if self._options.show_types:
-                description_extras.append(f"type: {arg_.arg_value_type.__name__}")
+                tuple_modifiers = [m for m in arg_.modifiers if isinstance(m, TupleModifier)]
+                if len(tuple_modifiers) > 0:
+                    assert len(tuple_modifiers) == 1
+                    description_extras.append(f"type: {','.join(t.__name__ for t in tuple_modifiers[0].tuple_arg)}")
+                else:
+                    description_extras.append(f"type: {arg_.arg_value_type.__name__}")
 
             # `default` value?
             if arg_.input_method.is_optional and arg_.default is not NoDefault:

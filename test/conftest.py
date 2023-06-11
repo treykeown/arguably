@@ -181,6 +181,18 @@ def scope_advanced(iobuf: StringIO) -> Dict[str, Callable]:
             iobuf.write(f"add coords: {coords[0]+total}, {coords[1]+total}, {coords[2]+total}\n")
 
     @arguably.command
+    def mixed_tuple(val: Tuple[str, int, float]) -> None:
+        """
+        mixed tuple
+        :param val: the values
+        """
+        if not MANUAL:
+            assert arguably.is_target()
+        iobuf.write("> mixed-tuple\n")
+
+        iobuf.write(f"{repr(val[0])}, {repr(val[1])}, {repr(val[2])}\n")
+
+    @arguably.command
     def give(
         *,
         slowly: bool = False,
