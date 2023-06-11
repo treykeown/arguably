@@ -176,7 +176,14 @@ class ArgumentParser(argparse.ArgumentParser):
 
 
 class ListTupleBuilderAction(argparse.Action):
-    """Special action for working with lists, tuples, and builders"""
+    """
+    Special action for arguably - handles lists, tuples, and builders. Designed to handle:
+        * lists - List[int], List[str]
+        * tuples - Tuple[int, int, int], Tuple[str, float, int]
+        * builders - Annotated[FooClass, arguably.arg.builder()]
+        * list of tuples - List[Tuple[int, int]]
+        * list of builders - Annotated[List[FooClass], arguably.arg.builder()]
+    """
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         self._command_arg = kwargs["command_arg"]
@@ -254,6 +261,11 @@ class ListTupleBuilderAction(argparse.Action):
         option_string: Optional[str],
         split_value_str: List[str],
     ) -> Any:
+        """
+        Builds a class from the passed-in strings. Example:
+            split_value_str=['foo', 'bar=123', 'bat=asdf'] -> FooClass(bar=123, bat='asdf')
+        """
+
         # Separate out subtype and kwargs
         kwargs: Dict[str, Any] = dict()
         subtype_ = None
@@ -285,10 +297,8 @@ class ListTupleBuilderAction(argparse.Action):
             return ctx.context.resolve_subtype(option_name, self._real_type, subtype_, kwargs)
 
 
-class EnumFlagAction(argparse.Action):
-    """
-    Special action for arguably, handles `enum.Flag`. Needed to clear default value if set, and to OR values together
-    """
+class FlagAction(argparse.Action):
+    """Special action for arguably - handles `enum.Flag`. Clears default value and ORs together flag values."""
 
     def __call__(
         self,

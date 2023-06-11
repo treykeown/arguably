@@ -10,7 +10,7 @@ from typing import Any, TextIO, Union, Optional, List, Dict, Type, Tuple, Callab
 
 from docstring_parser import parse as docparse
 
-from ._argparse_extensions import HelpFormatter, EnumFlagAction, ArgumentParser
+from ._argparse_extensions import HelpFormatter, FlagAction, ArgumentParser
 from ._commands import CommandDecoratorInfo, SubtypeDecoratorInfo, Command, CommandArg, InputMethod
 from ._modifiers import TupleModifier
 from ._util import (
@@ -337,7 +337,7 @@ class _Context:
                         parser.add_argument.__name__,
                         # Args for the call are below:
                         *entry.option,
-                        action=EnumFlagAction,
+                        action=FlagAction,
                         const=entry,
                         nargs=0,
                         help=entry.description,
