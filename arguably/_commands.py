@@ -56,16 +56,18 @@ class CommandArg:
 
     func_arg_name: str
     cli_arg_name: str
-    input_method: InputMethod
-    arg_value_type: type
-    description: str
-    count: int = 1
-    alias: Optional[str] = None
-    default: Any = util.NoDefault
-    metavars: Optional[List[str]] = None
-    modifiers: List[mods.CommandArgModifier] = field(default_factory=list)
 
-    ANY_COUNT = -1  # Used in the `count` field for an argument that can take any number of values, `*args`
+    input_method: InputMethod
+    is_variadic: bool
+    arg_value_type: type
+
+    description: str
+    alias: Optional[str] = None
+    metavars: Optional[List[str]] = None
+
+    default: Any = util.NoDefault
+
+    modifiers: List[mods.CommandArgModifier] = field(default_factory=list)
 
     @staticmethod
     def _normalize_type_union(
@@ -195,23 +197,23 @@ class Command:
 
     function: Callable
     name: str
+    args: List[CommandArg]
     description: str = ""
-    args: List[CommandArg] = field(default_factory=list)
-    arg_map: Dict[str, CommandArg] = field(init=False)
     alias: Optional[str] = None
 
-    has_positional_args: bool = False
-    variadic_positional_arg: Optional[str] = None
+    arg_map: Dict[str, CommandArg] = field(init=False)
 
     def __post_init__(self) -> None:
         self.arg_map = dict()
-        for arg_ in self.args:
-            if arg_.cli_arg_name in self.arg_map:
+        for arg in self.args:
+            assert arg.func_arg_name not in self.arg_map
+            if arg.cli_arg_name in self.arg_map:
                 raise util.ArguablyException(
-                    f"Function parameter `{arg_.func_arg_name}` in `{self.name}` conflicts with "
-                    f"`{self.arg_map[arg_.cli_arg_name].func_arg_name}`, both names simplify to `{arg_.cli_arg_name}`"
+                    f"Function parameter `{arg.func_arg_name}` in `{self.name}` conflicts with "
+                    f"`{self.arg_map[arg.cli_arg_name].func_arg_name}`, both names simplify to `{arg.cli_arg_name}`"
                 )
-            self.arg_map[arg_.cli_arg_name] = arg_
+            self.arg_map[arg.cli_arg_name] = arg
+            self.arg_map[arg.func_arg_name] = arg
 
     def call(self, parsed_args: Dict[str, Any]) -> Any:
         """Filters arguments from argparse to only include the ones used by this command, then calls it"""

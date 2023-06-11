@@ -59,7 +59,7 @@ class RequiredModifier(CommandArgModifier):
             raise util.ArguablyException("Cannot mark a bool as required.")
 
     def modify_arg_dict(self, command: cmds.Command, arg_: cmds.CommandArg, kwargs_dict: Dict[str, Any]) -> None:
-        if command.variadic_positional_arg == arg_.func_arg_name:
+        if arg_.is_variadic:
             kwargs_dict.update(nargs="+")
         else:
             kwargs_dict.update(required=True)

@@ -173,8 +173,6 @@ class _Context:
         # Will be filled in as we loop over all parameters
         processed_args: List[CommandArg] = list()
         used_arg_aliases: List[str] = list()
-        has_positional_args = False
-        variadic_positional_arg = None
 
         # Iterate over all parameters
         for func_arg_name, param in inspect.signature(info.function).parameters.items():
@@ -182,19 +180,19 @@ class _Context:
             arg_default = NoDefault if param.default is param.empty else param.default
 
             # Handle variadic arguments
-            arg_count = 1
+            is_variadic = False
             if param.kind is param.VAR_KEYWORD:
                 raise ArguablyException(f"`{processed_name}` is using **kwargs, which is not supported")
             if param.kind is param.VAR_POSITIONAL:
-                arg_count = CommandArg.ANY_COUNT
-                variadic_positional_arg = func_arg_name
+                is_variadic = True
 
             # Get the type and normalize it
             arg_value_type, modifiers = CommandArg.normalize_type(processed_name, param, hints)
             tuple_modifiers = [m for m in modifiers if isinstance(m, TupleModifier)]
+            expected_metavars = 1
             if len(tuple_modifiers) > 0:
                 assert len(tuple_modifiers) == 1
-                arg_count = len(tuple_modifiers[0].tuple_arg)
+                expected_metavars = len(tuple_modifiers[0].tuple_arg)
 
             # Get the description
             arg_description = ""
@@ -226,16 +224,16 @@ class _Context:
                 if len(metavar_split) == 3:
                     # format would be: ['pre-metavar', 'METAVAR', 'post-metavar']
                     match_items = [i.strip() for i in metavar_split[1].split(",")]
-                    if arg_count == CommandArg.ANY_COUNT:
+                    if is_variadic:
                         if len(match_items) != 1:
                             raise ArguablyException(
                                 f"Function parameter `{param.name}` in `{processed_name}` should only have one item in "
                                 f"its metavar descriptor, but found {len(match_items)}: {','.join(match_items)}."
                             )
-                    elif len(match_items) != arg_count:
+                    elif len(match_items) != expected_metavars:
                         raise ArguablyException(
-                            f"Function parameter `{param.name}` in `{processed_name}` takes {arg_count} items, but "
-                            f"metavar descriptor has {len(match_items)}: {','.join(match_items)}."
+                            f"Function parameter `{param.name}` in `{processed_name}` takes {expected_metavars} items, "
+                            f"but metavar descriptor has {len(match_items)}: {','.join(match_items)}."
                         )
                     metavars = [i.upper() for i in match_items]
                     arg_description = "".join(metavar_split)  # Strips { and } from metavars for description
@@ -250,10 +248,8 @@ class _Context:
                 input_method = InputMethod.OPTION
             elif arg_default is NoDefault:
                 input_method = InputMethod.REQUIRED_POSITIONAL
-                has_positional_args = True
             else:
                 input_method = InputMethod.OPTIONAL_POSITIONAL
-                has_positional_args = True
 
             # Check modifiers
             for modifier in modifiers:
@@ -265,12 +261,12 @@ class _Context:
                     func_arg_name,
                     cli_arg_name,
                     input_method,
+                    is_variadic,
                     arg_value_type,
                     arg_description,
-                    arg_count,
                     arg_alias,
-                    arg_default,
                     metavars,
+                    arg_default,
                     modifiers,
                 )
             )
@@ -279,11 +275,9 @@ class _Context:
         return Command(
             info.function,
             processed_name,
-            processed_description,
             processed_args,
+            processed_description,
             info.alias,
-            has_positional_args,
-            variadic_positional_arg,
         )
 
     def set_up_enum(
@@ -382,7 +376,7 @@ class _Context:
                         description_extras.append(f"default: {arg_.default}")
 
             # Number of arguments `nargs`?
-            if arg_.count is CommandArg.ANY_COUNT:
+            if arg_.is_variadic:
                 add_arg_kwargs.update(nargs="*")
             elif arg_.input_method is InputMethod.OPTIONAL_POSITIONAL:
                 add_arg_kwargs.update(nargs="?")
@@ -453,7 +447,7 @@ class _Context:
             required_subparser = False
             if ancestor not in self._commands:
                 # Dummy command - this ancestor doesn't have a function of its own, it's just a path.
-                self._commands[ancestor] = Command(lambda *_, **__: None, ancestor)
+                self._commands[ancestor] = Command(lambda *_, **__: None, ancestor, [])
             if ancestor not in self._parsers:
                 # Dummy parser - since there's nothing to run, require the subparser.
                 required_subparser = True
@@ -471,7 +465,7 @@ class _Context:
             if ancestor not in self._subparsers:
                 # Add subparser to the parent command's parser.
                 ancestor_cmd = self._commands[ancestor]
-                if ancestor_cmd.has_positional_args:
+                if any(arg.input_method.is_positional for arg in ancestor_cmd.args):
                     raise ArguablyException(
                         f"Command `{ancestor}` cannot have both subcommands and positional arguments."
                     )
