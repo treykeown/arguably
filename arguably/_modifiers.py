@@ -90,7 +90,7 @@ class TupleModifier(CommandArgModifier):
     def modify_arg_dict(self, command: cmds.Command, arg_: cmds.CommandArg, kwargs_dict: Dict[str, Any]) -> None:
         if arg_.metavars is None:
             kwargs_dict.update(metavar=",".join([arg_.cli_arg_name] * len(self.tuple_arg)))
-        kwargs_dict.update(nargs=len(self.tuple_arg), action=ap_ext.CommaSeparatedTupleAction, type=self.tuple_arg)
+        kwargs_dict.update(action=ap_ext.CommaSeparatedTupleAction, type=self.tuple_arg)
 
 
 @dataclass(frozen=True)

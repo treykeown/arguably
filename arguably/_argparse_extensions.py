@@ -3,7 +3,6 @@ from __future__ import annotations
 import argparse
 import enum
 import sys
-from dataclasses import dataclass
 from gettext import gettext
 from typing import (
     Callable,
@@ -189,11 +188,9 @@ class CommaSeparatedTupleAction(argparse.Action):
                 raise util.ArguablyException(f"{'/'.join(self.option_strings)} type {type_name} is not callable")
 
         # Keep track of the real type and real nargs, lie to argparse to take in a single (comma-separated) string
-        self._real_type = self.type
+        assert isinstance(self.type, list)
+        self._real_type: List[type] = self.type
         self.type = str
-
-        self._real_nargs = self.nargs
-        self.nargs = 1
 
         # Make metavar comma-separated as well
         if isinstance(self.metavar, tuple):
@@ -215,21 +212,13 @@ class CommaSeparatedTupleAction(argparse.Action):
             value = values[0]
             split_values = list()
             split_str_values = util.split_unquoted(value, delimeter=",")
-            if isinstance(self._real_type, list):
-                # We have a list of types for the tuple, convert each item accordingly
-                assert len(self._real_type) == self._real_nargs
-                if len(self._real_type) != len(split_str_values):
-                    raise argparse.ArgumentError(self, f"expected {self._real_nargs} values")
-                for str_value, value_type in zip(split_str_values, self._real_type):
-                    split_values.append(value_type(str_value))
-            else:
-                # Convert all to same type
-                split_values.extend(list(map(cast(type, self._real_type), split_str_values)))
+
+            # We have a list of types for the tuple, convert each item accordingly
+            for str_value, value_type in zip(split_str_values, self._real_type):
+                split_values.append(value_type(str_value))
             values = split_values
 
-        # Check length and set namespace variable
-        if len(values) != self._real_nargs:
-            raise argparse.ArgumentError(self, f"expected {self._real_nargs} values")
+        # Set namespace variable
         setattr(namespace, self.dest, values)
 
 
@@ -266,14 +255,6 @@ class CommaSeparatedListAction(argparse._ExtendAction):  # noqa
         if len(values) == 0 and self.required:
             raise argparse.ArgumentError(self, "expected at least one argument")
         super().__call__(parser, namespace, values, option_string)
-
-
-@dataclass
-class BuildTypeSpec:
-    """Subtype and kwargs that specify how to build a class, created by `_BuildTypeAction` and consumed later."""
-
-    subtype: Optional[str]
-    kwargs: Dict[str, Any]
 
 
 class BuildTypeAction(argparse.Action):
@@ -329,7 +310,7 @@ class BuildTypeAction(argparse.Action):
         # Set the value in the namespace to be a `_BuildTypeSpec`, which will be consumed later to build the class
         option_name = "" if option_string is None else option_string.lstrip("-")
         with ctx.context.current_parser(parser):
-            built_class = ctx.context.resolve_subtype(self._real_type, BuildTypeSpec(subtype_, kwargs), option_name)
+            built_class = ctx.context.resolve_subtype(option_name, self._real_type, subtype_, kwargs)
 
         setattr(namespace, self.dest, built_class)
 

@@ -10,13 +10,7 @@ from typing import Any, TextIO, Union, Optional, List, Dict, Type, Tuple, Callab
 
 from docstring_parser import parse as docparse
 
-from ._argparse_extensions import (
-    BuildTypeSpec,
-    CommaSeparatedTupleAction,
-    HelpFormatter,
-    EnumFlagAction,
-    ArgumentParser,
-)
+from ._argparse_extensions import HelpFormatter, EnumFlagAction, ArgumentParser
 from ._commands import CommandDecoratorInfo, SubtypeDecoratorInfo, Command, CommandArg, InputMethod
 from ._modifiers import TupleModifier
 from ._util import (
@@ -392,8 +386,6 @@ class _Context:
                 add_arg_kwargs.update(nargs="*")
             elif arg_.input_method is InputMethod.OPTIONAL_POSITIONAL:
                 add_arg_kwargs.update(nargs="?")
-            elif arg_.count != 1:
-                add_arg_kwargs.update(nargs=arg_.count, action=CommaSeparatedTupleAction)
 
             # Any specified `metavar`s?
             if arg_.metavars is not None:
@@ -703,7 +695,7 @@ class _Context:
         return result
 
     def _build_subtype(
-        self, subtype_info: SubtypeDecoratorInfo, type_spec: BuildTypeSpec, parent_func_arg_name: str
+        self, parent_func_arg_name: str, subtype_info: SubtypeDecoratorInfo, build_kwargs: Dict[str, Any]
     ) -> Any:
         type_ = subtype_info.type_
         factory = subtype_info.factory or type_.__call__
@@ -712,9 +704,7 @@ class _Context:
         normalized_kwargs: Dict[str, Any] = dict()
 
         missing_required_keys = [
-            normalize_name(p)
-            for p in inspect.signature(template).parameters
-            if p not in type_spec.kwargs and p != "self"
+            normalize_name(p) for p in inspect.signature(template).parameters if p not in build_kwargs and p != "self"
         ]
         if len(missing_required_keys) > 0:
             params = inspect.signature(template).parameters
@@ -730,8 +720,8 @@ class _Context:
                 func_arg_name = normalize_name(func_arg_name)
                 if func_arg_name == "self":
                     continue
-                param_value = type_spec.kwargs[func_arg_name]
-                del type_spec.kwargs[func_arg_name]
+                param_value = build_kwargs[func_arg_name]
+                del build_kwargs[func_arg_name]
                 arg_value_type, modifiers = CommandArg.normalize_type(type_.__name__, param, hints)
             except ArguablyException:
                 raise ArguablyException(f"Error processing parameter {func_arg_name} of subtype {type_.__name__}")
@@ -743,25 +733,27 @@ class _Context:
             normalized_kwargs[func_arg_name] = arg_value_type(param_value)
 
         # The calls to .error() cause an exit
-        if len(type_spec.kwargs) > 1:
-            self.error(f"unexpected keys for {parent_func_arg_name}: {', '.join(type_spec.kwargs)}")
-        elif len(type_spec.kwargs) > 0:
-            self.error(f"unexpected key for {parent_func_arg_name}: {next(iter(type_spec.kwargs))}")
+        if len(build_kwargs) > 1:
+            self.error(f"unexpected keys for {parent_func_arg_name}: {', '.join(build_kwargs)}")
+        elif len(build_kwargs) > 0:
+            self.error(f"unexpected key for {parent_func_arg_name}: {next(iter(build_kwargs))}")
 
         return factory(**normalized_kwargs)
 
-    def resolve_subtype(self, arg_value_type: type, type_spec: BuildTypeSpec, func_arg_name: str) -> Any:
+    def resolve_subtype(
+        self, func_arg_name: str, arg_value_type: type, subtype: Optional[str], build_kwargs: Dict[str, Any]
+    ) -> Any:
         options = self.find_subtype(arg_value_type)
         if len(options) == 0:
             options = [SubtypeDecoratorInfo(arg_value_type)]
         if len(options) == 1:
-            return self._build_subtype(options[0], type_spec, func_arg_name)
-        matches = [op for op in options if op.alias == type_spec.subtype]
+            return self._build_subtype(func_arg_name, options[0], build_kwargs)
+        matches = [op for op in options if op.alias == subtype]
         if len(matches) == 0:
-            self.error(f"unknown subtype `{type_spec.subtype}` for {func_arg_name}")
+            self.error(f"unknown subtype `{subtype}` for {func_arg_name}")
         if len(matches) > 1:
-            raise ArguablyException(f"More than one match for subtype `{type_spec.subtype}` of type {arg_value_type}")
-        return self._build_subtype(matches[0], type_spec, func_arg_name)
+            raise ArguablyException(f"More than one match for subtype `{subtype}` of type {arg_value_type}")
+        return self._build_subtype(func_arg_name, matches[0], build_kwargs)
 
 
 context = _Context()
