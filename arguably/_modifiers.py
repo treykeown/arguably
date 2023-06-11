@@ -78,7 +78,7 @@ class ListModifier(CommandArgModifier):
             type(mod) for mod in arg_.modifiers
         ]:
             kwargs_dict.update(required=True)
-        kwargs_dict.update(action=ap_ext.CommaSeparatedListAction)
+        kwargs_dict.update(action=ap_ext.ListTupleBuilderAction, command_arg=arg_)
 
 
 @dataclass(frozen=True)
@@ -90,7 +90,7 @@ class TupleModifier(CommandArgModifier):
     def modify_arg_dict(self, command: cmds.Command, arg_: cmds.CommandArg, kwargs_dict: Dict[str, Any]) -> None:
         if arg_.metavars is None:
             kwargs_dict.update(metavar=",".join([arg_.cli_arg_name] * len(self.tuple_arg)))
-        kwargs_dict.update(action=ap_ext.CommaSeparatedTupleAction, type=self.tuple_arg)
+        kwargs_dict.update(action=ap_ext.ListTupleBuilderAction, command_arg=arg_, type=self.tuple_arg)
 
 
 @dataclass(frozen=True)
@@ -98,7 +98,7 @@ class BuilderModifier(CommandArgModifier):
     """Sets up arguably builder"""
 
     def modify_arg_dict(self, command: cmds.Command, arg_: cmds.CommandArg, kwargs_dict: Dict[str, Any]) -> None:
-        kwargs_dict.update(action=ap_ext.BuildTypeAction)
+        kwargs_dict.update(action=ap_ext.ListTupleBuilderAction, command_arg=arg_)
 
 
 @dataclass(frozen=True)

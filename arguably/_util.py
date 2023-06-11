@@ -302,6 +302,8 @@ def load_and_run_inner(file: Path, *args: str, debug: bool) -> LoadAndRunResult:
                 callable_method.__name__ = f"{cls.__name__}.{callable_method.__name__}"
             functions.append(callable_method)
 
+    arguably._context.context.reset()
+
     # Add all functions to arguably
     for function in functions:
         try:

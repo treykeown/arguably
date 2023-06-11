@@ -19,6 +19,7 @@ from typing import (
 )
 
 import arguably._context as ctx
+import arguably._modifiers as mods
 import arguably._util as util
 
 
@@ -174,13 +175,28 @@ class ArgumentParser(argparse.ArgumentParser):
             raise argparse.ArgumentError(action, msg % args)
 
 
-class CommaSeparatedTupleAction(argparse.Action):
-    """Special action for arguably, handles comma-separated values for tuples"""
+class ListTupleBuilderAction(argparse.Action):
+    """Special action for working with lists, tuples, and builders"""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
+        self._command_arg = kwargs["command_arg"]
+        del kwargs["command_arg"]
+
         super().__init__(*args, **kwargs)
 
-        # Special handling if self.type is a list - it's a list of all the types for this tuple
+        # Check if we're handling a list
+        self._is_list = any(isinstance(m, mods.ListModifier) for m in self._command_arg.modifiers)
+
+        # Check if we're handling a tuple (or a list of tuples)
+        self._is_tuple = any(isinstance(m, mods.TupleModifier) for m in self._command_arg.modifiers)
+
+        # Check if we're handling a builder (or a list of builders)
+        self._is_builder = any(isinstance(m, mods.BuilderModifier) for m in self._command_arg.modifiers)
+
+        if self._is_tuple and self._is_builder:
+            raise util.ArguablyException(f"{'/'.join(self.option_strings)} cannot use both tuple and builder")
+
+        # Validate that type is callable
         check_type_list = self.type if isinstance(self.type, list) else [self.type]
         for type_ in check_type_list:
             if not callable(type_):
@@ -188,8 +204,8 @@ class CommaSeparatedTupleAction(argparse.Action):
                 raise util.ArguablyException(f"{'/'.join(self.option_strings)} type {type_name} is not callable")
 
         # Keep track of the real type and real nargs, lie to argparse to take in a single (comma-separated) string
-        assert isinstance(self.type, list)
-        self._real_type: List[type] = self.type
+        assert isinstance(self.type, type) or isinstance(self.type, list)
+        self._real_type: Union[type, List[type]] = self.type
         self.type = str
 
         # Make metavar comma-separated as well
@@ -200,101 +216,56 @@ class CommaSeparatedTupleAction(argparse.Action):
         self,
         parser: argparse.ArgumentParser,
         namespace: argparse.Namespace,
-        values: Union[str, Sequence[Any], None],
+        value_strs: Union[str, Sequence[Any], None],
         option_string: Optional[str] = None,
     ) -> None:
-        values = normalize_action_input(values)
-        if len(values) != 0:
-            # Unlike list, a tuple can only be specified one time
-            assert len(values) == 1
-
-            # Split values and convert to self._real_type
-            value = values[0]
-            split_values = list()
-            split_str_values = util.split_unquoted(value, delimeter=",")
-
-            # We have a list of types for the tuple, convert each item accordingly
-            for str_value, value_type in zip(split_str_values, self._real_type):
-                split_values.append(value_type(str_value))
-            values = split_values
-
-        # Set namespace variable
-        setattr(namespace, self.dest, values)
-
-
-class CommaSeparatedListAction(argparse._ExtendAction):  # noqa
-    """
-    Special action for arguably, handles comma-separated values for lists. Can be specified multiple times. Based off
-    the "extend" action.
-    """
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-        if not callable(self.type):
-            raise util.ArguablyException(f"{'/'.join(self.option_strings)} type {self.type} is not callable")
-        self._real_type = self.type
-        self.type = None
-
-    def __call__(
-        self,
-        parser: argparse.ArgumentParser,
-        namespace: argparse.Namespace,
-        values: Union[str, Sequence[Any], None],
-        option_string: Optional[str] = None,
-    ) -> None:
-        values = normalize_action_input(values)
+        value_strs = normalize_action_input(value_strs)
 
         # Split values and convert to self._real_type
-        split_values = list()
-        for value in values:
-            split_str_values = [util.unwrap_quotes(v) for v in util.split_unquoted(value, delimeter=",")]
-            split_values.extend(list(map(self._real_type, split_str_values)))
-        values = split_values
+        values = list()
+        for value_str in value_strs:
+            split_value_str = [util.unwrap_quotes(v) for v in util.split_unquoted(value_str, delimeter=",")]
+            if self._is_tuple:
+                assert isinstance(self._real_type, list)
+                if len(split_value_str) != len(self._real_type):
+                    raise argparse.ArgumentError(self, f"expected {len(self._real_type)} values")
+                value = tuple(type_(str_) for str_, type_ in zip(split_value_str, self._real_type))
+                values.append(value)
+            elif self._is_builder:
+                values.append(self._build_from_str_values(parser, option_string, split_value_str))
+            else:
+                assert self._is_list
+                assert isinstance(self._real_type, type)
+                values.extend(self._real_type(str_) for str_ in split_value_str)
 
-        # Check length and set namespace variable
-        if len(values) == 0 and self.required:
-            raise argparse.ArgumentError(self, "expected at least one argument")
-        super().__call__(parser, namespace, values, option_string)
+        # Set namespace variable
+        if self._is_list:
+            items = getattr(namespace, self.dest, list())
+            items = argparse._copy_items(items)  # type: ignore[attr-defined]
+            items.extend(values)
+            setattr(namespace, self.dest, items)
+        else:
+            assert len(values) == 1
+            setattr(namespace, self.dest, values[0])
 
-
-class BuildTypeAction(argparse.Action):
-    """
-    Special action for arguably, handles building a class with a complex signature for __init__, or when multiple
-    subclasses can be chosen from.
-    """
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-        assert isinstance(self.type, type)
-        self._real_type: type = self.type
-        self.type = None
-
-    def __call__(
+    def _build_from_str_values(
         self,
         parser: argparse.ArgumentParser,
-        namespace: argparse.Namespace,
-        values: Union[str, Sequence[Any], None],
-        option_string: Optional[str] = None,
-    ) -> None:
-        values = normalize_action_input(values)
-
-        # Split values
-        split_values = list()
-        for value in values:
-            split_str_values = [util.unwrap_quotes(v) for v in util.split_unquoted(value, delimeter=",")]
-            split_values.extend(split_str_values)
-        values = split_values
-
+        option_string: Optional[str],
+        split_value_str: List[str],
+    ) -> Any:
         # Separate out subtype and kwargs
         kwargs: Dict[str, Any] = dict()
         subtype_ = None
-        if len(values) > 0 and "=" not in values[0]:
-            subtype_ = values[0]
-            values = values[1:]
+        if len(split_value_str) > 0 and "=" not in split_value_str[0]:
+            subtype_ = split_value_str[0]
+            kwarg_strs = split_value_str[1:]
+        else:
+            kwarg_strs = split_value_str
 
         # Build kwargs dict
-        for value in values:
-            key, eq, value = value.partition("=")
+        for kwarg_str in kwarg_strs:
+            key, eq, value = kwarg_str.partition("=")
             if len(eq) == 0:
                 raise argparse.ArgumentError(
                     self, f"type arguments should be of form key=value, {value} does not match"
@@ -310,9 +281,8 @@ class BuildTypeAction(argparse.Action):
         # Set the value in the namespace to be a `_BuildTypeSpec`, which will be consumed later to build the class
         option_name = "" if option_string is None else option_string.lstrip("-")
         with ctx.context.current_parser(parser):
-            built_class = ctx.context.resolve_subtype(option_name, self._real_type, subtype_, kwargs)
-
-        setattr(namespace, self.dest, built_class)
+            assert isinstance(self._real_type, type)
+            return ctx.context.resolve_subtype(option_name, self._real_type, subtype_, kwargs)
 
 
 class EnumFlagAction(argparse.Action):
