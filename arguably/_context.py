@@ -12,7 +12,7 @@ from docstring_parser import parse as docparse
 
 from ._argparse_extensions import HelpFormatter, FlagAction, ArgumentParser
 from ._commands import CommandDecoratorInfo, SubtypeDecoratorInfo, Command, CommandArg, InputMethod
-from ._modifiers import TupleModifier
+from ._modifiers import TupleModifier, ListModifier
 from ._util import (
     warn,
     logger,
@@ -232,10 +232,13 @@ class _Context:
                                 f"its metavar descriptor, but found {len(match_items)}: {','.join(match_items)}."
                             )
                     elif len(match_items) != expected_metavars:
-                        raise ArguablyException(
-                            f"Function parameter `{param.name}` in `{processed_name}` takes {expected_metavars} items, "
-                            f"but metavar descriptor has {len(match_items)}: {','.join(match_items)}."
-                        )
+                        if len(match_items) == 1:
+                            match_items *= expected_metavars
+                        else:
+                            raise ArguablyException(
+                                f"Function parameter `{param.name}` in `{processed_name}` takes {expected_metavars} "
+                                f"items, but metavar descriptor has {len(match_items)}: {','.join(match_items)}."
+                            )
                     metavars = [i.upper() for i in match_items]
                     arg_description = "".join(metavar_split)  # Strips { and } from metavars for description
                 if len(metavar_split) > 3:
@@ -354,12 +357,18 @@ class _Context:
 
             # Show arg type?
             if self._options.show_types:
+                type_name = ""
+                list_modifiers = [m for m in arg_.modifiers if isinstance(m, ListModifier)]
                 tuple_modifiers = [m for m in arg_.modifiers if isinstance(m, TupleModifier)]
                 if len(tuple_modifiers) > 0:
                     assert len(tuple_modifiers) == 1
-                    description_extras.append(f"type: {','.join(t.__name__ for t in tuple_modifiers[0].tuple_arg)}")
+                    type_name = ",".join(t.__name__ for t in tuple_modifiers[0].tuple_arg)
                 else:
-                    description_extras.append(f"type: {arg_.arg_value_type.__name__}")
+                    type_name = arg_.arg_value_type.__name__
+                if len(list_modifiers) > 0:
+                    assert len(list_modifiers) == 1
+                    type_name = f"list[{type_name}]"
+                description_extras.append(f"type: {type_name}")
 
             # `default` value?
             if arg_.input_method.is_optional and arg_.default is not NoDefault:

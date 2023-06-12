@@ -7,8 +7,7 @@
 
 <p align="center">
     <em>
-        the best CLI library, arguably<br>
-        turns your functions into command line interfaces
+        The best Python CLI library, arguably.
     </em>
 </p>
 
@@ -20,110 +19,85 @@
 </p>
 <hr>
 
-`arguably` solves this problem:
-1. You've written a Python script
-2. Now you want to pass in parameters from the command line
-3. You don't want to read the docs for your favorite argument parsing library *again*
+`arguably` turns functions into command line interfaces. `arguably` has a tiny API and is extremely easy to integrate.
+You can even use it to run functions and class methods directly from a script, without even integrating it - just run
+`python3 -m arguably your_script.py`.
 
-By leveraging as many Python idioms as possible, `arguably` keeps its API small and memorable without sacrificing
-functionality. `arguably` uses functions and their docstrings to automatically set up argparse. Notably, `arguably`
-maps your function signature to a command-line interface like this:
+To use `arguably` in a script, just decorate any functions that should appear on the command line with
+`@arguably.command`, then call `arguably.run()`. If multiple functions are decorated, they'll all appear as subcommands.
+You can even have [multiple levels of subcommands](#FIXME).
 
 ```python
 @arguably.command
-def some_function(required, not_required="foo", *others, option="bar"):
+def some_function(required, not_required=2, *others: int, option: float = 3.14):
+    """
+    this function is on the command line!
+    :param required: a required parameter
+    :param not_required: this one isn't required, since it has a default
+    :param others: all the other positional arguments go here
+    :param option: [-x] an option, short name is in brackets
+    """
     ...
 ```
 
 <p align="center"><b><em>becomes</em></b></p>
 
 ```text
-usage: script [--option OPTION] required [not-required] [others ...]
+usage: some_script.py [-h] [-x OPTION] required [not-required] [others ...]
+
+this function is on the command line!
+
+positional arguments:
+  required             a required parameter (type: str)
+  not-required         this one isn't required, since it has a default (type: int, default: 2)
+  others               all the other positional arguments go here (type: int)
+
+options:
+  -h, --help           show this help message and exit
+  -x, --option OPTION  an option, short name is in brackets (type: float, default: 3.14)
 ```
 
-In short, `arguably` turns your function's **positional parameters** into **positional command-line arguments**, and
-your function's **keyword-only arguments** into **command-line options**. From the example above:
+`arguably` looks at any decorated functions and transforms them like this:
 
-| Name           | Type                                | Becomes                         | Usage               |
-|----------------|-------------------------------------|---------------------------------|---------------------|
-| `required`     | positional, no default value        | required positional arg         | `required`          |
-| `not_required` | positional, with default value      | optional positional arg         | `[not-required]`    |
-| `others`       | positional, variadic (like `*args`) | the rest of the positional args | `[others ...]`      |
-| `option`       | keyword-only argument               | an option                       | `[--option OPTION]` |
+* positional arguments &rightarrow; positional command-line arguments
+* keyword-only arguments &rightarrow; command-line options
+* type annotations (or type of default value) &rightarrow; type of the argument
+* parameter docstring &rightarrow; help for the argument
 
-`arguably` also enables you to easily add subcommands - just annotate more than one function with `@arguably.command`.
-You can even have nested subcommands (more on that later).
-
-`arguably` reads type annotations and automatically converts arguments to the declared types. It has smart handling for
-`tuple`, `list`, `enum.Enum`, and `enum.Flag`. There are also a few special behaviors you can attach to a parameter
-via `Annotated[]` and the `arguably.arg.*` functions.
-
-`arguably` parses docstrings to generate descriptions for your commands and parameters. If you want to give a parameter
-the alias `-X`, prefix its docstring description with `[-X]`. Wrapping a word in `{}` changes the *metavar* that gets
-printed (this is what's shown in the usage string after an option name, don't worry if you aren't familiar with this).
-For example:
-
-```python
-#!/usr/bin/env python3
-"""docstrings for the file become the description for the script."""
-__version__ = "1.0.0"  # You can also set `version_flag=True` to add a version flag, it will read `__version__`
-
-import arguably
-
-@arguably.command(alias="h")
-def hello(name: str, *, lastname: str | None = None):
-    """
-    says hello to you
-    :param name: your name
-    :param lastname: [-l] your {surname}
-    """
-    full_name = name if lastname is None else f"{name} {lastname}"
-    print(f"Hello, {full_name}!")
-
-@arguably.command(alias="g")
-def goodbye(name: str, *, is_sad: bool = False):
-    """
-    says goodbye to you
-    :param name: your name
-    :param is_sad: [-s] whether or not it's sad to see you go
-    """
-    print(f"Goodbye, {name}!")
-    if is_sad:
-        print(f"It's sad to see you go!")
-
-if __name__ == "__main__":
-    arguably.run(version_flag=True)
-```
-
-<p align="center"><b><em>becomes</em></b></p>
+Type annotations are optional, but `arguably` can use them to automatically convert arguments to their type. It has
+smart handling for `tuple`, `list`, `enum.Enum`, and `enum.Flag`. There are also a few special behaviors you can attach
+to a parameter via `Annotated[]` and the `arguably.arg.*` functions, [documented here](#FIXME). Using
+`arguably.arg.builder()`, you can even build an object to pass in from the command line (using syntax inspired by QEMU):
 
 ```console
-user@machine:~$ python3 script.py
-usage: test_scripts.docs2 [-h] [--version] command ...
-
-docstrings for the file become the description for the script.
-
-positional arguments:
-  command
-    hello (h)    says hello to you
-    goodbye (g)  says goodbye to you
-
-options:
-  -h, --help     show this help message and exit
-  --version      show program's version number and exit
-
-
-user@machine:~$ python3 script.py hello --help
-usage: test_scripts.docs2 hello [-h] [-l SURNAME] name
-
-says hello to you
-
-positional arguments:
-  name                    your name
-
-options:
-  -h, --help              show this help message and exit
-  -l, --lastname SURNAME  your surname (default: None)
+user@machine:~$ ./script.py --nic tap,model=e1000 --nic user,hostfwd=tcp::10022-:22
+nic=[TapNic(model='e1000'), UserNic(hostfwd='tcp::10022-:22')]
 ```
 
-More docs coming soon...
+Install with `pip install arguably`, check out the [maximalist script](#TODO) to see all features being used, and check
+the full documentation below.
+
+## API Reference
+
+`arguably` tries to keep its API tiny but full-featured. Here's a brief rundown of **everything**:
+* `@arguably.command` marks a function so that it appears in the command line interface. If multiple functions
+are marked, they'll each appear as subcommands.
+* `arguably.run(...)` parses the command-line arguments and runs your decorated function. If you need to configure
+anything about `arguably`, you pass in a keyword argument here.
+* `arguably.error()` prints an error to the console and exits the script.
+* `arguably.is_target()` is only useful if you have layers of subcommands. It returns `True` if the currently running
+function was the targeted command, and `False` if it's just an ancestor. For example, if a user specifies the command
+`git remote add`, this returns `False` for `git()` and `git__remote()`, but `True` for `git__remote__add()`.
+* `@arguably.subtype(alias="...")` marks a class so that it can be built by `arguably.arg.builder()`.
+* `arguably.arg` contains a few special behaviors you can attach to an argument through `Annotated[]`.
+  * `arguably.arg.required()` explicitly marks a parameter as required. Only needed if you want at least one item in
+  `*args`, or if you want to make an `--option` required.
+  * `arguably.arg.count()` counts the number of times an option is passed in. For example, with `-v/--verbose` passing
+  in `-vvvv` would yield `4`
+  * `arguably.arg.choices(...)` explicity specifies choices for an argument. Not required if your argument's type is an
+  `enum.Enum`.
+  * `arguably.arg.missing(val)` will use `val` if an option is specified, but no value is given for it.
+  * `arguably.arg.handler(func)` will skip all processing by `arguably`, and call `func` to process an input
+  * `arguably.arg.builder()` will build a class (or one of its subclasses marked with `@arguably.subtype`)
+
+Full details to come...
