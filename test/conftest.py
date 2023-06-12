@@ -314,6 +314,18 @@ def scope_annotated(iobuf: StringIO) -> Dict[str, Callable]:
         logger.log(message)
 
     @arguably.command
+    def multi_log(
+        message: str = "Howdy, there!", *, logger: Annotated[List[Logger], arguably.arg.builder()] = [NoLogger()]
+    ) -> None:
+        """
+        logs a hello
+        :param message: message to log
+        :param logger: what to use for logging
+        """
+        for lg in logger:
+            lg.log(message)
+
+    @arguably.command
     def dataclass(dc: Annotated[Complex, arguably.arg.builder()]) -> None:
         """
         build a dataclass

@@ -698,11 +698,18 @@ class _Context:
         hints = get_type_hints(template, include_extras=True)
         normalized_kwargs: Dict[str, Any] = dict()
 
+        params: Dict[str, inspect.Parameter] = {
+            k: v
+            for k, v in inspect.signature(template).parameters.items()
+            if (v.kind != v.VAR_POSITIONAL) and (v.kind != v.VAR_KEYWORD)
+        }
+
         missing_required_keys = [
-            normalize_name(p) for p in inspect.signature(template).parameters if p not in build_kwargs and p != "self"
+            normalize_name(n)
+            for i, (n, p) in enumerate(params.items())
+            if (n not in build_kwargs) and (i != 0 or p.name != "self")
         ]
         if len(missing_required_keys) > 0:
-            params = inspect.signature(template).parameters
             missing_specs = list()
             for key in missing_required_keys:
                 arg_value_type, modifiers = CommandArg.normalize_type(type_.__name__, params[key], hints)
@@ -710,7 +717,7 @@ class _Context:
             self.error(f"the following keys are required for {parent_func_arg_name}: {', '.join(missing_specs)}")
 
         # Iterate over all parameters
-        for func_arg_name, param in inspect.signature(template).parameters.items():
+        for func_arg_name, param in params.items():
             try:
                 func_arg_name = normalize_name(func_arg_name)
                 if func_arg_name == "self":

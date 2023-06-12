@@ -20,6 +20,18 @@ def test_log(iobuf: StringIO, scope_annotated: Dict[str, Callable]) -> None:
     assert cli == manual
 
 
+def test_multi_log(iobuf: StringIO, scope_annotated: Dict[str, Callable]) -> None:
+    argv = ["multi-log", "--logger", "file,path=foo.txt", "--logger", "term"]
+    args = []
+    kwargs = dict(logger=[scope_annotated["FileLogger"](path=Path("foo.txt")), scope_annotated["TerminalLogger"]()])
+
+    cli, manual = run_cli_and_manual(iobuf, scope_annotated["multi_log"], argv, args, kwargs)
+
+    assert "~file foo.txt: Howdy, there!\n" in cli
+    assert "~term: Howdy, there!\n" in cli
+    assert cli == manual
+
+
 def test_dataclass(iobuf: StringIO, scope_annotated: Dict[str, Callable]) -> None:
     argv = ["dataclass", "foo=10,bar=test"]
     args = [scope_annotated["Complex"](10, "test")]
