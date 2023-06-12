@@ -7,9 +7,9 @@ https://github.com/pypi/warehouse/issues/11251
 
 from pathlib import Path
 
-project_path = Path(__file__).resolve().parent.parent
+project_path = Path(__file__).parent.parent.parent
 readme_src = project_path / "README.md"
-readme_dst = project_path / "assets" / "PYPI_README.md"
+readme_dst = project_path / "assets" / "pypi" / "PYPI_README.md"
 
 # A bit hacky, but works for now.
 with readme_src.open("r") as src:

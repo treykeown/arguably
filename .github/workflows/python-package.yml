@@ -67,17 +67,22 @@ jobs:
     - name: Run tests
       run: nox -s test-${{ matrix.python-version }}
 
+    - name: (${{ env.latest-python-version }} only) Sphinx build, copy coverage
+      if: ${{ matrix.python-version == env.latest-python-version }}
+      run: |
+        ./docs/make html
+        cp -R htmlcov ./docs/_build/html/coverage
+
     - name: (${{ env.latest-python-version }} only) Remove gitignore for coverage publish
       if: ${{ matrix.python-version == env.latest-python-version }}
       run: rm htmlcov/.gitignore
 
-    - name: (${{ env.latest-python-version }} only) Publish coverage
+    - name: (${{ env.latest-python-version }} only) Publish site
       if: ${{ matrix.python-version == env.latest-python-version }}
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: htmlcov
-        destination_dir: coverage
+        publish_dir: ./docs/_build/html/
 
     - name: (${{ env.latest-python-version }} only) Extract coverage for badge
       if: ${{ matrix.python-version == env.latest-python-version }}

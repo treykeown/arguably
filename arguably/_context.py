@@ -282,6 +282,7 @@ class _Context:
             processed_args,
             processed_description,
             info.alias,
+            info.help,
         )
 
     def set_up_enum(
@@ -534,10 +535,17 @@ class _Context:
 
         self._is_calling_target = False
 
+        only_one_cmd = (len(self._command_decorator_info) == 1) and not self._options.always_subcommand
+
         # Grab the description
         import __main__
 
         description = "" if __main__.__doc__ is None else __main__.__doc__.partition("\n\n\n")[0]
+
+        # TODO: Rewrite this code to remove the need for this line
+        add_root_help = next(
+            iter(info.help for info in self._command_decorator_info if info.name == "__root__" or only_one_cmd), True
+        )
 
         # Set up the root parser
         argspec = log_args(
@@ -548,6 +556,7 @@ class _Context:
             prog=self._options.name,
             description=description,
             formatter_class=self._formatter,
+            add_help=add_root_help,
             **self._extra_argparser_options,
         )
         root_parser = ArgumentParser(*argspec.args, **argspec.kwargs)
@@ -575,7 +584,6 @@ class _Context:
             root_parser.add_argument(*argspec.args, **argspec.kwargs)
 
         # Check the number of commands we have
-        only_one_cmd = (len(self._command_decorator_info) == 1) and not self._options.always_subcommand
         if len(self._command_decorator_info) == 0:
             raise ArguablyException("At least one command is required")
 
@@ -619,6 +627,7 @@ class _Context:
                     help=cmd.description,
                     description=cmd.description,
                     formatter_class=self._formatter,
+                    add_help=cmd.add_help,
                     **self._extra_argparser_options,
                 )
                 self._parsers[cmd.name] = self._subparsers[parent_name].add_parser(*argspec.args, **argspec.kwargs)
@@ -785,6 +794,7 @@ def command(
     *,
     # Arguments below are passed through to `_CommandDecoratorInfo`
     alias: Optional[str] = None,
+    help: bool = True,
 ) -> Callable:
     """
     Mark a decorated function as a command. If multiple functions are decorated with this, they will be available as
@@ -792,7 +802,7 @@ def command(
     """
 
     def wrap(func_: Callable) -> Callable:
-        context.add_command(function=func_, alias=alias)
+        context.add_command(function=func_, alias=alias, help=help)
         return func_
 
     # Handle being called as either @arguably.command or @arguably.command()

@@ -1,8 +1,5 @@
 <p align="center">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/treykeown/arguably/main/assets/logo/arguably_white.png">
       <img alt="arguably logo" src="https://raw.githubusercontent.com/treykeown/arguably/main/assets/logo/arguably_black.png">
-    </picture>
 </p>
 
 <p align="center">

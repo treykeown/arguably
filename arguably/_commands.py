@@ -31,6 +31,7 @@ class CommandDecoratorInfo:
 
     function: Callable
     alias: Optional[str] = None
+    help: bool = True
     name: str = field(init=False)
 
     def __post_init__(self) -> None:
@@ -200,6 +201,7 @@ class Command:
     args: List[CommandArg]
     description: str = ""
     alias: Optional[str] = None
+    add_help: bool = True
 
     arg_map: Dict[str, CommandArg] = field(init=False)
 
