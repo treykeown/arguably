@@ -103,6 +103,35 @@ class HelpFormatter(argparse.HelpFormatter):
 
         return textwrap.wrap(text, width)
 
+    def _format_args(self, action: argparse.Action, default_metavar: str) -> str:
+        """Same as stock, but backport ZERO_OR_MORE behavior for 3.8"""
+        get_metavar = self._metavar_formatter(action, default_metavar)
+        if action.nargs is None:
+            result = "%s" % get_metavar(1)
+        elif action.nargs == argparse.OPTIONAL:
+            result = "[%s]" % get_metavar(1)
+        elif action.nargs == argparse.ZERO_OR_MORE:
+            metavar = get_metavar(1)
+            if len(metavar) == 2:
+                result = "[%s [%s ...]]" % metavar
+            else:
+                result = "[%s ...]" % metavar
+        elif action.nargs == argparse.ONE_OR_MORE:
+            result = "%s [%s ...]" % get_metavar(2)
+        elif action.nargs == argparse.REMAINDER:
+            result = "..."
+        elif action.nargs == argparse.PARSER:
+            result = "%s ..." % get_metavar(1)
+        elif action.nargs == argparse.SUPPRESS:
+            result = ""
+        else:
+            try:
+                formats = ["%s" for _ in range(action.nargs)]  # type: ignore[arg-type]
+            except TypeError:
+                raise ValueError("invalid nargs value") from None
+            result = " ".join(formats) % get_metavar(action.nargs)  # type: ignore[arg-type]
+        return result
+
 
 class ArgumentParser(argparse.ArgumentParser):
     """ArgumentParser modified for arguably"""
