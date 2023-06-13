@@ -67,15 +67,14 @@ jobs:
     - name: Run tests
       run: nox -s test-${{ matrix.python-version }}
 
-    - name: (${{ env.latest-python-version }} only) Sphinx build, copy coverage
+    - name: (${{ env.latest-python-version }} only) Sphinx build, copy coverage, extract coverage percent
       if: ${{ matrix.python-version == env.latest-python-version }}
       run: |
+        . .venv/bin/activate
         ./docs/make html
+        rm htmlcov/.gitignore
         cp -R htmlcov ./docs/_build/html/coverage
-
-    - name: (${{ env.latest-python-version }} only) Remove gitignore for coverage publish
-      if: ${{ matrix.python-version == env.latest-python-version }}
-      run: rm htmlcov/.gitignore
+        echo "COVERAGE_PERCENT=$(jq '.totals.percent_covered_display' < coverage.json | tr -d '"')" >> $GITHUB_ENV
 
     - name: (${{ env.latest-python-version }} only) Publish site
       if: ${{ matrix.python-version == env.latest-python-version }}
@@ -83,10 +82,6 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./docs/_build/html/
-
-    - name: (${{ env.latest-python-version }} only) Extract coverage for badge
-      if: ${{ matrix.python-version == env.latest-python-version }}
-      run: echo "COVERAGE_PERCENT=$(jq '.totals.percent_covered_display' < coverage.json | tr -d '"')" >> $GITHUB_ENV
 
     - name: (${{ env.latest-python-version }} only) Coverage badge
       if: ${{ matrix.python-version == env.latest-python-version }}
