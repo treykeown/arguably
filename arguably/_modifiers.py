@@ -150,7 +150,10 @@ class arg:
 
     @staticmethod
     def required() -> RequiredModifier:
-        """Marks a field as required. For lists and *args, requires at least one item."""
+        """
+        Marks a field as required. For ``*args`` or a ``list``, requires at least one item.
+
+        """
         return RequiredModifier()
 
     @staticmethod

@@ -16,9 +16,11 @@ argv_cut_index = 2
 def main(file: Path, *args: str, debug: bool = False) -> None:
     """
     run functions from any python file
-    :param file: the file to load
-    :param args: the function to run, and any arguments
-    :param debug: show a debug log for how argparse is set up and for how functions are called
+
+    Args:
+        file: the file to load
+        *args: the function to run, as well as any arguments
+        debug: if set, will show a debug log for how argparse is set up and for how functions are called
     """
 
     # Check that the user-specified file exists

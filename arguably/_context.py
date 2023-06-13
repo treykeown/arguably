@@ -134,7 +134,7 @@ class _Context:
     def find_subtype(self, func_arg_type: type) -> List[SubtypeDecoratorInfo]:
         return [bi for bi in self._subtype_init_info if issubclass(bi.type_, func_arg_type)]
 
-    def is_calling_target(self) -> bool:
+    def is_target(self) -> bool:
         """Aliased by `arguably.is_target`. Only useful when `invoke_ancestors=True`, it lets a command know whether
         it's the main targeted command or just an ancestor of the targeted command."""
         return self._is_calling_target
@@ -198,7 +198,7 @@ class _Context:
             # Get the description
             arg_description = ""
             if docs is not None and docs.params is not None:
-                ds_matches = [ds_p for ds_p in docs.params if ds_p.arg_name == param.name]
+                ds_matches = [ds_p for ds_p in docs.params if ds_p.arg_name.lstrip("*") == param.name]
                 if len(ds_matches) > 1:
                     raise ArguablyException(
                         f"Function parameter `{param.name}` in " f"`{processed_name}` has multiple docstring entries."
@@ -784,7 +784,7 @@ context = _Context()
 
 
 run = context.run
-is_target = context.is_calling_target
+is_target = context.is_target
 error = context.error
 
 
@@ -798,7 +798,14 @@ def command(
 ) -> Callable:
     """
     Mark a decorated function as a command. If multiple functions are decorated with this, they will be available as
-    subcommands.
+    subcommands. If only one function is decorated, it is automatically selected and the subcommand logic will not be
+    used.
+
+    Args:
+        func: The target function.
+        alias: An alias for this function. For example, `@arguably.command(alias="h")` would alias `h` to the function
+            that follows.
+        help: If `False`, the help flag `-h/--help` will not automatically be added to this function.
     """
 
     def wrap(func_: Callable) -> Callable:

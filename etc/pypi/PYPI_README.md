@@ -98,9 +98,13 @@ options:
 
 The full documentation can be found here: [https://treykeown.github.io/arguably/](https://treykeown.github.io/arguably/)
 
+* Getting Started: [https://treykeown.github.io/arguably/getting-started/](https://treykeown.github.io/arguably/getting-started/)
+* API Reference: [https://treykeown.github.io/arguably/api-reference/](https://treykeown.github.io/arguably/api-reference/)
+
 ## Dependencies
 
 All of `arguably` is built on top of `argparse`. It has two dependencies:
+
 * `docstring-parser` for parsing function docstrings
 * `typing-extensions` for `Annotated[]` support in Python 3.8 (only needed for that version)
 

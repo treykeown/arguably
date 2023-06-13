@@ -71,9 +71,9 @@ jobs:
       if: ${{ matrix.python-version == env.latest-python-version }}
       run: |
         . .venv/bin/activate
-        ./docs/make html
+        ./docs/run build
         rm htmlcov/.gitignore
-        cp -R htmlcov ./docs/_build/html/coverage
+        cp -R htmlcov ./site/coverage
         echo "COVERAGE_PERCENT=$(jq '.totals.percent_covered_display' < coverage.json | tr -d '"')" >> $GITHUB_ENV
 
     - name: (${{ env.latest-python-version }} only) Publish site
@@ -81,7 +81,7 @@ jobs:
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./docs/_build/html/
+        publish_dir: ./site/
 
     - name: (${{ env.latest-python-version }} only) Coverage badge
       if: ${{ matrix.python-version == env.latest-python-version }}

@@ -1,0 +1,53 @@
+site_name: arguably documentation
+site_description: The best Python CLI library, arguably.
+strict: true
+site_url: https://treykeown.github.io/arguably/
+
+theme:
+  name: 'material'
+  palette:
+  - media: "(prefers-color-scheme: light)"
+    scheme: default
+    primary: green
+    accent: green
+    toggle:
+      icon: material/lightbulb-outline
+      name: "Switch to dark mode"
+  - media: "(prefers-color-scheme: dark)"
+    scheme: slate
+    primary: green
+    accent: green
+    toggle:
+      icon: material/lightbulb
+      name: "Switch to light mode"
+  features:
+    - content.tabs.link
+    - content.code.annotate
+    - announce.dismiss
+    - navigation.tabs
+
+
+repo_name: treykeown/arguably
+repo_url: https://github.com/treykeown/arguably
+edit_uri: edit/main/docs/
+
+
+plugins:
+- mkdocstrings:
+    handlers:
+      python:
+        paths: [.]
+        options:
+          filters: ["!^_"]
+          docstring_options:
+            ignore_init_summary: true
+          separate_signature: true
+          merge_init_into_class: true
+          show_submodules: true
+          show_object_full_path: true
+          members_order: source
+          group_by_category: false
+          line_length: 80
+          signature_crossrefs: true
+          show_root_toc_entry: false
+          show_source: false
