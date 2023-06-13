@@ -17,12 +17,12 @@
 <hr>
 
 `arguably` turns functions into command line interfaces. `arguably` has a tiny API and is extremely easy to integrate.
-You can also run it without any integration through `python3 -m arguably your_script.py`, more on that
-[here](#no-integration-required).
+You can also use it directly through `python3 -m arguably your_script.py`, more on that
+[here](#no-integration-required)
 
-To use `arguably` in a script, just decorate any functions that should appear on the command line with
-`@arguably.command`, then call `arguably.run()`. If multiple functions are decorated, they'll all appear as subcommands.
-You can even have multiple levels of subcommands.
+To use `arguably` in a script, decorate any functions that should appear on the command line with `@arguably.command`,
+then call `arguably.run()`. If multiple functions are decorated, they'll all appear as subcommands. You can even have
+multiple levels of subcommands.
 
 ```python
 @arguably.command
@@ -66,8 +66,8 @@ options:
 
 Type annotations are optional, but `arguably` can use them to automatically convert arguments to their type. It has
 smart handling for `tuple`, `list`, `enum.Enum`, and `enum.Flag`. There are also a few special behaviors you can attach
-to a parameter via `Annotated[]` and the `arguably.arg.*` functions. Using `arguably.arg.builder()`, you can even build
-an object to pass in from the command line (using syntax inspired by QEMU):
+to a parameter via `Annotated[]` and the `arguably.arg.*` functions. Using `arguably.arg.builder()`, you can even
+build an object to pass in from the command line (using syntax inspired by QEMU):
 
 ```console
 user@machine:~$ ./script.py --nic tap,model=e1000 --nic user,hostfwd=tcp::10022-:22
@@ -76,7 +76,7 @@ nic=[TapNic(model='e1000'), UserNic(hostfwd='tcp::10022-:22')]
 
 ## No integration required
 
-Don't want to write any code? Just pass any Python script to `arguably` to give it a command line interface.
+Don't want to write any code? Simply pass any Python script to `arguably` to give it a command line interface.
 
 ```console
 user@machine:~$ python3 -m arguably party-trick.py
@@ -96,17 +96,17 @@ options:
 
 ## Documentation
 
-The full documentation can be found at [https://treykeown.github.io/arguably/](https://treykeown.github.io/arguably/).
+The full documentation can be found here: [https://treykeown.github.io/arguably/](https://treykeown.github.io/arguably/)
 
 ## Dependencies
 
 All of `arguably` is built on top of `argparse`. It has two dependencies:
 * `docstring-parser` for parsing function docstrings
-* `typing-extensions` (Python 3.8 only) for `Annotated[]` support in versions before Python 3.9
+* `typing-extensions` for `Annotated[]` support in Python 3.8 (only needed for that version)
 
 ## Installation
 
-Simply install with `pip install arguably`. If you want to install with `conda`, please comment on
+Install using `pip install arguably`. If you want to install by using `conda`, please comment on
 [this issue](https://github.com/treykeown/arguably/issues/12).
 
 ## Future Roadmap
