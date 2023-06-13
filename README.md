@@ -60,12 +60,12 @@ options:
 
 `arguably` looks at any decorated functions and maps them from a Python to the CLI exactly how you would expect:
 
-| This Python ...                                     | ... becomes this on the CLI.                     |
-|-----------------------------------------------------|--------------------------------------------------|
-| positional args (`required`)                        | positional CLI args, required (`required`)       |
-| positional args with default value (`not_required`) | positional CLI args, optional (`[not-required]`) |
-| positional args, variadic (`*others`)               | any extra positional CLI args (`[others ...]`)   |
-| keyword-only arguments (`option`)                   | command-line options (`[-x OPTION]`)             |
+| This Python ...                                | ... becomes this on the CLI.                   |
+|------------------------------------------------|------------------------------------------------|
+| positional args, no default `required`         | positional CLI args, required `required`       |
+| positional args, with default `not_required=2` | positional CLI args, optional `[not-required]` |
+| positional args, variadic `*others`            | any extra positional CLI args `[others ...]`   |
+| keyword-only arguments `option`                | command-line options `[-x OPTION]`             |
 
 Type annotations are optional, but `arguably` can use them to automatically convert arguments to their type. It has
 smart handling for `tuple`, `list`, `enum.Enum`, and `enum.Flag`. There are also a few special behaviors you can attach
