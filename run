@@ -1,0 +1,121 @@
+#!/usr/bin/env python3
+import inspect
+import os
+import shutil
+import subprocess
+from contextlib import contextmanager
+from pathlib import Path
+from typing import Any, Annotated
+
+import arguably
+
+project_root = Path(__file__).parent.parent
+module_root = project_root / "arguably"
+
+
+@contextmanager
+def swap_file(real, tmp):
+    shutil.move(real, tmp)
+    try:
+        yield
+    finally:
+        shutil.move(tmp, real)
+
+
+def get_members(obj) -> list[Any]:
+    return [v for k, v in vars(obj).items() if not k.startswith("_") and not type(v).__name__.startswith("_")]
+
+
+def get_signature(obj) -> inspect.Signature:
+    try:
+        return inspect.signature(obj)
+    except ValueError:
+        for ancestor in obj.__mro__:
+            try:
+                return inspect.signature(ancestor)
+            except ValueError:
+                pass
+    raise Exception(f"Unable to find signature for {obj}")
+
+
+def produce_file(path: Path):
+    with path.open("w") as fh:
+        good_doc_lines = "\n\n".join(arguably.__doc__.split("\n\n")[1:-1])
+        fh.write(f'"""\n{good_doc_lines}\n"""\n')
+        fh.write("\n")
+
+        members = get_members(arguably)
+        for member in sorted(members, key=lambda x: arguably.__all__.index(x.__name__)):
+            signature = get_signature(member)
+            if isinstance(member, type):
+                fh.write(f"class {member.__name__}:\n")
+                fh.write(f'    """{member.__doc__}"""\n')
+                fh.write(f"    def __init__{signature}:\n")
+                fh.write("        pass\n")
+                fh.write("\n")
+                for cls_member in get_members(member):
+                    signature = get_signature(member)
+                    if callable(cls_member):
+                        fh.write(f"    def {cls_member.__name__}{signature}:\n")
+                        fh.write(f'        """{cls_member.__doc__}"""\n')
+                        fh.write("\n")
+                    else:
+                        raise Exception(f"Unsupported member type {type(cls_member)} for {cls_member} in {member}")
+            else:
+                assert callable(member)
+                fh.write(f"def {member.__name__}{signature}:\n")
+                fh.write(f'    """{member.__doc__}"""\n')
+            fh.write("\n")
+
+
+def run_mkdocs(target):
+    args = ["mkdocs", target]
+    print(f"running: {' '.join(args)}")
+    print()
+    subprocess.run(args)
+
+
+def copy_logos():
+    shutil.copy(project_root / "etc" / "logo" / "arguably_black.png", project_root / "docs")
+    shutil.copy(project_root / "etc" / "logo" / "arguably_white.png", project_root / "docs")
+
+
+def copy_readme():
+    readme = project_root / "README.md"
+    index = project_root / "docs" / "index.md"
+    with readme.open("r") as src:
+        with index.open("w") as dst:
+            in_picture = False
+            dst.write("![Image title](arguably_black.png#only-light)\n")
+            dst.write("![Image title](arguably_white.png#only-dark)\n")
+            for line in src.readlines():
+                stripped_line = line.lstrip(" ")
+                if stripped_line.startswith("<picture"):
+                    in_picture = True
+                    continue
+                if stripped_line.startswith("</picture"):
+                    in_picture = False
+                    continue
+                if in_picture:
+                    continue
+                dst.write(line)
+
+
+@arguably.command
+def main(mkdocs_cmd: Annotated[str, arguably.arg.choices("build", "serve")]):
+    """
+    due to issues running mkdocs directly on our module, we stub out a fake one and run mkdocs on that
+
+    Args:
+        mkdocs_cmd: the command that will be passed to mkdocs
+    """
+    os.chdir(project_root)
+    copy_logos()
+    copy_readme()
+    with swap_file(module_root / "__init__.py", module_root / "_mkdocs_swap__init__.py"):
+        produce_file(module_root / "__init__.py")
+        run_mkdocs(mkdocs_cmd)
+
+
+if __name__ == "__main__":
+    arguably.run()
