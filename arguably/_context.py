@@ -477,8 +477,8 @@ class _Context:
     def error(self, message: str) -> None:
         """
         Prints an error message and exits. Should be used when a CLI input is not of the correct form. `arguably`
-        handles converting values to the correct type, but if extra validation is performed and fails, this should be
-        called.
+        handles converting values to the correct type, but if extra validation is performed and fails, you should call
+        this.
 
         Args:
             message: A message to be printed to the console indicating why the input is wrong.

@@ -101,7 +101,7 @@ options:
 
 The full documentation can be found here: [https://treykeown.github.io/arguably/](https://treykeown.github.io/arguably/)
 
-* Getting Started: [https://treykeown.github.io/arguably/getting-started/](https://treykeown.github.io/arguably/getting-started/)
+* Get Started: [https://treykeown.github.io/arguably/get-started/](https://treykeown.github.io/arguably/get-started/)
 * API Reference: [https://treykeown.github.io/arguably/api-reference/](https://treykeown.github.io/arguably/api-reference/)
 
 ## Dependencies
