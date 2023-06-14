@@ -19,6 +19,7 @@ def swap_file(real, tmp):
     try:
         yield
     finally:
+        shutil.copy(real, module_root / ".doc.__init__.py")
         shutil.move(tmp, real)
 
 
@@ -43,19 +44,29 @@ def produce_file(path: Path):
         good_doc_lines = "\n\n".join(arguably.__doc__.split("\n\n")[1:-1])
         fh.write(f'"""\n{good_doc_lines}\n"""\n')
         fh.write("\n")
+        fh.write("import enum\n")
+        fh.write("from typing import *\n")
+        fh.write("\n")
 
         members = get_members(arguably)
         for member in sorted(members, key=lambda x: arguably.__all__.index(x.__name__)):
-            signature = get_signature(member)
+            signature_str = str(get_signature(member))
             if isinstance(member, type):
+                signature_str = "(self, " + signature_str[1:]
                 fh.write(f"class {member.__name__}:\n")
-                fh.write(f'    """{member.__doc__}"""\n')
-                fh.write(f"    def __init__{signature}:\n")
+                if member.__doc__ is not None:
+                    fh.write(f'    """{member.__doc__}"""\n')
+                fh.write(f"    def __init__{signature_str}:\n")
                 fh.write("        pass\n")
                 fh.write("\n")
                 for cls_member in get_members(member):
-                    signature = get_signature(member)
+                    signature = get_signature(cls_member)
                     if callable(cls_member):
+                        static_cls_member = inspect.getattr_static(member, cls_member.__name__)
+                        if isinstance(static_cls_member, classmethod):
+                            fh.write("    @classmethod\n")
+                        elif isinstance(static_cls_member, staticmethod):
+                            fh.write("    @staticmethod\n")
                         fh.write(f"    def {cls_member.__name__}{signature}:\n")
                         fh.write(f'        """{cls_member.__doc__}"""\n')
                         fh.write("\n")
@@ -63,7 +74,7 @@ def produce_file(path: Path):
                         raise Exception(f"Unsupported member type {type(cls_member)} for {cls_member} in {member}")
             else:
                 assert callable(member)
-                fh.write(f"def {member.__name__}{signature}:\n")
+                fh.write(f"def {member.__name__}{signature_str}:\n")
                 fh.write(f'    """{member.__doc__}"""\n')
             fh.write("\n")
 

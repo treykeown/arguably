@@ -14,7 +14,7 @@
       
       
       
-        <link rel="next" href="api-reference/">
+        <link rel="next" href="get-started/">
       
       <link rel="icon" href="assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.15">
@@ -45,6 +45,8 @@
     
     
       <link rel="stylesheet" href="assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="extra.css">
     
     <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -190,8 +192,8 @@
 
 
   <li class="md-tabs__item">
-    <a href="api-reference/" class="md-tabs__link">
-      API reference
+    <a href="get-started/" class="md-tabs__link">
+      Get Started
     </a>
   </li>
 
@@ -202,8 +204,8 @@
 
 
   <li class="md-tabs__item">
-    <a href="getting-started/" class="md-tabs__link">
-      Getting started
+    <a href="api-reference/" class="md-tabs__link">
+      API Reference
     </a>
   </li>
 
@@ -278,14 +280,16 @@
       
         
 
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="Page contents">
   
   
   
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      Table of contents
+      Page contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
@@ -340,8 +344,8 @@
   
   
     <li class="md-nav__item">
-      <a href="api-reference/" class="md-nav__link">
-        API reference
+      <a href="get-started/" class="md-nav__link">
+        Get Started
       </a>
     </li>
   
@@ -355,8 +359,8 @@
   
   
     <li class="md-nav__item">
-      <a href="getting-started/" class="md-nav__link">
-        Getting started
+      <a href="api-reference/" class="md-nav__link">
+        API Reference
       </a>
     </li>
   
@@ -375,14 +379,16 @@
                   <div class="md-sidebar__inner">
                     
 
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="Page contents">
   
   
   
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      Table of contents
+      Page contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
@@ -466,33 +472,33 @@ You can also use it directly through <code>python3 -m arguably your_script.py</c
 <p>To use <code>arguably</code> in a script, decorate any functions that should appear on the command line with <code>@arguably.command</code>,
 then call <code>arguably.run()</code>. If multiple functions are decorated, they'll all appear as subcommands. You can even have
 multiple levels of subcommands.</p>
-<pre><code class="language-python">@arguably.command
-def some_function(required, not_required=2, *others: int, option: float = 3.14):
-    &quot;&quot;&quot;
-    this function is on the command line!
-    :param required: a required parameter
-    :param not_required: this one isn't required, since it has a default
-    :param others: all the other positional arguments go here
-    :param option: [-x] an option, short name is in brackets
-    &quot;&quot;&quot;
-    ...
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">some_function</span><span class="p">(</span><span class="n">required</span><span class="p">,</span> <span class="n">not_required</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">*</span><span class="n">others</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">option</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.14</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    this function is on the command line!</span>
+<span class="sd">    :param required: a required parameter</span>
+<span class="sd">    :param not_required: this one isn&#39;t required, since it has a default</span>
+<span class="sd">    :param others: all the other positional arguments go here</span>
+<span class="sd">    :param option: [-x] an option, short name is in brackets</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="o">...</span>
+</code></pre></div>
 <p align="center"><b><em>becomes</em></b></p>
 
-<pre><code class="language-console">user@machine:~$ ./some_script.py -h
-usage: some_script.py [-h] [-x OPTION] required [not-required] [others ...]
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>./some_script.py<span class="w"> </span>-h
+<span class="go">usage: some_script.py [-h] [-x OPTION] required [not-required] [others ...]</span>
 
-this function is on the command line!
+<span class="go">this function is on the command line!</span>
 
-positional arguments:
-  required             a required parameter (type: str)
-  not-required         this one isn't required, since it has a default (type: int, default: 2)
-  others               all the other positional arguments go here (type: int)
+<span class="go">positional arguments:</span>
+<span class="go">  required             a required parameter (type: str)</span>
+<span class="go">  not-required         this one isn&#39;t required, since it has a default (type: int, default: 2)</span>
+<span class="go">  others               all the other positional arguments go here (type: int)</span>
 
-options:
-  -h, --help           show this help message and exit
-  -x, --option OPTION  an option, short name is in brackets (type: float, default: 3.14)
-</code></pre>
+<span class="go">options:</span>
+<span class="go">  -h, --help           show this help message and exit</span>
+<span class="go">  -x, --option OPTION  an option, short name is in brackets (type: float, default: 3.14)</span>
+</code></pre></div>
 <p><code>arguably</code> looks at any decorated functions and maps them from a Python to the CLI exactly how you would expect:</p>
 <table>
 <thead>
@@ -524,41 +530,41 @@ options:
 smart handling for <code>tuple</code>, <code>list</code>, <code>enum.Enum</code>, and <code>enum.Flag</code>. There are also a few special behaviors you can attach
 to a parameter via <code>Annotated[]</code> and the <code>arguably.arg.*</code> functions. Using <code>arguably.arg.builder()</code>, you can even
 build an object to pass in from the command line (using syntax inspired by QEMU):</p>
-<pre><code class="language-console">user@machine:~$ ./script.py --nic tap,model=e1000 --nic user,hostfwd=tcp::10022-:22
-nic=[TapNic(model='e1000'), UserNic(hostfwd='tcp::10022-:22')]
-</code></pre>
-<h2 id="no-integration-required">No integration required</h2>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>./script.py<span class="w"> </span>--nic<span class="w"> </span>tap,model<span class="o">=</span>e1000<span class="w"> </span>--nic<span class="w"> </span>user,hostfwd<span class="o">=</span>tcp::10022-:22
+<span class="go">nic=[TapNic(model=&#39;e1000&#39;), UserNic(hostfwd=&#39;tcp::10022-:22&#39;)]</span>
+</code></pre></div>
+<h2 id="no-integration-required">No integration required<a class="headerlink" href="#no-integration-required" title="Permanent link">&para;</a></h2>
 <p>Don't want to write any code? Simply pass any Python script to <code>arguably</code> to give it a command line interface.</p>
-<pre><code class="language-console">user@machine:~$ python3 -m arguably party-trick.py
-usage: party-trick [-h] command ...
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>-m<span class="w"> </span>arguably<span class="w"> </span>party-trick.py
+<span class="go">usage: party-trick [-h] command ...</span>
 
-positional arguments:
-  command
-    hello                this is the docstring for a function in the script
-    goodbye              any function from a script can be called
-    a-class              so can any __init__ for objects defined in the script
-    a-class.func-static  a @staticmethod on a class can be called
-    a-class.func-cls     so can a @classmethod
+<span class="go">positional arguments:</span>
+<span class="go">  command</span>
+<span class="go">    hello                this is the docstring for a function in the script</span>
+<span class="go">    goodbye              any function from a script can be called</span>
+<span class="go">    a-class              so can any __init__ for objects defined in the script</span>
+<span class="go">    a-class.func-static  a @staticmethod on a class can be called</span>
+<span class="go">    a-class.func-cls     so can a @classmethod</span>
 
-options:
-  -h, --help             show this help message and exit
-</code></pre>
-<h2 id="documentation">Documentation</h2>
+<span class="go">options:</span>
+<span class="go">  -h, --help             show this help message and exit</span>
+</code></pre></div>
+<h2 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h2>
 <p>The full documentation can be found here: <a href="https://treykeown.github.io/arguably/">https://treykeown.github.io/arguably/</a></p>
 <ul>
 <li>Getting Started: <a href="https://treykeown.github.io/arguably/getting-started/">https://treykeown.github.io/arguably/getting-started/</a></li>
 <li>API Reference: <a href="https://treykeown.github.io/arguably/api-reference/">https://treykeown.github.io/arguably/api-reference/</a></li>
 </ul>
-<h2 id="dependencies">Dependencies</h2>
+<h2 id="dependencies">Dependencies<a class="headerlink" href="#dependencies" title="Permanent link">&para;</a></h2>
 <p>All of <code>arguably</code> is built on top of <code>argparse</code>. It has two dependencies:</p>
 <ul>
 <li><code>docstring-parser</code> for parsing function docstrings</li>
 <li><code>typing-extensions</code> for <code>Annotated[]</code> support in Python 3.8 (only needed for that version)</li>
 </ul>
-<h2 id="installation">Installation</h2>
+<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
 <p>Install using <code>pip install arguably</code>. If you want to install by using <code>conda</code>, please comment on
 <a href="https://github.com/treykeown/arguably/issues/12">this issue</a>.</p>
-<h2 id="future-roadmap">Future Roadmap</h2>
+<h2 id="future-roadmap">Future Roadmap<a class="headerlink" href="#future-roadmap" title="Permanent link">&para;</a></h2>
 <p>If you have any interest in these (either as a user or implementer), please leave a comment!</p>
 <ul>
 <li><a href="https://github.com/treykeown/arguably/issues/8">#8 - Display all enum options in a command group</a></li>

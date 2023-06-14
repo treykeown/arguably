@@ -13,17 +13,15 @@
         <link rel="canonical" href="https://treykeown.github.io/arguably/api-reference/">
       
       
-        <link rel="prev" href="..">
+        <link rel="prev" href="../get-started/">
       
-      
-        <link rel="next" href="../getting-started/">
       
       <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.15">
     
     
       
-        <title>API reference - arguably documentation</title>
+        <title>API Reference - arguably documentation</title>
       
     
     
@@ -47,6 +45,8 @@
     
     
       <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../extra.css">
     
     <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -110,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              API reference
+              API Reference
             
           </span>
         </div>
@@ -187,13 +187,11 @@
         
   
   
-    
-  
 
 
   <li class="md-tabs__item">
-    <a href="./" class="md-tabs__link md-tabs__link--active">
-      API reference
+    <a href="../get-started/" class="md-tabs__link">
+      Get Started
     </a>
   </li>
 
@@ -201,11 +199,13 @@
         
   
   
+    
+  
 
 
   <li class="md-tabs__item">
-    <a href="../getting-started/" class="md-tabs__link">
-      Getting started
+    <a href="./" class="md-tabs__link md-tabs__link--active">
+      API Reference
     </a>
   </li>
 
@@ -220,8 +220,6 @@
         <div class="md-main__inner md-grid">
           
             
-              
-                
               
               <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
                 <div class="md-sidebar__scrollwrap">
@@ -277,6 +275,21 @@
 
   
   
+  
+    <li class="md-nav__item">
+      <a href="../get-started/" class="md-nav__link">
+        Get Started
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
     
   
   
@@ -289,17 +302,19 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          API reference
+          API Reference
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        API reference
+        API Reference
       </a>
       
         
 
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="Page contents">
   
   
   
@@ -308,7 +323,7 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      Table of contents
+      Page contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
@@ -424,21 +439,6 @@
   
 
     
-      
-      
-      
-
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../getting-started/" class="md-nav__link">
-        Getting started
-      </a>
-    </li>
-  
-
-    
   </ul>
 </nav>
                   </div>
@@ -447,14 +447,14 @@
             
             
               
-                
-              
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" hidden>
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
 
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="Page contents">
   
   
   
@@ -463,7 +463,7 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      Table of contents
+      Page contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
@@ -589,7 +589,7 @@
   
 
 
-<h1 id="api-reference">API reference</h1>
+<h1 id="api-reference">API Reference<a class="headerlink" href="#api-reference" title="Permanent link">&para;</a></h1>
 
 
 <div class="doc doc-object doc-module">
@@ -621,15 +621,15 @@ messes up, an error message will be printed (as is normally done with argparse).
         <span class="doc doc-object-name doc-function-name">arguably.command</span>
 
 
-</h2>
+<a href="#arguably.command" class="headerlink" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
   
-      <p>Mark a decorated function as a command. If multiple functions are decorated with this, they will be available as
-subcommands. If only one function is decorated, it is automatically selected and the subcommand logic will not be
-used.</p>
+      <p>Mark a function as a command that should appear on the CLI. If multiple functions are decorated with this, they will
+all be available as subcommands. If only one function is decorated, it is automatically selected - no need to
+specify it on the CLI.</p>
 
   <p><strong>Parameters:</strong></p>
   <table>
@@ -688,6 +688,29 @@ that follows.</p>
     </tbody>
   </table>
 
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>Callable</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If called with parens <code>@arguably.command(...)</code>, returns the decorated function. If called without parens
+<code>@arguably.command</code>, returns the function <code>wrap(func_)</code>, which returns <code>func_</code>.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
   </div>
 
 </div>
@@ -705,13 +728,11 @@ that follows.</p>
         <span class="doc doc-object-name doc-function-name">arguably.run</span>
 
 
-</h2>
+<a href="#arguably.run" class="headerlink" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
     <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">call_ancestors</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">always_subcommand</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">auto_alias_cmds</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">auto_alias_params</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">version_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">show_defaults</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">show_types</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -725,6 +746,191 @@ that follows.</p>
   <div class="doc doc-contents ">
   
       <p>Set up the argument parser, parse argv, and run the appropriate command(s)</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td>
+                <code>Optional[str]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Name of the script/program. Defaults to the filename or module name, depending on how the script is
+run. <code>$ python3 my/script.py</code> yields <code>script.py</code>, and <code>python3 -m my.script</code> yeilds <code>script</code>.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>call_ancestors</code></td>
+          <td>
+                <code>bool</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If true, all members of the targeted command's heirarchy are called. For example, a command
+like <code>$ ./script.py git init</code> will first call <code>__root__()</code>, then <code>git()</code>, then <code>git__init()</code>. This
+allows parents to handle options. Parents can determine if they are actually the target command (instead
+of being called through the heirarchy) through the <code>is_target()</code> method.</p>
+            </div>
+          </td>
+          <td>
+                <code>False</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>always_subcommand</code></td>
+          <td>
+                <code>bool</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If true, will force a subcommand interface to be used, even if there's only one command.</p>
+            </div>
+          </td>
+          <td>
+                <code>False</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>version_flag</code></td>
+          <td>
+                <code>Union[bool, Tuple[str], Tuple[str, str]]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If true, adds an option to show the script version using the value of <code>__version__</code> in the
+invoked script. If a tuple of one or two strings is passed in, like <code>("-V", "--ver")</code>, those are used
+instead of the default <code>--version</code>.</p>
+            </div>
+          </td>
+          <td>
+                <code>False</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>show_defaults</code></td>
+          <td>
+                <code>bool</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Show the default value (if any) for each argument at the end of its help string.</p>
+            </div>
+          </td>
+          <td>
+                <code>True</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>show_types</code></td>
+          <td>
+                <code>bool</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Show the type of each argument at the end of its help string.</p>
+            </div>
+          </td>
+          <td>
+                <code>False</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>max_description_offset</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The maximum number of columns before argument descriptions are printed. Equivalent
+to <code>max_help_position</code> in argparse.</p>
+            </div>
+          </td>
+          <td>
+                <code>60</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>max_width</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The total maximum width of text to be displayed in the terminal. Equivalent to <code>width</code> in
+argparse.</p>
+            </div>
+          </td>
+          <td>
+                <code>120</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>command_metavar</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The name shown in the usage string for taking in a subcommand. Change this if you have a
+conflicting argument name.</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;command&#39;</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>output</code></td>
+          <td>
+                <code>Optional[TextIO]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Where argparse output should be written - can write to a file, stderr, or anything similar.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>Any</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The return value from the called function.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
   </div>
 
@@ -743,14 +949,65 @@ that follows.</p>
         <span class="doc doc-object-name doc-function-name">arguably.error</span>
 
 
-</h2>
+<a href="#arguably.error" class="headerlink" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
   
-      <p>Prints an error message and exits. Should only be used for when a value from the command line is not of the
-correct form.</p>
+      <p>Prints an error message and exits. Should be used when a CLI input is not of the correct form. <code>arguably</code>
+handles converting values to the correct type, but if extra validation is performed and fails, this should be
+called.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>message</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A message to be printed to the console indicating why the input is wrong.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Raises:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>SystemExit</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The script will exit.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
   </div>
 
@@ -769,14 +1026,38 @@ correct form.</p>
         <span class="doc doc-object-name doc-function-name">arguably.is_target</span>
 
 
-</h2>
+<a href="#arguably.is_target" class="headerlink" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">is_target</span><span class="p">()</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
   
-      <p>Aliased by <code>arguably.is_target</code>. Only useful when <code>invoke_ancestors=True</code>, it lets a command know whether
-it's the main targeted command or just an ancestor of the targeted command.</p>
+      <p>Only useful if <code>invoke_ancestors=True</code>. Returns <code>True</code> if the targeted command is being executed and <code>False</code> if
+not. This is safe to call even if <code>arguably</code> is not being used, since it returns <code>True</code> if <code>arguably.run()</code> is
+not being used.</p>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>bool</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p><code>False</code> if <code>arguably.run()</code> was called and the currently running command is not the targeted command, <code>True</code>
+in every other case.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
   </div>
 
@@ -795,7 +1076,7 @@ it's the main targeted command or just an ancestor of the targeted command.</p>
         <span class="doc doc-object-name doc-function-name">arguably.subtype</span>
 
 
-</h2>
+<a href="#arguably.subtype" class="headerlink" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">subtype</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">alias</span><span class="p">)</span>
 </code></pre></div>
 
@@ -803,6 +1084,72 @@ it's the main targeted command or just an ancestor of the targeted command.</p>
   
       <p>Mark a decorated class as a subtype that should be buildable for a parameter using arg.builder(). The alias
 parameter is required.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>cls</code></td>
+          <td>
+                <code>Optional[type]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The target class.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>alias</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>An alias for this class. For example, <code>@arguably.subtype(alias="foo")</code> would cause this class to be built
+any time an applicable arg is given a string starting with <code>foo,...</code></p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>Union[Callable[[type], type], type]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If called with parens <code>@arguably.subtype(...)</code>, returns the decorated class. If called without parens
+<code>@arguably.subtype</code>, returns the function <code>wrap(cls_)</code>, which returns <code>cls_</code>.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
   </div>
 
@@ -821,14 +1168,15 @@ parameter is required.</p>
         <span class="doc doc-object-name doc-class-name">arguably.arg</span>
 
 
-</h2>
+<a href="#arguably.arg" class="headerlink" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="p">()</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
 
   
-      <p>Static methods for adding a modifier to a parameter. Should be used in Annotated[].</p>
+      <p>Non-instantiable class.</p>
+<p>A collection of static methods for adding a modifier to a parameter. Should be used in <code>Annotated[]</code>.</p>
 
 
 
@@ -849,14 +1197,40 @@ parameter is required.</p>
 <h3 id="arguably.arg.required" class="doc doc-heading">
         <span class="doc doc-object-name doc-function-name">arguably.arg.required</span>
 
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
+  </span>
 
-</h3>
+<a href="#arguably.arg.required" class="headerlink" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">required</span><span class="p">()</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
   
-      <p>Marks a field as required. For <code>*args</code> or a <code>list</code>, requires at least one item.</p>
+      <p>Marks a field as required. For <code>*args</code> or a <code>list[]</code>, requires at least one item.</p>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>RequiredModifier</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A value for use with <code>Annotated[]</code>, stating that this parameter is required.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
   </div>
 
@@ -874,14 +1248,40 @@ parameter is required.</p>
 <h3 id="arguably.arg.count" class="doc doc-heading">
         <span class="doc doc-object-name doc-function-name">arguably.arg.count</span>
 
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
+  </span>
 
-</h3>
+<a href="#arguably.arg.count" class="headerlink" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
   
-      <p>Will count the number of times a flag is given</p>
+      <p>Counts the number of times a flag is given. For example, <code>-vvvv</code> would yield <code>4</code>.</p>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>CountedModifier</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A value for use with <code>Annotated[]</code>, stating that this parameter should be counted.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
   </div>
 
@@ -899,14 +1299,70 @@ parameter is required.</p>
 <h3 id="arguably.arg.choices" class="doc doc-heading">
         <span class="doc doc-object-name doc-function-name">arguably.arg.choices</span>
 
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
+  </span>
 
-</h3>
-<div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">choices</span><span class="p">()</span>
+<a href="#arguably.arg.choices" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="o">*</span><span class="n">choices</span><span class="p">)</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
   
-      <p>Allows specifying a fixed number of choices</p>
+      <p>Specifies a fixed set of values that a parameter is allowed to be. If a parameter is an <code>enum.Enum</code> type, this
+logic is already used to restrict the inputs to be one of the enum entries.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>*choices</code></td>
+          <td>
+                <code>Union[str, enum.<span title="enum.Enum">Enum</span>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The allowed values. Must all be of the same type, and be compatible with the annotated type for
+this parameter.</p>
+            </div>
+          </td>
+          <td>
+                <code>()</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>ChoicesModifier</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A value for use with <code>Annotated[]</code>, stating that this parameter has a fixed set of choices.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
   </div>
 
@@ -924,14 +1380,82 @@ parameter is required.</p>
 <h3 id="arguably.arg.missing" class="doc doc-heading">
         <span class="doc doc-object-name doc-function-name">arguably.arg.missing</span>
 
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
+  </span>
 
-</h3>
-<div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">missing</span><span class="p">()</span>
+<a href="#arguably.arg.missing" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">missing</span><span class="p">(</span><span class="n">omit_value</span><span class="p">)</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
   
-      <p>Will use a value different than the default if an option is specified, but no value is given for it</p>
+      <p>Allows an option to be specified, but its value be omitted. In the case where the value is given, the value is
+used, but if it is omitted, <code>omit_value</code> will be used.</p>
+
+<p><strong>Examples:</strong></p>
+    <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">opt</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">missing</span><span class="p">(</span><span class="s2">&quot;omit-val&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;no-flag&quot;</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">opt</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>./test.py
+no-flag
+$<span class="w"> </span>./test.py<span class="w"> </span>--opt<span class="w"> </span>input
+input
+$<span class="w"> </span>./test.py<span class="w"> </span>--opt
+omit-val
+</code></pre></div>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>omit_value</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The value that will be used if the flag is present, but the value is omitted.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>MissingArgDefaultModifier</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A value for use with <code>Annotated[]</code>, stating that this parameter has a special value if the flag is present,
+but no value is provided.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
   </div>
 
@@ -949,14 +1473,69 @@ parameter is required.</p>
 <h3 id="arguably.arg.handler" class="doc doc-heading">
         <span class="doc doc-object-name doc-function-name">arguably.arg.handler</span>
 
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
+  </span>
 
-</h3>
-<div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">handler</span><span class="p">()</span>
+<a href="#arguably.arg.handler" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">handler</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
   
-      <p>Will use a user-provided handler to take the input string value and return an output</p>
+      <p>Causes a user-provided handler to be used to process the input string, instead of trying to process it using
+the types from type annotations.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>func</code></td>
+          <td>
+                <code>Callable[[str], Any]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The function to call to process the input string.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>HandlerModifier</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A value for use with <code>Annotated[]</code>, stating that this parameter has a specific handler to call.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
   </div>
 
@@ -974,14 +1553,40 @@ parameter is required.</p>
 <h3 id="arguably.arg.builder" class="doc doc-heading">
         <span class="doc doc-object-name doc-function-name">arguably.arg.builder</span>
 
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
+  </span>
 
-</h3>
+<a href="#arguably.arg.builder" class="headerlink" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">builder</span><span class="p">()</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
   
-      <p>Will use the arguably builder logic instead of trying to instantiate the type from the input string</p>
+      <p>Causes the arguably builder logic to be used instead of trying to instantiate the type from the input string.</p>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>BuilderModifier</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A value for use with <code>Annotated[]</code>, stating that this parameter should use the builder logic.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
   </div>
 
@@ -1009,14 +1614,16 @@ parameter is required.</p>
         <span class="doc doc-object-name doc-class-name">arguably.ArguablyException</span>
 
 
-</h2>
+<a href="#arguably.ArguablyException" class="headerlink" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">ArguablyException</span><span class="p">()</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
 
   
-      <p>Raised when a decorated function is incorrectly set up in some way</p>
+      <p>Inherits from <code>Exception</code>.</p>
+<p>Raised when a decorated function is incorrectly set up in some way. Will <em>not</em> be raised when a user provides
+incorrect input to the CLI.</p>
 
 
 
@@ -1047,14 +1654,17 @@ parameter is required.</p>
         <span class="doc doc-object-name doc-class-name">arguably.ArguablyWarning</span>
 
 
-</h2>
+<a href="#arguably.ArguablyWarning" class="headerlink" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">ArguablyWarning</span><span class="p">()</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
 
   
-      <p>Raised when a decorated function is incorrectly set up in some way, but arguably can continue</p>
+      <p>Inherits from <code>UserWarning</code>.</p>
+<p>Emitted when a decorated function is incorrectly set up in some way, but arguably can continue. Will <em>not</em> be raised
+when a user provides incorrect input to the CLI.</p>
+<p>Note that this is a warning - it is used with <code>warnings.warn</code>.</p>
 
 
 
@@ -1082,8 +1692,6 @@ parameter is required.</p>
 </div>
 
 
-
-  
 
 
 
