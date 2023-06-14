@@ -1,5 +1,5 @@
 <p align="center">
-      <img alt="arguably logo" src="https://raw.githubusercontent.com/treykeown/arguably/main/assets/logo/arguably_black.png">
+      <img alt="arguably logo" src="https://raw.githubusercontent.com/treykeown/arguably/main/etc/logo/arguably_black.png">
 </p>
 
 <p align="center">
