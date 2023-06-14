@@ -3,6 +3,7 @@ site_description: The best Python CLI library, arguably.
 strict: true
 site_url: https://treykeown.github.io/arguably/
 
+
 theme:
   name: 'material'
   palette:
@@ -25,6 +26,10 @@ theme:
     - content.code.annotate
     - announce.dismiss
     - navigation.tabs
+
+
+extra_css:
+  - extra.css
 
 
 repo_name: treykeown/arguably
@@ -51,3 +56,22 @@ plugins:
           signature_crossrefs: true
           show_root_toc_entry: false
           show_source: false
+          show_bases: true
+
+
+nav:
+  - Home: index.md
+  - Get Started: get-started.md
+  - API Reference: api-reference.md
+
+
+markdown_extensions:
+- tables
+- toc:
+    permalink: true
+    title: Page contents
+- admonition
+- pymdownx.details
+- pymdownx.superfences
+- pymdownx.highlight
+- pymdownx.extra

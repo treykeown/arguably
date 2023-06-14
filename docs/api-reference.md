@@ -1,8 +1,3 @@
----
-hide:
-  - toc
----
-
-# API reference
+# API Reference
 
 ::: arguably

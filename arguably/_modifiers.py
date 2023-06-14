@@ -145,38 +145,98 @@ class ChoicesModifier(CommandArgModifier):
 # Exposed for API
 
 
-class arg:
-    """Static methods for adding a modifier to a parameter. Should be used in Annotated[]."""
+class arg(abc.ABC):
+    """
+    Non-instantiable class.
+
+    A collection of static methods for adding a modifier to a parameter. Should be used in `Annotated[]`.
+    """
 
     @staticmethod
     def required() -> RequiredModifier:
         """
-        Marks a field as required. For ``*args`` or a ``list``, requires at least one item.
+        Marks a field as required. For `*args` or a `list[]`, requires at least one item.
 
+        Returns:
+            A value for use with `Annotated[]`, stating that this parameter is required.
         """
         return RequiredModifier()
 
     @staticmethod
     def count() -> CountedModifier:
-        """Will count the number of times a flag is given"""
+        """
+        Counts the number of times a flag is given. For example, `-vvvv` would yield `4`.
+
+        Returns:
+            A value for use with `Annotated[]`, stating that this parameter should be counted.
+        """
         return CountedModifier()
 
     @staticmethod
-    def choices(*choices_: Union[str, enum.Enum]) -> ChoicesModifier:
-        """Allows specifying a fixed number of choices"""
-        return ChoicesModifier(choices_)
+    def choices(*choices: Union[str, enum.Enum]) -> ChoicesModifier:
+        """
+        Specifies a fixed set of values that a parameter is allowed to be. If a parameter is an `enum.Enum` type, this
+        logic is already used to restrict the inputs to be one of the enum entries.
+
+        Args:
+            *choices: The allowed values. Must all be of the same type, and be compatible with the annotated type for
+                this parameter.
+
+        Returns:
+            A value for use with `Annotated[]`, stating that this parameter has a fixed set of choices.
+        """
+        return ChoicesModifier(choices)
 
     @staticmethod
-    def missing(value: str) -> MissingArgDefaultModifier:
-        """Will use a value different than the default if an option is specified, but no value is given for it"""
-        return MissingArgDefaultModifier(value)
+    def missing(omit_value: str) -> MissingArgDefaultModifier:
+        """
+        Allows an option to be specified, but its value be omitted. In the case where the value is given, the value is
+        used, but if it is omitted, `omit_value` will be used.
+
+        Examples:
+            ```python
+            def main(*, opt: Annotated[str, arguably.arg.missing("omit-val")] = "no-flag"):
+                print(opt)
+            ```
+
+            ```shell
+            $ ./test.py
+            no-flag
+            $ ./test.py --opt input
+            input
+            $ ./test.py --opt
+            omit-val
+            ```
+
+        Args:
+            omit_value: The value that will be used if the flag is present, but the value is omitted.
+
+        Returns:
+            A value for use with `Annotated[]`, stating that this parameter has a special value if the flag is present,
+                but no value is provided.
+        """
+        return MissingArgDefaultModifier(omit_value)
 
     @staticmethod
     def handler(func: Callable[[str], Any]) -> HandlerModifier:
-        """Will use a user-provided handler to take the input string value and return an output"""
+        """
+        Causes a user-provided handler to be used to process the input string, instead of trying to process it using
+        the types from type annotations.
+
+        Args:
+            func: The function to call to process the input string.
+
+        Returns:
+            A value for use with `Annotated[]`, stating that this parameter has a specific handler to call.
+        """
         return HandlerModifier(func)
 
     @staticmethod
     def builder() -> BuilderModifier:
-        """Will use the arguably builder logic instead of trying to instantiate the type from the input string"""
+        """
+        Causes the arguably builder logic to be used instead of trying to instantiate the type from the input string.
+
+        Returns:
+            A value for use with `Annotated[]`, stating that this parameter should use the builder logic.
+        """
         return BuilderModifier()

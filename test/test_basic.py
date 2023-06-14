@@ -162,24 +162,6 @@ def test_hello_help(iobuf: StringIO, fn_hello: Callable) -> None:
 # others
 
 
-def test_auto_alias_help(iobuf: StringIO) -> None:
-    @arguably.command
-    def autoaliased(*, foo: int, foo2: str, foo3: float, foo4: list):
-        pass
-
-    argv = ["-h"]
-
-    sys.argv.extend(argv)
-    with pytest.raises(SystemExit):
-        arguably.run(output=iobuf, auto_alias_params=True)
-    cli = get_and_clear_io(iobuf)
-
-    assert ", --foo " in cli
-    assert ", --foo2 " in cli
-    assert ", --foo3 " in cli
-    assert ", --foo4 " in cli
-
-
 def test_error(iobuf: StringIO) -> None:
     @arguably.command
     def foo():
@@ -193,7 +175,7 @@ def test_error(iobuf: StringIO) -> None:
 
     sys.argv.extend(argv)
     with pytest.raises(SystemExit):
-        arguably.run(output=iobuf, auto_alias_params=True)
+        arguably.run(output=iobuf)
     cli = get_and_clear_io(iobuf)
 
     assert f"{test_error.__name__} bar: error: !!!\n" in cli

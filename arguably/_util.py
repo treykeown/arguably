@@ -14,7 +14,7 @@ import warnings
 from dataclasses import dataclass
 from io import StringIO
 from pathlib import Path
-from typing import Callable, cast, Any, Collection, Union, Optional, List, Dict, Type, Tuple, TextIO
+from typing import Callable, cast, Any, Union, Optional, List, Dict, Type, Tuple, TextIO
 
 from docstring_parser import parse as docparse
 
@@ -74,21 +74,6 @@ def unwrap_quotes(qs: str) -> str:
     if (qs.startswith('"') and qs.endswith('"')) or (qs.startswith("'") and qs.endswith("'")):
         return qs[1:-1]
     return qs
-
-
-def find_alias(used_aliases: Collection[str], name: str) -> Optional[str]:
-    """
-    Simple algorithm for automatically finding an alias for a parameter. There are better ways, but this works for now.
-    Iterates over each character in a parameter, tries both lowercase and uppercase variants. Returns the first one
-    found that isn't in used_aliases.
-    """
-    for char in name:
-        for transform in [lambda s: s.lower(), lambda s: s.upper()]:
-            alias = transform(char)
-            assert len(alias) == 1, f"One character became more than one: `{char}` -> `{alias}`"
-            if alias not in used_aliases:
-                return alias
-    return None
 
 
 def get_ancestors(command_name: str) -> List[str]:
@@ -410,9 +395,21 @@ def load_and_run(results: multiprocessing.Queue, file: Path, argv: List[str], de
 # Exposed for API
 
 
-class ArguablyWarning(UserWarning):
-    """Raised when a decorated function is incorrectly set up in some way, but arguably can continue"""
-
-
 class ArguablyException(Exception):
-    """Raised when a decorated function is incorrectly set up in some way"""
+    """
+    Inherits from `Exception`.
+
+    Raised when a decorated function is incorrectly set up in some way. Will *not* be raised when a user provides
+    incorrect input to the CLI.
+    """
+
+
+class ArguablyWarning(UserWarning):
+    """
+    Inherits from `UserWarning`.
+
+    Emitted when a decorated function is incorrectly set up in some way, but arguably can continue. Will *not* be raised
+    when a user provides incorrect input to the CLI.
+
+    Note that this is a warning - it is used with `warnings.warn`.
+    """

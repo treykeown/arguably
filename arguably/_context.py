@@ -21,7 +21,6 @@ from ._util import (
     normalize_name,
     NoDefault,
     get_type_hints,
-    find_alias,
     info_for_flags,
     get_ancestors,
     get_parser_name,
@@ -30,39 +29,11 @@ from ._util import (
 
 @dataclass
 class _ContextOptions:
-    """
-    Options for arguably
-
-    :ivar name: Name of the script/program. Defaults to the filename or module name (depending on invocation method).
-
-    :ivar call_ancestors: Normally false. If true, `git init` will first call `git()`, then `git__init()`. Calls all
-        members of the hierarchy. This allows parents to handle options. Parents can determine if they are actually the
-        target command (instead of being called through the heirarchy) through the `is_target()` method.
-    :ivar always_subcommand: Normally false. If true, will force a subcommand interface to be used, even if there's only
-        one command.
-    :ivar auto_alias_cmds: Normally false. If true, will automatically create a short alias for every command. See
-        `_find_alias` for implementation.
-    :ivar auto_alias_params: Normally false. If true, will automatically create a short alias for every parameter
-        (example: `-v` for `--verbose`). See `_find_alias` for implementation.
-    :ivar version_flag: Normally false. If true, will set up version printing using `__version__` and add options to
-        the root parser.
-
-    :ivar show_defaults: Show default values for optional arguments.
-    :ivar show_types: Show the type of each argument.
-    :ivar command_metavar: Allows you to change how the subcommand placeholder appears in the usage string.
-    :ivar max_description_offset: The maximum number of columns before argument descriptions are printed. Equivalent to
-        `max_help_position` in argparse.
-    :ivar max_width: The total maximum width of text to be displayed in the terminal. Equivalent to `width` in argparse.
-    :ivar output: Where argparse output should be written - can write to a file, stderr, or anything similar.
-    """
-
     name: Optional[str]
 
     # Behavior options
     call_ancestors: bool
     always_subcommand: bool
-    auto_alias_cmds: bool
-    auto_alias_params: bool
     version_flag: Union[bool, List[str]]
 
     # Formatting options
@@ -135,8 +106,15 @@ class _Context:
         return [bi for bi in self._subtype_init_info if issubclass(bi.type_, func_arg_type)]
 
     def is_target(self) -> bool:
-        """Aliased by `arguably.is_target`. Only useful when `invoke_ancestors=True`, it lets a command know whether
-        it's the main targeted command or just an ancestor of the targeted command."""
+        """
+        Only useful if `invoke_ancestors=True`. Returns `True` if the targeted command is being executed and `False` if
+        not. This is safe to call even if `arguably` is not being used, since it returns `True` if `arguably.run()` is
+        not being used.
+
+        Returns:
+            `False` if `arguably.run()` was called and the currently running command is not the targeted command, `True`
+                in every other case.
+        """
         return self._is_calling_target
 
     def check_and_set_enum_flag_default_status(self, parser: argparse.ArgumentParser, cli_arg_name: str) -> bool:
@@ -173,7 +151,6 @@ class _Context:
 
         # Will be filled in as we loop over all parameters
         processed_args: List[CommandArg] = list()
-        used_arg_aliases: List[str] = list()
 
         # Iterate over all parameters
         for func_arg_name, param in inspect.signature(info.function).parameters.items():
@@ -212,12 +189,6 @@ class _Context:
             if alias_match := re.match(r"^\[-([a-zA-Z0-9])] ", arg_description):
                 arg_description = arg_description[len(alias_match.group(0)) :]
                 arg_alias = alias_match.group(1)
-
-            # Generate the alias if required and there isn't one
-            if self._options.auto_alias_params and arg_alias is None:
-                arg_alias = find_alias(used_arg_aliases, param.name)
-                if arg_alias is not None:
-                    used_arg_aliases.append(arg_alias)
 
             # Extract the metavars
             metavars = None
@@ -505,8 +476,15 @@ class _Context:
 
     def error(self, message: str) -> None:
         """
-        Prints an error message and exits. Should only be used for when a value from the command line is not of the
-        correct form.
+        Prints an error message and exits. Should be used when a CLI input is not of the correct form. `arguably`
+        handles converting values to the correct type, but if extra validation is performed and fails, this should be
+        called.
+
+        Args:
+            message: A message to be printed to the console indicating why the input is wrong.
+
+        Raises:
+            SystemExit: The script will exit.
         """
         if self._current_parser is None:
             raise ArguablyException("Unknown current parser.")
@@ -517,8 +495,6 @@ class _Context:
         name: Optional[str] = None,
         call_ancestors: bool = False,
         always_subcommand: bool = False,
-        auto_alias_cmds: bool = False,
-        auto_alias_params: bool = False,
         version_flag: Union[bool, Tuple[str], Tuple[str, str]] = False,
         show_defaults: bool = True,
         show_types: bool = False,
@@ -527,7 +503,33 @@ class _Context:
         command_metavar: str = "command",
         output: Optional[TextIO] = None,
     ) -> Any:
-        """Set up the argument parser, parse argv, and run the appropriate command(s)"""
+        """
+        Set up the argument parser, parse argv, and run the appropriate command(s)
+
+        Args:
+            name: Name of the script/program. Defaults to the filename or module name, depending on how the script is
+                run. `$ python3 my/script.py` yields `script.py`, and `python3 -m my.script` yeilds `script`.
+            call_ancestors: If true, all members of the targeted command's heirarchy are called. For example, a command
+                like `$ ./script.py git init` will first call `__root__()`, then `git()`, then `git__init()`. This
+                allows parents to handle options. Parents can determine if they are actually the target command (instead
+                of being called through the heirarchy) through the `is_target()` method.
+            always_subcommand: If true, will force a subcommand interface to be used, even if there's only one command.
+            version_flag: If true, adds an option to show the script version using the value of `__version__` in the
+                invoked script. If a tuple of one or two strings is passed in, like `("-V", "--ver")`, those are used
+                instead of the default `--version`.
+            show_defaults: Show the default value (if any) for each argument at the end of its help string.
+            show_types: Show the type of each argument at the end of its help string.
+            max_description_offset: The maximum number of columns before argument descriptions are printed. Equivalent
+                to `max_help_position` in argparse.
+            max_width: The total maximum width of text to be displayed in the terminal. Equivalent to `width` in
+                argparse.
+            command_metavar: The name shown in the usage string for taking in a subcommand. Change this if you have a
+                conflicting argument name.
+            output: Where argparse output should be written - can write to a file, stderr, or anything similar.
+
+        Returns:
+            The return value from the called function.
+        """
 
         # Set options
         self._options = _ContextOptions(**{k: v for k, v in locals().items() if k != "self"})
@@ -595,10 +597,6 @@ class _Context:
                 self._parsers[command_decorator_info.name] = self._parsers["__root__"]
             else:
                 parent_name = self._build_subparser_tree(command_decorator_info)
-
-            # Assign an alias, if needed
-            if command_decorator_info.alias is None and self._options.auto_alias_cmds:
-                command_decorator_info.alias = find_alias(self._command_aliases.keys(), command_decorator_info.name)
 
             # Process command and its args
             cmd = self._process_decorator_info(command_decorator_info)
@@ -792,20 +790,24 @@ def command(
     func: Optional[Callable] = None,
     /,
     *,
-    # Arguments below are passed through to `_CommandDecoratorInfo`
+    # Arguments below are passed through to `CommandDecoratorInfo`
     alias: Optional[str] = None,
     help: bool = True,
 ) -> Callable:
     """
-    Mark a decorated function as a command. If multiple functions are decorated with this, they will be available as
-    subcommands. If only one function is decorated, it is automatically selected and the subcommand logic will not be
-    used.
+    Mark a function as a command that should appear on the CLI. If multiple functions are decorated with this, they will
+    all be available as subcommands. If only one function is decorated, it is automatically selected - no need to
+    specify it on the CLI.
 
     Args:
         func: The target function.
         alias: An alias for this function. For example, `@arguably.command(alias="h")` would alias `h` to the function
             that follows.
         help: If `False`, the help flag `-h/--help` will not automatically be added to this function.
+
+    Returns:
+        If called with parens `@arguably.command(...)`, returns the decorated function. If called without parens
+            `@arguably.command`, returns the function `wrap(func_)`, which returns `func_`.
     """
 
     def wrap(func_: Callable) -> Callable:
@@ -821,12 +823,21 @@ def subtype(
     cls: Optional[type] = None,
     /,
     *,
-    # Arguments from `_CommandDecoratorInfo`. Here for IDE help.
+    # Arguments below are passed through to `SubtypeDecoratorInfo`
     alias: str,
 ) -> Union[Callable[[type], type], type]:
     """
     Mark a decorated class as a subtype that should be buildable for a parameter using arg.builder(). The alias
     parameter is required.
+
+    Args:
+        cls: The target class.
+        alias: An alias for this class. For example, `@arguably.subtype(alias="foo")` would cause this class to be built
+            any time an applicable arg is given a string starting with `foo,...`
+
+    Returns:
+        If called with parens `@arguably.subtype(...)`, returns the decorated class. If called without parens
+            `@arguably.subtype`, returns the function `wrap(cls_)`, which returns `cls_`.
     """
 
     def wrap(cls_: type) -> type:

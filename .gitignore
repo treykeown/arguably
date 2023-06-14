@@ -3,6 +3,8 @@ test_scripts/
 .ruff_cache/
 coverage.json
 
+.doc.*
+
 
 ########################################################################################################################
 # https://github.com/github/gitignore/blob/5808b77453dec299d4daf8557b05a80be832a5b8/Global/Windows.gitignore
