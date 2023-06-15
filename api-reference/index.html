@@ -16,7 +16,9 @@
         <link rel="prev" href="../get-started/">
       
       
-      <link rel="icon" href="../assets/images/favicon.png">
+        <link rel="next" href="../contributing/">
+      
+      <link rel="icon" href="../arguably_tiny.png">
       <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.15">
     
     
@@ -93,8 +95,7 @@
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href=".." title="arguably documentation" class="md-header__button md-logo" aria-label="arguably documentation" data-md-component="logo">
       
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+  <img src="../arguably_small.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -210,6 +211,18 @@
   </li>
 
       
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../contributing/" class="md-tabs__link">
+      Contributing
+    </a>
+  </li>
+
+      
     </ul>
   </div>
 </nav>
@@ -233,8 +246,7 @@
   <label class="md-nav__title" for="__drawer">
     <a href=".." title="arguably documentation" class="md-nav__button md-logo" aria-label="arguably documentation" data-md-component="logo">
       
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+  <img src="../arguably_small.png" alt="logo">
 
     </a>
     arguably documentation
@@ -439,6 +451,21 @@
   
 
     
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/" class="md-nav__link">
+        Contributing
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -590,6 +617,7 @@
 
 
 <h1 id="api-reference">API Reference<a class="headerlink" href="#api-reference" title="Permanent link">&para;</a></h1>
+<p>This is the API reference.</p>
 
 
 <div class="doc doc-object doc-module">
@@ -597,11 +625,6 @@
 
 
   <div class="doc doc-contents first">
-  
-      <p>arguably is a tool for handling command-line input in Python. It is a layer on top of argparse that lets you use a
-function definition and a docstring to handle inputs any way a script would require.</p>
-<p>Any time a user setting up arguably messes up, an ArguablyException will be raised. Any time a user on the command line
-messes up, an error message will be printed (as is normally done with argparse).</p>
 
   
 
@@ -1173,6 +1196,8 @@ any time an applicable arg is given a string starting with <code>foo,...</code><
 </code></pre></div>
 
   <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code><span title="abc.ABC">ABC</span></code></p>
 
   
       <p>Non-instantiable class.</p>
@@ -1619,10 +1644,11 @@ the types from type annotations.</p>
 </code></pre></div>
 
   <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code>Exception</code></p>
 
   
-      <p>Inherits from <code>Exception</code>.</p>
-<p>Raised when a decorated function is incorrectly set up in some way. Will <em>not</em> be raised when a user provides
+      <p>Raised when a decorated function is incorrectly set up in some way. Will <em>not</em> be raised when a user provides
 incorrect input to the CLI.</p>
 
 
@@ -1659,10 +1685,11 @@ incorrect input to the CLI.</p>
 </code></pre></div>
 
   <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code>UserWarning</code></p>
 
   
-      <p>Inherits from <code>UserWarning</code>.</p>
-<p>Emitted when a decorated function is incorrectly set up in some way, but arguably can continue. Will <em>not</em> be raised
+      <p>Emitted when a decorated function is incorrectly set up in some way, but arguably can continue. Will <em>not</em> be raised
 when a user provides incorrect input to the CLI.</p>
 <p>Note that this is a warning - it is used with <code>warnings.warn</code>.</p>
 
