@@ -7,7 +7,7 @@
 
 ## Setup
 
-1. Clone the repository - `user@machine:~$ git clone git@github.com:treykeown/arguably.git`
+1. Clone the repository - `git clone git@github.com:treykeown/arguably.git`
 2. Set up the project - `poetry install`
 3. Activate the project virtualenv - `source .venv/bin/activate`
 4. Install the pre-commit hooks - `pre-commit install`
