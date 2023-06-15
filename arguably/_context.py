@@ -497,7 +497,7 @@ class _Context:
         always_subcommand: bool = False,
         version_flag: Union[bool, Tuple[str], Tuple[str, str]] = False,
         show_defaults: bool = True,
-        show_types: bool = False,
+        show_types: bool = True,
         max_description_offset: int = 60,
         max_width: int = 120,
         command_metavar: str = "command",

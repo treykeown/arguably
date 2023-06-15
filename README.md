@@ -27,6 +27,10 @@ To use `arguably` in a script, decorate any functions that should appear on the 
 then call `arguably.run()`. If multiple functions are decorated, they'll all appear as subcommands. You can even have
 *multiple levels* of subcommands: `def s3__ls()` becomes `s3 ls`.
 
+<div align="right"><sub>
+    <a href="https://raw.githubusercontent.com/treykeown/arguably/main/etc/scripts/readme-1.py">[source]</a>
+</sub></div>
+
 ```python
 @arguably.command
 def some_function(required, not_required=2, *others: int, option: float = 3.14):
@@ -45,8 +49,8 @@ def some_function(required, not_required=2, *others: int, option: float = 3.14):
 <p align="center"><b><em>becomes</em></b></p>
 
 ```console
-user@machine:~$ ./some_script.py -h
-usage: some_script.py [-h] [-x OPTION] required [not-required] [others ...]
+user@machine:~$ ./readme-1.py -h
+usage: readme-1.py [-h] [-x OPTION] required [not-required] [others ...]
 
 this function is on the command line!
 
@@ -85,14 +89,22 @@ There are also a few special behaviors you can attach to a parameter via `Annota
 functions. Using `arguably.arg.builder()`, you can even build an object to pass in from the command line (using syntax
 inspired by QEMU):
 
+<div align="right"><sub>
+    <a href="https://raw.githubusercontent.com/treykeown/arguably/main/etc/scripts/readme-2.py">[source]</a>
+</sub></div>
+
 ```console
-user@machine:~$ ./script.py --nic tap,model=e1000 --nic user,hostfwd=tcp::10022-:22
+user@machine:~$ ./readme-2.py --nic tap,model=e1000 --nic user,hostfwd=tcp::10022-:22
 nic=[TapNic(model='e1000'), UserNic(hostfwd='tcp::10022-:22')]
 ```
 
 ## No integration required
 
 Don't want to write any code? Simply pass any Python script to `arguably` to give it a command line interface.
+
+<div align="right"><sub>
+    <a href="https://raw.githubusercontent.com/treykeown/arguably/main/etc/scripts/party-trick.py">[source]</a>
+</sub></div>
 
 ```console
 user@machine:~$ python3 -m arguably party-trick.py
