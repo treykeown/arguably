@@ -682,7 +682,11 @@ ancestors is being run</li>
 <li><a href="#arguably.subtype"><code>@arguably.subtype</code></a> marks a class as being a subclass buildable through <code>arguably.arg.builder()</code></li>
 </ul>
 <h3 id="special-behaviors">Special behaviors<a class="headerlink" href="#special-behaviors" title="Permanent link">&para;</a></h3>
-<p>There are special behaviors you can attach to a parameter: <code>param: Annotated[&lt;param_type&gt;, arguably.arg.*()]</code></p>
+<p>There are special behaviors you can attach to a parameter:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span>
+    <span class="n">param</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="o">&lt;</span><span class="n">param_type</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.*</span><span class="p">()]</span>
+<span class="p">):</span>
+</code></pre></div>
 <ul>
 <li><a href="#arguably.arg.required"><code>arguably.arg.required()</code></a> requires <code>list[]</code> and <code>*args</code> params to not be empty, or marks an
 <code>--option</code> as required.</li>
