@@ -397,8 +397,6 @@ def load_and_run(results: multiprocessing.Queue, file: Path, argv: List[str], de
 
 class ArguablyException(Exception):
     """
-    Inherits from `Exception`.
-
     Raised when a decorated function is incorrectly set up in some way. Will *not* be raised when a user provides
     incorrect input to the CLI.
     """
@@ -406,8 +404,6 @@ class ArguablyException(Exception):
 
 class ArguablyWarning(UserWarning):
     """
-    Inherits from `UserWarning`.
-
     Emitted when a decorated function is incorrectly set up in some way, but arguably can continue. Will *not* be raised
     when a user provides incorrect input to the CLI.
 

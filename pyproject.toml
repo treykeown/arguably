@@ -4,13 +4,13 @@ version = "1.1.0"
 description = "turns functions into command line interfaces"
 authors = ["treykeown <2755914+treykeown@users.noreply.github.com>"]
 readme = "etc/pypi/PYPI_README.md"
-homepage = "https://github.com/treykeown/arguably"
+homepage = "https://treykeown.github.io/arguably/"
 repository = "https://github.com/treykeown/arguably"
 
 [tool.poetry.dependencies]
 python = "^3.8"
 docstring-parser = "^0.15"
-typing-extensions = {version = "^4.6.3", python = ">=3.7,<3.9" }
+typing-extensions = {version = "^4.6.3", python = ">=3.8,<3.9" }
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"
@@ -21,10 +21,6 @@ pytest = "^7.3.1"
 pytest-cov = "^4.1.0"
 pytest-randomly = "^3.12.0"
 nox = "^2023.4.22"
-sphinx = "^7.0.1"
-build = "^0.10.0"
-furo = "^2023.5.20"
-
 
 [tool.poetry.group.docs.dependencies]
 mkdocs = "^1.4.3"

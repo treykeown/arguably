@@ -67,6 +67,11 @@ jobs:
     - name: Run tests
       run: nox -s test-${{ matrix.python-version }}
 
+    - name: Verify pre-commit hooks passed
+      run: |
+        . .venv/bin/activate
+        pre-commit run --all-files
+
     - name: (${{ env.latest-python-version }} only) Docs build, copy coverage, extract coverage percent
       if: ${{ matrix.python-version == env.latest-python-version }}
       run: |

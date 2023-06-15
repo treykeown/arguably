@@ -96,8 +96,6 @@ options:
 
 ## Documentation
 
-The full documentation can be found here: [https://treykeown.github.io/arguably/](https://treykeown.github.io/arguably/)
-
 * Get Started: [https://treykeown.github.io/arguably/get-started/](https://treykeown.github.io/arguably/get-started/)
 * API Reference: [https://treykeown.github.io/arguably/api-reference/](https://treykeown.github.io/arguably/api-reference/)
 
@@ -112,6 +110,11 @@ All of `arguably` is built on top of `argparse`. It has two dependencies:
 
 Install using `pip install arguably`. If you want to install by using `conda`, please comment on
 [this issue](https://github.com/treykeown/arguably/issues/12).
+
+## Contributing
+
+Ideas and help are very much appreciated! There is a guide for getting started with contributing to `arguably` which
+shows you how to run tests and pre-commit hooks.
 
 ## Future Roadmap
 

@@ -26,6 +26,8 @@ theme:
     - content.code.annotate
     - announce.dismiss
     - navigation.tabs
+  logo: arguably_small.png
+  favicon: arguably_tiny.png
 
 
 extra_css:
@@ -63,6 +65,7 @@ nav:
   - Home: index.md
   - Get Started: get-started.md
   - API Reference: api-reference.md
+  - Contributing: contributing.md
 
 
 markdown_extensions:

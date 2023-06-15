@@ -5,7 +5,7 @@ import shutil
 import subprocess
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Annotated
+from typing import Any, Annotated, Tuple
 
 import arguably
 
@@ -39,13 +39,32 @@ def get_signature(obj) -> inspect.Signature:
     raise Exception(f"Unable to find signature for {obj}")
 
 
+def get_bases(cls) -> Tuple[type]:
+    classtree = inspect.getclasstree(inspect.getmro(cls))
+    real_bases = tuple()
+    stack = [classtree]
+    while len(stack) > 0:
+        curr = stack.pop()
+        to_visit = list()
+        for item in curr:
+            if isinstance(item, tuple) and item[0] == cls:
+                real_bases = item[1]
+                break
+            elif isinstance(item, list):
+                to_visit.append(item)
+        else:
+            stack.extend(to_visit)
+    return real_bases
+
+
 def produce_file(path: Path):
     with path.open("w") as fh:
-        good_doc_lines = "\n\n".join(arguably.__doc__.split("\n\n")[1:-1])
-        fh.write(f'"""\n{good_doc_lines}\n"""\n')
-        fh.write("\n")
+        # good_doc_lines = "\n\n".join(arguably.__doc__.split("\n\n")[1:-1])
+        # fh.write(f'"""\n{good_doc_lines}\n"""\n')
+        # fh.write("\n")
         fh.write("import enum\n")
         fh.write("from typing import *\n")
+        fh.write("from abc import ABC\n")
         fh.write("\n")
 
         members = get_members(arguably)
@@ -53,7 +72,8 @@ def produce_file(path: Path):
             signature_str = str(get_signature(member))
             if isinstance(member, type):
                 signature_str = "(self, " + signature_str[1:]
-                fh.write(f"class {member.__name__}:\n")
+                real_bases = get_bases(member)
+                fh.write(f"class {member.__name__}({', '.join(b.__name__ for b in real_bases)}):\n")
                 if member.__doc__ is not None:
                     fh.write(f'    """{member.__doc__}"""\n')
                 fh.write(f"    def __init__{signature_str}:\n")
@@ -87,8 +107,9 @@ def run_mkdocs(target):
 
 
 def copy_logos():
-    shutil.copy(project_root / "etc" / "logo" / "arguably_black.png", project_root / "docs")
-    shutil.copy(project_root / "etc" / "logo" / "arguably_white.png", project_root / "docs")
+    logos = ["arguably_black.png", "arguably_white.png", "arguably_small.png", "arguably_tiny.png"]
+    for logo in logos:
+        shutil.copy(project_root / "etc" / "logo" / logo, project_root / "docs")
 
 
 def copy_readme():
@@ -123,7 +144,7 @@ def main(mkdocs_cmd: Annotated[str, arguably.arg.choices("build", "serve")]):
     os.chdir(project_root)
     copy_logos()
     copy_readme()
-    with swap_file(module_root / "__init__.py", module_root / "_mkdocs_swap__init__.py"):
+    with swap_file(module_root / "__init__.py", module_root / ".real.__init__.py"):
         produce_file(module_root / "__init__.py")
         run_mkdocs(mkdocs_cmd)
 
