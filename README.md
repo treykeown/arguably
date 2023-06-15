@@ -122,6 +122,11 @@ options:
   -h, --help             show this help message and exit
 ```
 
+## Installation
+
+Install using `pip install arguably`. If you want to install by using `conda`, please comment on
+[this issue](https://github.com/treykeown/arguably/issues/12).
+
 ## Documentation
 
 * Get Started: [https://treykeown.github.io/arguably/get-started/](https://treykeown.github.io/arguably/get-started/)
@@ -133,11 +138,6 @@ All of `arguably` is built on top of `argparse`. It has two dependencies:
 
 * `docstring-parser` for parsing function docstrings
 * `typing-extensions` for `Annotated[]` support in Python 3.8 (only needed for that version)
-
-## Installation
-
-Install using `pip install arguably`. If you want to install by using `conda`, please comment on
-[this issue](https://github.com/treykeown/arguably/issues/12).
 
 ## Contributing
 
