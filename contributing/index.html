@@ -17,7 +17,7 @@
       
       
       <link rel="icon" href="../arguably_tiny.png">
-      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.15">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.16">
     
     
       
@@ -326,9 +326,77 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Contributing
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         Contributing
       </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="Page contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Page contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    Prerequisites
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setup" class="md-nav__link">
+    Setup
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#linting" class="md-nav__link">
+    Linting
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    Testing
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#code-style" class="md-nav__link">
+    Code Style
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pre-commit-hooks" class="md-nav__link">
+    Pre-commit Hooks
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -356,6 +424,56 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Page contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    Prerequisites
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setup" class="md-nav__link">
+    Setup
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#linting" class="md-nav__link">
+    Linting
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    Testing
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#code-style" class="md-nav__link">
+    Code Style
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pre-commit-hooks" class="md-nav__link">
+    Pre-commit Hooks
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -373,7 +491,47 @@
 
 
 <h1 id="contributing">Contributing<a class="headerlink" href="#contributing" title="Permanent link">&para;</a></h1>
-<p>...</p>
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
+<p><code>poetry</code> is used for managing this project. To install poetry, follow
+<a href="https://python-poetry.org/docs/#installation">this guide</a>.</p>
+<h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Clone the repository - <code>user@machine:~$ git clone git@github.com:treykeown/arguably.git</code></li>
+<li>Set up the project - <code>poetry install</code></li>
+<li>Activate the project virtualenv - <code>source .venv/bin/activate</code></li>
+<li>Install the pre-commit hooks - <code>pre-commit install</code></li>
+</ol>
+<h2 id="linting">Linting<a class="headerlink" href="#linting" title="Permanent link">&para;</a></h2>
+<p><code>ruff</code> and <code>mypy</code> are used for checking code correctness. These are automatically run as a part of the pre-commit hooks.
+If you want to invoke them manually, from the project root directory:</p>
+<ul>
+<li><code>ruff .</code></li>
+<li><code>mypy arguably/</code></li>
+</ul>
+<h2 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h2>
+<p>Originally, tests were only conducted through directly running <code>pytest</code>. Now, in order to support multiple Python
+versions, <code>nox</code> is used to automatically test Python 3.8 through 3.11. Running all the tests for all versions takes a
+bit of time, so during normal development I directly run <code>pytest</code> and only run <code>nox</code> at the very end, before pushing. To
+invoke each, from the project root directory:</p>
+<ul>
+<li><code>pytest test --cov arguably --cov-report html</code> (will put a coverage report in the <code>htmlcov/</code> directory)</li>
+<li><code>nox</code> (automatically runs <code>noxfile.py</code>)</li>
+</ul>
+<h2 id="code-style">Code Style<a class="headerlink" href="#code-style" title="Permanent link">&para;</a></h2>
+<p>As with many projects, <code>black</code> is used to automatically format code. Its output is not always as clear as
+hand-formatting everything, but it's much faster and works well for projects with many contributors. You will not have
+to manually invoke <code>black</code>, it runs during the pre-commit hooks.</p>
+<p>If you do not type hint your functions, <code>mypy</code> will fail. Please add docstrings, but no need to document parameters
+(unless you want to!). A short description of each class or function is great.</p>
+<p>Sparse comments are appreciated!</p>
+<h2 id="pre-commit-hooks">Pre-commit Hooks<a class="headerlink" href="#pre-commit-hooks" title="Permanent link">&para;</a></h2>
+<p>If this is your first time using pre-commit hooks, all you need to know is that when you run <code>git commit</code>, a lot of
+tools are invoked to check the code. Notably absent is <code>pytest</code> - tests take quite a bit of time to run, and
+<a href="https://github.com/pre-commit/pre-commit-hooks/issues/291#issuecomment-394167917">commiting should be fast</a>. You'll
+need to make sure to run the tests yourself.</p>
+<p>If a pre-commit hook fails, it's because it just reformatted something (except for <code>mypy</code>, which will just complain and
+not fix itself). If something fails, you can just <code>git add</code> and <code>git commit</code> again with the same message. This will
+include the changes the pre-commit hook made to automatically reformat your code.</p>
 
 
 
@@ -416,7 +574,7 @@
     <script id="__config" type="application/json">{"base": "..", "features": ["content.tabs.link", "content.code.annotate", "announce.dismiss", "navigation.tabs"], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.b4d07000.min.js"></script>
+      <script src="../assets/javascripts/bundle.a51614de.min.js"></script>
       
     
   </body>
