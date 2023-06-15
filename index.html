@@ -456,7 +456,10 @@ then call <code>arguably.run()</code>. If multiple functions are decorated, they
     <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/readme-1.py">[source]</a>
 </sub></div>
 
-<div class="highlight"><pre><span></span><code><span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+<span class="kn">import</span> <span class="nn">arguably</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
 <span class="k">def</span> <span class="nf">some_function</span><span class="p">(</span><span class="n">required</span><span class="p">,</span> <span class="n">not_required</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">*</span><span class="n">others</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">option</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.14</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    this function is on the command line!</span>
@@ -467,7 +470,9 @@ then call <code>arguably.run()</code>. If multiple functions are decorated, they
 <span class="sd">        *others: all the other positional arguments go here</span>
 <span class="sd">        option: [-x] an option, short name is in brackets</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="o">...</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </code></pre></div>
 <p align="center"><b><em>becomes</em></b></p>
 
