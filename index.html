@@ -507,10 +507,10 @@
 
 <p><code>arguably</code> turns functions into command line interfaces. <code>arguably</code> has a tiny API and is extremely easy to integrate.
 You can also use it directly through <code>python3 -m arguably your_script.py</code>, more on that
-<a href="#no-integration-required">here</a></p>
+<a href="#no-integration-required">here</a>.</p>
 <p>To use <code>arguably</code> in a script, decorate any functions that should appear on the command line with <code>@arguably.command</code>,
 then call <code>arguably.run()</code>. If multiple functions are decorated, they'll all appear as subcommands. You can even have
-multiple levels of subcommands.</p>
+multiple levels of subcommands: <code>def git__add()</code> becomes <code>git add</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
 <span class="k">def</span> <span class="nf">some_function</span><span class="p">(</span><span class="n">required</span><span class="p">,</span> <span class="n">not_required</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">*</span><span class="n">others</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">option</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.14</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -540,7 +540,9 @@ multiple levels of subcommands.</p>
 <span class="go">  -h, --help           show this help message and exit</span>
 <span class="go">  -x, --option OPTION  an option, short name is in brackets (type: float, default: 3.14)</span>
 </code></pre></div>
-<p><code>arguably</code> looks at any decorated functions and maps them from a Python to the CLI exactly how you would expect:</p>
+<p><code>arguably</code> uses your docstrings to automatically generate help messages. It supports all major formats for docstrings:
+reStructuredText, Google, Numpydoc, and Epydoc.</p>
+<p><code>arguably</code> looks at any decorated functions and maps their arguments from Python to the CLI:</p>
 <table>
 <thead>
 <tr>
@@ -568,9 +570,17 @@ multiple levels of subcommands.</p>
 </tbody>
 </table>
 <p>Type annotations are optional, but <code>arguably</code> can use them to automatically convert arguments to their type. It has
-smart handling for <code>tuple</code>, <code>list</code>, <code>enum.Enum</code>, and <code>enum.Flag</code>. There are also a few special behaviors you can attach
-to a parameter via <code>Annotated[]</code> and the <code>arguably.arg.*</code> functions. Using <code>arguably.arg.builder()</code>, you can even
-build an object to pass in from the command line (using syntax inspired by QEMU):</p>
+smart handling for a few built-in types:</p>
+<ul>
+<li><code>tuple</code> takes in comma-separated values. <code>tuple[str,float]</code> takes in <code>foo,2.0</code></li>
+<li><code>list</code> is like <code>tuple</code>, but if it's a keyword-only argument, it can be specified multiple times. <code>nums: list[int]</code>
+takes in <code>--nums 1 --nums 2</code>.</li>
+<li><code>enum.Enum</code> takes in a lowercase enum item name, like <code>read</code> or <code>write</code>.</li>
+<li><code>enum.Flag</code> is like <code>enum.Enum</code>, but its values become options that can be specified multiple times: <code>-r -w -x</code></li>
+</ul>
+<p>There are also a few special behaviors you can attach to a parameter via <code>Annotated[]</code> and the <code>arguably.arg.*</code>
+functions. Using <code>arguably.arg.builder()</code>, you can even build an object to pass in from the command line (using syntax
+inspired by QEMU):</p>
 <div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>./script.py<span class="w"> </span>--nic<span class="w"> </span>tap,model<span class="o">=</span>e1000<span class="w"> </span>--nic<span class="w"> </span>user,hostfwd<span class="o">=</span>tcp::10022-:22
 <span class="go">nic=[TapNic(model=&#39;e1000&#39;), UserNic(hostfwd=&#39;tcp::10022-:22&#39;)]</span>
 </code></pre></div>
@@ -605,8 +615,11 @@ build an object to pass in from the command line (using syntax inspired by QEMU)
 <p>Install using <code>pip install arguably</code>. If you want to install by using <code>conda</code>, please comment on
 <a href="https://github.com/treykeown/arguably/issues/12">this issue</a>.</p>
 <h2 id="contributing">Contributing<a class="headerlink" href="#contributing" title="Permanent link">&para;</a></h2>
-<p>Ideas and help are very much appreciated! There is a guide for getting started with contributing to <code>arguably</code> which
-shows you how to run tests and pre-commit hooks.</p>
+<p>Ideas and help are very much appreciated! There's a guide for getting started with contributing to <code>arguably</code> that shows
+you how to run tests and pre-commit hooks.</p>
+<ul>
+<li>Contributing: <a href="https://treykeown.github.io/arguably/contributing/">https://treykeown.github.io/arguably/contributing/</a></li>
+</ul>
 <h2 id="future-roadmap">Future Roadmap<a class="headerlink" href="#future-roadmap" title="Permanent link">&para;</a></h2>
 <p>If you have any interest in these (either as a user or implementer), please leave a comment!</p>
 <ul>
