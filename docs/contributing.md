@@ -13,9 +13,12 @@
 4. Install the pre-commit hooks - `pre-commit install`
 
 That's it! You should be ready to make a change and [open a pull request](https://github.com/treykeown/arguably/pulls).
-Just remember to run `pytest` to make sure everything works. It takes a little longer, but running `nox` will make sure
-all supported Python versions (3.8-3.11) work - please run this before submitting. I can help debug if you're having
-issues.
+Just remember to run `pytest` as you're developing to make sure everything works.
+
+I can help debug if you're having issues, just [open a discussion](https://github.com/treykeown/arguably/discussions).
+
+It's not necessary, but if you're using `pyenv`, you can install all the supported Python versions to make sure all
+tests pass before submitting your pull request. See the [Testing section](#testing) below.
 
 ## Pre-commit Hooks
 
@@ -59,7 +62,12 @@ invoke each, from the project root directory:
 * `pytest test --cov arguably --cov-report html` (will put a coverage report in the `htmlcov/` directory)
 * `nox` (automatically runs `noxfile.py`)
 
-### Building docs
+`nox` will require extra setup. You'll need to install Python versions 3.8 through 3.11 using `pyenv`:
+
+* `pyenv install 3.11 3.10 3.9 3.8`
+* `pyenv global 3.11 3.10 3.9 3.8`
+
+### Building Docs
 
 I've been fighting `mkdocs`. I'm not sure that I'm winning.
 
