@@ -124,7 +124,7 @@ options:
 
 ## Installation
 
-Install using `pip install arguably`. If you want to install by using `conda`, please comment on
+Install using `pip install arguably`. If you want to install using `conda`, please comment on
 [this issue](https://github.com/treykeown/arguably/issues/12).
 
 ## Documentation
