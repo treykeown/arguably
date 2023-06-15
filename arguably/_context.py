@@ -334,7 +334,7 @@ class _Context:
                 tuple_modifiers = [m for m in arg_.modifiers if isinstance(m, TupleModifier)]
                 if len(tuple_modifiers) > 0:
                     assert len(tuple_modifiers) == 1
-                    type_name = ",".join(t.__name__ for t in tuple_modifiers[0].tuple_arg)
+                    type_name = f"({','.join(t.__name__ for t in tuple_modifiers[0].tuple_arg)})"
                 else:
                     type_name = arg_.arg_value_type.__name__
                 if len(list_modifiers) > 0:

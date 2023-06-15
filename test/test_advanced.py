@@ -20,7 +20,7 @@ def test_help(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
     assert "add          adds a bunch of numbers together" in cli
     assert "give         give something" in cli
     assert "hey-you (h)  says hello to you" in cli
-    assert "  --loud         make it loud (default: False)" in cli
+    assert "  --loud         make it loud (type: bool, default: False)" in cli
 
 
 def test_hey_you_help(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
@@ -124,8 +124,8 @@ def test_add_help(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
 
     assert cli.startswith("usage: advanced add [-h] [-c X,Y,Z] NUMS [NUMS ...]\n")
     assert "adds a bunch of numbers together\n" in cli
-    assert "  NUMS                the numbers NUMS to add\n" in cli
-    assert "  -c, --coords X,Y,Z  coordinates X,Y,Z updated with the sum (default: None)\n" in cli
+    assert "  NUMS                the numbers NUMS to add (type: int)\n" in cli
+    assert "  -c, --coords X,Y,Z  coordinates X,Y,Z updated with the sum (type: (int,int,int), default: None)\n" in cli
 
 
 def test_mixed_tuple(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
@@ -145,8 +145,8 @@ def test_mixed_tuple_help(iobuf: StringIO, scope_advanced: Dict[str, Callable]) 
 
     sys.argv.extend(argv)
     with pytest.raises(SystemExit):
-        arguably.run(output=iobuf, name="advanced", show_types=True)
+        arguably.run(output=iobuf, name="advanced")
     cli = get_and_clear_io(iobuf)
 
     assert cli.startswith("usage: advanced mixed-tuple [-h] val,val,val\n")
-    assert "  val,val,val  the values (type: str,int,float)" in cli
+    assert "  val,val,val  the values (type: (str,int,float))" in cli
