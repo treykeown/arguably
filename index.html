@@ -505,12 +505,16 @@
 </p>
 <hr>
 
-<p><code>arguably</code> turns functions into command line interfaces. <code>arguably</code> has a tiny API and is extremely easy to integrate.
-You can also use it directly through <code>python3 -m arguably your_script.py</code>, more on that
+<p><code>arguably</code> turns functions into command line interfaces (CLIs). <code>arguably</code> has a tiny API and is extremely easy to
+integrate. You can also use it directly through <code>python3 -m arguably your_script.py</code>, more on that
 <a href="#no-integration-required">here</a>.</p>
 <p>To use <code>arguably</code> in a script, decorate any functions that should appear on the command line with <code>@arguably.command</code>,
 then call <code>arguably.run()</code>. If multiple functions are decorated, they'll all appear as subcommands. You can even have
-multiple levels of subcommands: <code>def git__add()</code> becomes <code>git add</code>.</p>
+<em>multiple levels</em> of subcommands: <code>def s3__ls()</code> becomes <code>s3 ls</code>.</p>
+<div align="right"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/readme-1.py">[source]</a>
+</sub></div>
+
 <div class="highlight"><pre><span></span><code><span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
 <span class="k">def</span> <span class="nf">some_function</span><span class="p">(</span><span class="n">required</span><span class="p">,</span> <span class="n">not_required</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">*</span><span class="n">others</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">option</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.14</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -526,8 +530,8 @@ multiple levels of subcommands: <code>def git__add()</code> becomes <code>git ad
 </code></pre></div>
 <p align="center"><b><em>becomes</em></b></p>
 
-<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>./some_script.py<span class="w"> </span>-h
-<span class="go">usage: some_script.py [-h] [-x OPTION] required [not-required] [others ...]</span>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>./readme-1.py<span class="w"> </span>-h
+<span class="go">usage: readme-1.py [-h] [-x OPTION] required [not-required] [others ...]</span>
 
 <span class="go">this function is on the command line!</span>
 
@@ -581,11 +585,19 @@ takes in <code>--nums 1 --nums 2</code>.</li>
 <p>There are also a few special behaviors you can attach to a parameter via <code>Annotated[]</code> and the <code>arguably.arg.*</code>
 functions. Using <code>arguably.arg.builder()</code>, you can even build an object to pass in from the command line (using syntax
 inspired by QEMU):</p>
-<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>./script.py<span class="w"> </span>--nic<span class="w"> </span>tap,model<span class="o">=</span>e1000<span class="w"> </span>--nic<span class="w"> </span>user,hostfwd<span class="o">=</span>tcp::10022-:22
+<div align="right"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/readme-2.py">[source]</a>
+</sub></div>
+
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>./readme-2.py<span class="w"> </span>--nic<span class="w"> </span>tap,model<span class="o">=</span>e1000<span class="w"> </span>--nic<span class="w"> </span>user,hostfwd<span class="o">=</span>tcp::10022-:22
 <span class="go">nic=[TapNic(model=&#39;e1000&#39;), UserNic(hostfwd=&#39;tcp::10022-:22&#39;)]</span>
 </code></pre></div>
 <h2 id="no-integration-required">No integration required<a class="headerlink" href="#no-integration-required" title="Permanent link">&para;</a></h2>
 <p>Don't want to write any code? Simply pass any Python script to <code>arguably</code> to give it a command line interface.</p>
+<div align="right"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/party-trick.py">[source]</a>
+</sub></div>
+
 <div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>-m<span class="w"> </span>arguably<span class="w"> </span>party-trick.py
 <span class="go">usage: party-trick [-h] command ...</span>
 

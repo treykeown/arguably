@@ -55,8 +55,8 @@
         </aside>
         <h2>
             <span class="text">390 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">346<span class="text"> run</span></button>
-            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">44<span class="text"> missing</span></button>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">348<span class="text"> run</span></button>
+            <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">42<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="d_a93d8c4ccb61e4dc__modifiers_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.2.7">coverage.py v7.2.7</a>,
-            created at 2023-06-15 13:08 +0000
+            created at 2023-06-15 14:07 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"/>
@@ -416,12 +416,12 @@
     <p class="run"><span class="n"><a id="t334" href="#t334">334</a></span><span class="t">                <span class="nam">tuple_modifiers</span> <span class="op">=</span> <span class="op">[</span><span class="nam">m</span> <span class="key">for</span> <span class="nam">m</span> <span class="key">in</span> <span class="nam">arg_</span><span class="op">.</span><span class="nam">modifiers</span> <span class="key">if</span> <span class="nam">isinstance</span><span class="op">(</span><span class="nam">m</span><span class="op">,</span> <span class="nam">TupleModifier</span><span class="op">)</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t335" href="#t335">335</a></span><span class="t">                <span class="key">if</span> <span class="nam">len</span><span class="op">(</span><span class="nam">tuple_modifiers</span><span class="op">)</span> <span class="op">></span> <span class="num">0</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t336" href="#t336">336</a></span><span class="t">                    <span class="key">assert</span> <span class="nam">len</span><span class="op">(</span><span class="nam">tuple_modifiers</span><span class="op">)</span> <span class="op">==</span> <span class="num">1</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t337" href="#t337">337</a></span><span class="t">                    <span class="nam">type_name</span> <span class="op">=</span> <span class="str">","</span><span class="op">.</span><span class="nam">join</span><span class="op">(</span><span class="nam">t</span><span class="op">.</span><span class="nam">__name__</span> <span class="key">for</span> <span class="nam">t</span> <span class="key">in</span> <span class="nam">tuple_modifiers</span><span class="op">[</span><span class="num">0</span><span class="op">]</span><span class="op">.</span><span class="nam">tuple_arg</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t337" href="#t337">337</a></span><span class="t">                    <span class="nam">type_name</span> <span class="op">=</span> <span class="str">f"({','.join(t.__name__ for t in tuple_modifiers[0].tuple_arg)})"</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t338" href="#t338">338</a></span><span class="t">                <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t339" href="#t339">339</a></span><span class="t">                    <span class="nam">type_name</span> <span class="op">=</span> <span class="nam">arg_</span><span class="op">.</span><span class="nam">arg_value_type</span><span class="op">.</span><span class="nam">__name__</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t340" href="#t340">340</a></span><span class="t">                <span class="key">if</span> <span class="nam">len</span><span class="op">(</span><span class="nam">list_modifiers</span><span class="op">)</span> <span class="op">></span> <span class="num">0</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t341" href="#t341">341</a></span><span class="t">                    <span class="key">assert</span> <span class="nam">len</span><span class="op">(</span><span class="nam">list_modifiers</span><span class="op">)</span> <span class="op">==</span> <span class="num">1</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t342" href="#t342">342</a></span><span class="t">                    <span class="nam">type_name</span> <span class="op">=</span> <span class="str">f"list[{type_name}]"</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t341" href="#t341">341</a></span><span class="t">                    <span class="key">assert</span> <span class="nam">len</span><span class="op">(</span><span class="nam">list_modifiers</span><span class="op">)</span> <span class="op">==</span> <span class="num">1</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t342" href="#t342">342</a></span><span class="t">                    <span class="nam">type_name</span> <span class="op">=</span> <span class="str">f"list[{type_name}]"</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t343" href="#t343">343</a></span><span class="t">                <span class="nam">description_extras</span><span class="op">.</span><span class="nam">append</span><span class="op">(</span><span class="str">f"type: {type_name}"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t344" href="#t344">344</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t345" href="#t345">345</a></span><span class="t">            <span class="com"># `default` value?</span>&nbsp;</span><span class="r"></span></p>
@@ -579,7 +579,7 @@
     <p class="pln"><span class="n"><a id="t497" href="#t497">497</a></span><span class="t">        <span class="nam">always_subcommand</span><span class="op">:</span> <span class="nam">bool</span> <span class="op">=</span> <span class="key">False</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t498" href="#t498">498</a></span><span class="t">        <span class="nam">version_flag</span><span class="op">:</span> <span class="nam">Union</span><span class="op">[</span><span class="nam">bool</span><span class="op">,</span> <span class="nam">Tuple</span><span class="op">[</span><span class="nam">str</span><span class="op">]</span><span class="op">,</span> <span class="nam">Tuple</span><span class="op">[</span><span class="nam">str</span><span class="op">,</span> <span class="nam">str</span><span class="op">]</span><span class="op">]</span> <span class="op">=</span> <span class="key">False</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t499" href="#t499">499</a></span><span class="t">        <span class="nam">show_defaults</span><span class="op">:</span> <span class="nam">bool</span> <span class="op">=</span> <span class="key">True</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t500" href="#t500">500</a></span><span class="t">        <span class="nam">show_types</span><span class="op">:</span> <span class="nam">bool</span> <span class="op">=</span> <span class="key">False</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t500" href="#t500">500</a></span><span class="t">        <span class="nam">show_types</span><span class="op">:</span> <span class="nam">bool</span> <span class="op">=</span> <span class="key">True</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t501" href="#t501">501</a></span><span class="t">        <span class="nam">max_description_offset</span><span class="op">:</span> <span class="nam">int</span> <span class="op">=</span> <span class="num">60</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t502" href="#t502">502</a></span><span class="t">        <span class="nam">max_width</span><span class="op">:</span> <span class="nam">int</span> <span class="op">=</span> <span class="num">120</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t503" href="#t503">503</a></span><span class="t">        <span class="nam">command_metavar</span><span class="op">:</span> <span class="nam">str</span> <span class="op">=</span> <span class="str">"command"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
@@ -941,7 +941,7 @@
             <a id="nextFileLink" class="nav" href="d_a93d8c4ccb61e4dc__modifiers_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.2.7">coverage.py v7.2.7</a>,
-            created at 2023-06-15 13:08 +0000
+            created at 2023-06-15 14:07 +0000
         </p>
     </div>
 </footer>
