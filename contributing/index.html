@@ -367,30 +367,70 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#linting" class="md-nav__link">
-    Linting
+  <a href="#pre-commit-hooks" class="md-nav__link">
+    Pre-commit Hooks
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#testing" class="md-nav__link">
-    Testing
+  <a href="#other-details" class="md-nav__link">
+    Other Details
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
+    <nav class="md-nav" aria-label="Other Details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#code-style" class="md-nav__link">
     Code Style
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#pre-commit-hooks" class="md-nav__link">
-    Pre-commit Hooks
+        
+          <li class="md-nav__item">
+  <a href="#linting" class="md-nav__link">
+    Linting
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    Testing
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#building-docs" class="md-nav__link">
+    Building docs
+  </a>
+  
+    <nav class="md-nav" aria-label="Building docs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tldr" class="md-nav__link">
+    TL;DR
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#releasing" class="md-nav__link">
+    Releasing
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -445,30 +485,70 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#linting" class="md-nav__link">
-    Linting
+  <a href="#pre-commit-hooks" class="md-nav__link">
+    Pre-commit Hooks
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#testing" class="md-nav__link">
-    Testing
+  <a href="#other-details" class="md-nav__link">
+    Other Details
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
+    <nav class="md-nav" aria-label="Other Details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#code-style" class="md-nav__link">
     Code Style
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#pre-commit-hooks" class="md-nav__link">
-    Pre-commit Hooks
+        
+          <li class="md-nav__item">
+  <a href="#linting" class="md-nav__link">
+    Linting
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    Testing
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#building-docs" class="md-nav__link">
+    Building docs
+  </a>
+  
+    <nav class="md-nav" aria-label="Building docs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tldr" class="md-nav__link">
+    TL;DR
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#releasing" class="md-nav__link">
+    Releasing
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -491,6 +571,7 @@
 
 
 <h1 id="contributing">Contributing<a class="headerlink" href="#contributing" title="Permanent link">&para;</a></h1>
+<p>I'm hoping to have a need to</p>
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
 <p><code>poetry</code> is used for managing this project. To install poetry, follow
 <a href="https://python-poetry.org/docs/#installation">this guide</a>.</p>
@@ -501,29 +582,10 @@
 <li>Activate the project virtualenv - <code>source .venv/bin/activate</code></li>
 <li>Install the pre-commit hooks - <code>pre-commit install</code></li>
 </ol>
-<h2 id="linting">Linting<a class="headerlink" href="#linting" title="Permanent link">&para;</a></h2>
-<p><code>ruff</code> and <code>mypy</code> are used for checking code correctness. These are automatically run as a part of the pre-commit hooks.
-If you want to invoke them manually, from the project root directory:</p>
-<ul>
-<li><code>ruff .</code></li>
-<li><code>mypy arguably/</code></li>
-</ul>
-<h2 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h2>
-<p>Originally, tests were only conducted through directly running <code>pytest</code>. Now, in order to support multiple Python
-versions, <code>nox</code> is used to automatically test Python 3.8 through 3.11. Running all the tests for all versions takes a
-bit of time, so during normal development I directly run <code>pytest</code> and only run <code>nox</code> at the very end, before pushing. To
-invoke each, from the project root directory:</p>
-<ul>
-<li><code>pytest test --cov arguably --cov-report html</code> (will put a coverage report in the <code>htmlcov/</code> directory)</li>
-<li><code>nox</code> (automatically runs <code>noxfile.py</code>)</li>
-</ul>
-<h2 id="code-style">Code Style<a class="headerlink" href="#code-style" title="Permanent link">&para;</a></h2>
-<p>As with many projects, <code>black</code> is used to automatically format code. Its output is not always as clear as
-hand-formatting everything, but it's much faster and works well for projects with many contributors. You will not have
-to manually invoke <code>black</code>, it runs during the pre-commit hooks.</p>
-<p>If you do not type hint your functions, <code>mypy</code> will fail. Please add docstrings, but no need to document parameters
-(unless you want to!). A short description of each class or function is great.</p>
-<p>Sparse comments are appreciated!</p>
+<p>That's it! You should be ready to make a change and <a href="https://github.com/treykeown/arguably/pulls">open a pull request</a>.
+Just remember to run <code>pytest</code> to make sure everything works. It takes a little longer, but running <code>nox</code> will make sure
+all supported Python versions (3.8-3.11) work - please run this before submitting. I can help debug if you're having
+issues.</p>
 <h2 id="pre-commit-hooks">Pre-commit Hooks<a class="headerlink" href="#pre-commit-hooks" title="Permanent link">&para;</a></h2>
 <p>If this is your first time using pre-commit hooks, all you need to know is that when you run <code>git commit</code>, a lot of
 tools are invoked to check the code. Notably absent is <code>pytest</code> - tests take quite a bit of time to run, and
@@ -532,6 +594,51 @@ need to make sure to run the tests yourself.</p>
 <p>If a pre-commit hook fails, it's because it just reformatted something (except for <code>mypy</code>, which will just complain and
 not fix itself). If something fails, you can just <code>git add</code> and <code>git commit</code> again with the same message. This will
 include the changes the pre-commit hook made to automatically reformat your code.</p>
+<h2 id="other-details">Other Details<a class="headerlink" href="#other-details" title="Permanent link">&para;</a></h2>
+<h3 id="code-style">Code Style<a class="headerlink" href="#code-style" title="Permanent link">&para;</a></h3>
+<p>As with many projects, <code>black</code> is used to automatically format code. Its output is not always as clear as
+hand-formatting everything, but it's much faster and works well for projects with many contributors. You will not have
+to manually invoke <code>black</code>, it runs during the pre-commit hooks.</p>
+<p>If you do not type hint your functions, <code>mypy</code> will fail. Please add docstrings, but no need to document parameters
+(unless you want to!). A short description of each class or function is great.</p>
+<p>Sparse comments are appreciated!</p>
+<h3 id="linting">Linting<a class="headerlink" href="#linting" title="Permanent link">&para;</a></h3>
+<p><code>ruff</code> and <code>mypy</code> are used for checking code correctness. These are automatically run as a part of the pre-commit hooks.
+If you want to invoke them manually, from the project root directory:</p>
+<ul>
+<li><code>ruff .</code></li>
+<li><code>mypy arguably/</code></li>
+</ul>
+<h3 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h3>
+<p>Originally, tests were only conducted through directly running <code>pytest</code>. Now, in order to support multiple Python
+versions, <code>nox</code> is used to automatically test Python 3.8 through 3.11. Running all the tests for all versions takes a
+bit of time, so during normal development I directly run <code>pytest</code> and only run <code>nox</code> at the very end, before pushing. To
+invoke each, from the project root directory:</p>
+<ul>
+<li><code>pytest test --cov arguably --cov-report html</code> (will put a coverage report in the <code>htmlcov/</code> directory)</li>
+<li><code>nox</code> (automatically runs <code>noxfile.py</code>)</li>
+</ul>
+<h3 id="building-docs">Building docs<a class="headerlink" href="#building-docs" title="Permanent link">&para;</a></h3>
+<p>I've been fighting <code>mkdocs</code>. I'm not sure that I'm winning.</p>
+<p>I ran into an issue where all the functions which were aliases of class methods weren't appearing in the automatically
+generated docs. Snippet is below, link to source is <a href="https://github.com/treykeown/arguably/blob/9c3655480aaa2bdd714db209de4ed7b74f8f1fd5/arguably/_context.py#L784-L786">here</a>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">run</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">run</span>
+<span class="n">is_target</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">is_target</span>
+<span class="n">error</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">error</span>
+</code></pre></div>
+<p>What I ended up doing is temporarily swapping out the <code>__init__.py</code> for a new one, which consists solely of skeletons of
+the exposed functions and classes. No code is in the file, only signatures and docstrings. This madness is contained in
+<code>docs/run</code>.</p>
+<p>This wasn't the only issue that led me to this. I also wanted to ignore the docstring in the file. There were also other
+pre-build steps I needed to do, like copying images and tweaking the <code>README.md</code> so that the light and dark mode images
+would work.</p>
+<p>I'm hoping to work on a proper <code>mkdocs</code> plugin one day to allow these sorts of tweaks without the steps I've taken here.</p>
+<h4 id="tldr">TL;DR<a class="headerlink" href="#tldr" title="Permanent link">&para;</a></h4>
+<p>Run <code>./docs/run serve</code> to check the docs. <code>arguably</code> will not be usable as long as this is running, since I do some
+magic to work around a few <code>mkdocs</code> issues. Don't try to make a commit while <code>./docs/run serve</code> is running.</p>
+<h3 id="releasing">Releasing<a class="headerlink" href="#releasing" title="Permanent link">&para;</a></h3>
+<p>I need to manually add a tag on GitHub for the new version, and it'll be automatically published on PyPI. At some point
+in the future, we'll have a changelog.</p>
 
 
 
