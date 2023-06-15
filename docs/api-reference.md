@@ -20,7 +20,13 @@ ancestors is being run
 
 ### Special behaviors
 
-There are special behaviors you can attach to a parameter: `param: Annotated[<param_type>, arguably.arg.*()]`
+There are special behaviors you can attach to a parameter:
+
+```python
+def foo(
+    param: Annotated[<param_type>, arguably.arg.*()]
+):
+```
 
 * [`arguably.arg.required()`](#arguably.arg.required) requires `list[]` and `*args` params to not be empty, or marks an
 `--option` as required.
