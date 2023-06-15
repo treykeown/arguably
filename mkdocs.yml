@@ -1,4 +1,4 @@
-site_name: arguably documentation
+site_name: arguably
 site_description: The best Python CLI library, arguably.
 strict: true
 site_url: https://treykeown.github.io/arguably/
@@ -25,7 +25,6 @@ theme:
     - content.tabs.link
     - content.code.annotate
     - announce.dismiss
-    - navigation.tabs
   logo: arguably_small.png
   favicon: arguably_tiny.png
 
@@ -59,6 +58,7 @@ plugins:
           show_root_toc_entry: false
           show_source: false
           show_bases: true
+          heading_level: 3
 
 
 nav:

@@ -80,22 +80,24 @@ is_target = context.is_target
 error = context.error
 ```
 
-What I ended up doing is temporarily swapping out the `__init__.py` for a new one, which consists solely of skeletons of
-the exposed functions and classes. No code is in the file, only signatures and docstrings. This madness is contained in
-`docs/run`.
+So I wrote a script, `docs/run`. It temporarily swaps out the real `__init__.py` for a generated one which consists
+solely of skeletons of the functions and classes exposed in `__all__`. No code is in the generated file, only signatures
+and docstrings. The script also does a few other things:
 
-This wasn't the only issue that led me to this. I also wanted to ignore the docstring in the file. There were also other
-pre-build steps I needed to do, like copying images and tweaking the `README.md` so that the light and dark mode images
-would work.
+* Strips the docstring from `__init__.py`
+* Copies in images from `etc/logo`
+* Tweaks `README.md` so that the light and dark mode images work
 
 I'm hoping to work on a proper `mkdocs` plugin one day to allow these sorts of tweaks without the steps I've taken here.
+
+If you can save me from my own madness here, please help me.
 
 #### TL;DR
 
 Run `./docs/run serve` to check the docs. `arguably` will not be usable as long as this is running, since I do some
 magic to work around a few `mkdocs` issues. Don't try to make a commit while `./docs/run serve` is running.
 
-### Releasing
+### Making Releases
 
 I need to manually add a tag on GitHub for the new version, and it'll be automatically published on PyPI. At some point
-in the future, we'll have a changelog.
+in the future, we'll have a changelog to go along with this.
