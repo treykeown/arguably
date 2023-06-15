@@ -21,11 +21,11 @@
 
 `arguably` turns functions into command line interfaces. `arguably` has a tiny API and is extremely easy to integrate.
 You can also use it directly through `python3 -m arguably your_script.py`, more on that
-[here](#no-integration-required)
+[here](#no-integration-required).
 
 To use `arguably` in a script, decorate any functions that should appear on the command line with `@arguably.command`,
 then call `arguably.run()`. If multiple functions are decorated, they'll all appear as subcommands. You can even have
-multiple levels of subcommands.
+multiple levels of subcommands: `def git__add()` becomes `git add`.
 
 ```python
 @arguably.command
@@ -60,7 +60,10 @@ options:
   -x, --option OPTION  an option, short name is in brackets (type: float, default: 3.14)
 ```
 
-`arguably` looks at any decorated functions and maps them from a Python to the CLI exactly how you would expect:
+`arguably` uses your docstrings to automatically generate help messages. It supports all major formats for docstrings:
+reStructuredText, Google, Numpydoc, and Epydoc.
+
+`arguably` looks at any decorated functions and maps their arguments from Python to the CLI:
 
 | This Python ...                                | ... becomes this on the CLI.                   |
 |------------------------------------------------|------------------------------------------------|
@@ -70,9 +73,17 @@ options:
 | keyword-only arguments `option`                | command-line options `[-x OPTION]`             |
 
 Type annotations are optional, but `arguably` can use them to automatically convert arguments to their type. It has
-smart handling for `tuple`, `list`, `enum.Enum`, and `enum.Flag`. There are also a few special behaviors you can attach
-to a parameter via `Annotated[]` and the `arguably.arg.*` functions. Using `arguably.arg.builder()`, you can even
-build an object to pass in from the command line (using syntax inspired by QEMU):
+smart handling for a few built-in types:
+
+* `tuple` takes in comma-separated values. `tuple[str,float]` takes in `foo,2.0`
+* `list` is like `tuple`, but if it's a keyword-only argument, it can be specified multiple times. `nums: list[int]`
+takes in `--nums 1 --nums 2`.
+* `enum.Enum` takes in a lowercase enum item name, like `read` or `write`.
+* `enum.Flag` is like `enum.Enum`, but its values become options that can be specified multiple times: `-r -w -x`
+
+There are also a few special behaviors you can attach to a parameter via `Annotated[]` and the `arguably.arg.*`
+functions. Using `arguably.arg.builder()`, you can even build an object to pass in from the command line (using syntax
+inspired by QEMU):
 
 ```console
 user@machine:~$ ./script.py --nic tap,model=e1000 --nic user,hostfwd=tcp::10022-:22
@@ -118,8 +129,10 @@ Install using `pip install arguably`. If you want to install by using `conda`, p
 
 ## Contributing
 
-Ideas and help are very much appreciated! There is a guide for getting started with contributing to `arguably` which
-shows you how to run tests and pre-commit hooks.
+Ideas and help are very much appreciated! There's a guide for getting started with contributing to `arguably` that shows
+you how to run tests and pre-commit hooks.
+
+* Contributing: [https://treykeown.github.io/arguably/contributing/](https://treykeown.github.io/arguably/contributing/)
 
 ## Future Roadmap
 
