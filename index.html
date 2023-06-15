@@ -515,10 +515,12 @@ multiple levels of subcommands.</p>
 <span class="k">def</span> <span class="nf">some_function</span><span class="p">(</span><span class="n">required</span><span class="p">,</span> <span class="n">not_required</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">*</span><span class="n">others</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">option</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.14</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    this function is on the command line!</span>
-<span class="sd">    :param required: a required parameter</span>
-<span class="sd">    :param not_required: this one isn&#39;t required, since it has a default</span>
-<span class="sd">    :param others: all the other positional arguments go here</span>
-<span class="sd">    :param option: [-x] an option, short name is in brackets</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        required: a required parameter</span>
+<span class="sd">        not_required: this one isn&#39;t required, since it has a default</span>
+<span class="sd">        *others: all the other positional arguments go here</span>
+<span class="sd">        option: [-x] an option, short name is in brackets</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="o">...</span>
 </code></pre></div>
