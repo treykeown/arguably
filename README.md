@@ -19,13 +19,13 @@
 </p>
 <hr>
 
-`arguably` turns functions into command line interfaces. `arguably` has a tiny API and is extremely easy to integrate.
-You can also use it directly through `python3 -m arguably your_script.py`, more on that
+`arguably` turns functions into command line interfaces (CLIs). `arguably` has a tiny API and is extremely easy to
+integrate. You can also use it directly through `python3 -m arguably your_script.py`, more on that
 [here](#no-integration-required).
 
 To use `arguably` in a script, decorate any functions that should appear on the command line with `@arguably.command`,
 then call `arguably.run()`. If multiple functions are decorated, they'll all appear as subcommands. You can even have
-multiple levels of subcommands: `def git__add()` becomes `git add`.
+*multiple levels* of subcommands: `def s3__ls()` becomes `s3 ls`.
 
 ```python
 @arguably.command
