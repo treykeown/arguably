@@ -1,7 +1,5 @@
 # Contributing
 
-I'm hoping to have a need to
-
 ## Prerequisites
 
 `poetry` is used for managing this project. To install poetry, follow
