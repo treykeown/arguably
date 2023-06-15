@@ -21,7 +21,7 @@
     
     
       
-        <title>Contributing - arguably documentation</title>
+        <title>Contributing - arguably</title>
       
     
     
@@ -89,9 +89,11 @@
     
       
 
-<header class="md-header" data-md-component="header">
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="arguably documentation" class="md-header__button md-logo" aria-label="arguably documentation" data-md-component="logo">
+    <a href=".." title="arguably" class="md-header__button md-logo" aria-label="arguably" data-md-component="logo">
       
   <img src="../arguably_small.png" alt="logo">
 
@@ -103,7 +105,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            arguably documentation
+            arguably
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -166,65 +168,6 @@
       
         
           
-            
-<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
-  <div class="md-grid">
-    <ul class="md-tabs__list">
-      
-        
-  
-  
-
-
-  <li class="md-tabs__item">
-    <a href=".." class="md-tabs__link">
-      Home
-    </a>
-  </li>
-
-      
-        
-  
-  
-
-
-  <li class="md-tabs__item">
-    <a href="../get-started/" class="md-tabs__link">
-      Get Started
-    </a>
-  </li>
-
-      
-        
-  
-  
-
-
-  <li class="md-tabs__item">
-    <a href="../api-reference/" class="md-tabs__link">
-      API Reference
-    </a>
-  </li>
-
-      
-        
-  
-  
-    
-  
-
-
-  <li class="md-tabs__item">
-    <a href="./" class="md-tabs__link md-tabs__link--active">
-      Contributing
-    </a>
-  </li>
-
-      
-    </ul>
-  </div>
-</nav>
-          
         
       
       <main class="md-main" data-md-component="main">
@@ -237,17 +180,15 @@
                   <div class="md-sidebar__inner">
                     
 
-  
 
-
-<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="arguably documentation" class="md-nav__button md-logo" aria-label="arguably documentation" data-md-component="logo">
+    <a href=".." title="arguably" class="md-nav__button md-logo" aria-label="arguably" data-md-component="logo">
       
   <img src="../arguably_small.png" alt="logo">
 
     </a>
-    arguably documentation
+    arguably
   </label>
   
     <div class="md-nav__source">
@@ -423,8 +364,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#releasing" class="md-nav__link">
-    Releasing
+  <a href="#making-releases" class="md-nav__link">
+    Making Releases
   </a>
   
 </li>
@@ -541,8 +482,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#releasing" class="md-nav__link">
-    Releasing
+  <a href="#making-releases" class="md-nav__link">
+    Making Releases
   </a>
   
 </li>
@@ -631,19 +572,22 @@ generated docs. Snippet is below, link to source is <a href="https://github.com/
 <span class="n">is_target</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">is_target</span>
 <span class="n">error</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">error</span>
 </code></pre></div>
-<p>What I ended up doing is temporarily swapping out the <code>__init__.py</code> for a new one, which consists solely of skeletons of
-the exposed functions and classes. No code is in the file, only signatures and docstrings. This madness is contained in
-<code>docs/run</code>.</p>
-<p>This wasn't the only issue that led me to this. I also wanted to ignore the docstring in the file. There were also other
-pre-build steps I needed to do, like copying images and tweaking the <code>README.md</code> so that the light and dark mode images
-would work.</p>
+<p>So I wrote a script, <code>docs/run</code>. It temporarily swaps out the real <code>__init__.py</code> for a generated one which consists
+solely of skeletons of the functions and classes exposed in <code>__all__</code>. No code is in the generated file, only signatures
+and docstrings. The script also does a few other things:</p>
+<ul>
+<li>Strips the docstring from <code>__init__.py</code></li>
+<li>Copies in images from <code>etc/logo</code></li>
+<li>Tweaks <code>README.md</code> so that the light and dark mode images work</li>
+</ul>
 <p>I'm hoping to work on a proper <code>mkdocs</code> plugin one day to allow these sorts of tweaks without the steps I've taken here.</p>
+<p>If you can save me from my own madness here, please help me.</p>
 <h4 id="tldr">TL;DR<a class="headerlink" href="#tldr" title="Permanent link">&para;</a></h4>
 <p>Run <code>./docs/run serve</code> to check the docs. <code>arguably</code> will not be usable as long as this is running, since I do some
 magic to work around a few <code>mkdocs</code> issues. Don't try to make a commit while <code>./docs/run serve</code> is running.</p>
-<h3 id="releasing">Releasing<a class="headerlink" href="#releasing" title="Permanent link">&para;</a></h3>
+<h3 id="making-releases">Making Releases<a class="headerlink" href="#making-releases" title="Permanent link">&para;</a></h3>
 <p>I need to manually add a tag on GitHub for the new version, and it'll be automatically published on PyPI. At some point
-in the future, we'll have a changelog.</p>
+in the future, we'll have a changelog to go along with this.</p>
 
 
 
@@ -683,7 +627,7 @@ in the future, we'll have a changelog.</p>
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "..", "features": ["content.tabs.link", "content.code.annotate", "announce.dismiss", "navigation.tabs"], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["content.tabs.link", "content.code.annotate", "announce.dismiss"], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="../assets/javascripts/bundle.a51614de.min.js"></script>

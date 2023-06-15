@@ -23,7 +23,7 @@
     
     
       
-        <title>API Reference - arguably documentation</title>
+        <title>API Reference - arguably</title>
       
     
     
@@ -91,9 +91,11 @@
     
       
 
-<header class="md-header" data-md-component="header">
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="arguably documentation" class="md-header__button md-logo" aria-label="arguably documentation" data-md-component="logo">
+    <a href=".." title="arguably" class="md-header__button md-logo" aria-label="arguably" data-md-component="logo">
       
   <img src="../arguably_small.png" alt="logo">
 
@@ -105,7 +107,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            arguably documentation
+            arguably
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -168,65 +170,6 @@
       
         
           
-            
-<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
-  <div class="md-grid">
-    <ul class="md-tabs__list">
-      
-        
-  
-  
-
-
-  <li class="md-tabs__item">
-    <a href=".." class="md-tabs__link">
-      Home
-    </a>
-  </li>
-
-      
-        
-  
-  
-
-
-  <li class="md-tabs__item">
-    <a href="../get-started/" class="md-tabs__link">
-      Get Started
-    </a>
-  </li>
-
-      
-        
-  
-  
-    
-  
-
-
-  <li class="md-tabs__item">
-    <a href="./" class="md-tabs__link md-tabs__link--active">
-      API Reference
-    </a>
-  </li>
-
-      
-        
-  
-  
-
-
-  <li class="md-tabs__item">
-    <a href="../contributing/" class="md-tabs__link">
-      Contributing
-    </a>
-  </li>
-
-      
-    </ul>
-  </div>
-</nav>
-          
         
       
       <main class="md-main" data-md-component="main">
@@ -239,17 +182,15 @@
                   <div class="md-sidebar__inner">
                     
 
-  
 
-
-<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="arguably documentation" class="md-nav__button md-logo" aria-label="arguably documentation" data-md-component="logo">
+    <a href=".." title="arguably" class="md-nav__button md-logo" aria-label="arguably" data-md-component="logo">
       
   <img src="../arguably_small.png" alt="logo">
 
     </a>
-    arguably documentation
+    arguably
   </label>
   
     <div class="md-nav__source">
@@ -340,41 +281,90 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#need-to-know" class="md-nav__link">
+    Need-to-know
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extras" class="md-nav__link">
+    Extras
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#special-behaviors" class="md-nav__link">
+    Special behaviors
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exceptions" class="md-nav__link">
+    Exceptions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#detailed-description" class="md-nav__link">
+    Detailed Description
+  </a>
+  
+    <nav class="md-nav" aria-label="Detailed Description">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#arguably.command" class="md-nav__link">
     command()
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#arguably.run" class="md-nav__link">
     run()
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#arguably.error" class="md-nav__link">
     error()
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#arguably.is_target" class="md-nav__link">
     is_target()
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#arguably.subtype" class="md-nav__link">
     subtype()
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#arguably.arg" class="md-nav__link">
     arg
   </a>
@@ -428,18 +418,23 @@
     </nav>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#arguably.ArguablyException" class="md-nav__link">
     ArguablyException
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#arguably.ArguablyWarning" class="md-nav__link">
     ArguablyWarning
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -495,41 +490,90 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#need-to-know" class="md-nav__link">
+    Need-to-know
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extras" class="md-nav__link">
+    Extras
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#special-behaviors" class="md-nav__link">
+    Special behaviors
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exceptions" class="md-nav__link">
+    Exceptions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#detailed-description" class="md-nav__link">
+    Detailed Description
+  </a>
+  
+    <nav class="md-nav" aria-label="Detailed Description">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#arguably.command" class="md-nav__link">
     command()
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#arguably.run" class="md-nav__link">
     run()
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#arguably.error" class="md-nav__link">
     error()
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#arguably.is_target" class="md-nav__link">
     is_target()
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#arguably.subtype" class="md-nav__link">
     subtype()
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#arguably.arg" class="md-nav__link">
     arg
   </a>
@@ -583,18 +627,23 @@
     </nav>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#arguably.ArguablyException" class="md-nav__link">
     ArguablyException
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#arguably.ArguablyWarning" class="md-nav__link">
     ArguablyWarning
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -617,7 +666,43 @@
 
 
 <h1 id="api-reference">API Reference<a class="headerlink" href="#api-reference" title="Permanent link">&para;</a></h1>
-<p>This is the API reference.</p>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<h3 id="need-to-know">Need-to-know<a class="headerlink" href="#need-to-know" title="Permanent link">&para;</a></h3>
+<p>In short, only two functions are required to use <code>arguably</code>:</p>
+<ul>
+<li><a href="#arguably.command"><code>@arguably.command</code></a> to mark which functions to put on the CLI</li>
+<li><a href="#arguably.run"><code>arguably.run()</code></a> to initiate argument parsing and dispatch to a function</li>
+</ul>
+<h3 id="extras">Extras<a class="headerlink" href="#extras" title="Permanent link">&para;</a></h3>
+<p>The rest of the functions aren't necessary except in specific use cases:</p>
+<ul>
+<li><a href="#arguably.error"><code>arguably.error()</code></a> lets you error out if an input is the correct type but isn't acceptable</li>
+<li><a href="#arguably.is_target"><code>arguably.is_target()</code></a> tells you if the targeted command is being run, or if one of its
+ancestors is being run</li>
+<li><a href="#arguably.subtype"><code>@arguably.subtype</code></a> marks a class as being a subclass buildable through <code>arguably.arg.builder()</code></li>
+</ul>
+<h3 id="special-behaviors">Special behaviors<a class="headerlink" href="#special-behaviors" title="Permanent link">&para;</a></h3>
+<p>There are special behaviors you can attach to a parameter: <code>param: Annotated[&lt;param_type&gt;, arguably.arg.*()]</code></p>
+<ul>
+<li><a href="#arguably.arg.required"><code>arguably.arg.required()</code></a> requires <code>list[]</code> and <code>*args</code> params to not be empty, or marks an
+<code>--option</code> as required.</li>
+<li><a href="#arguably.arg.count"><code>arguably.arg.count()</code></a> counts the number of times an option appears: <code>-vvvv</code> gives <code>4</code>.</li>
+<li><a href="#arguably.arg.choices"><code>arguably.arg.choices(*choices)</code></a> restricts inputs to <code>choices</code></li>
+<li><a href="#arguably.arg.missing"><code>arguably.arg.missing(omit_value)</code></a> <code>--option foo</code> yields <code>foo</code>, but this allows the value to
+be omitted: just <code>--option</code> will use the given <code>omit_value</code>.</li>
+<li><a href="#arguably.arg.handler"><code>arguably.arg.handler(func)</code></a> skips all the argument processing <code>arguably</code> does and just calls
+<code>func</code></li>
+<li><a href="#arguably.arg.builder"><code>arguably.arg.builder()</code></a> treats the input as instructions on how to build a class</li>
+</ul>
+<h3 id="exceptions">Exceptions<a class="headerlink" href="#exceptions" title="Permanent link">&para;</a></h3>
+<p>Additionally, there are two exceptions:</p>
+<ul>
+<li><a href="#arguably.ArguablyException"><code>arguably.ArguablyException</code></a> raised if you messed up when setting up <code>arguably</code></li>
+<li><a href="#arguably.ArguablyWarning"><code>arguably.ArguablyWarning</code></a> passed to <code>warnings.warn()</code> if you messed up when setting up
+<code>arguably</code>, but not badly. Also used if <code>python3 -m arguably &lt;script.py&gt;</code> is used, but there were some problems running
+the script.</li>
+</ul>
+<h2 id="detailed-description">Detailed Description<a class="headerlink" href="#detailed-description" title="Permanent link">&para;</a></h2>
 
 
 <div class="doc doc-object doc-module">
@@ -640,11 +725,11 @@
 
 
 
-<h2 id="arguably.command" class="doc doc-heading">
+<h3 id="arguably.command" class="doc doc-heading">
         <span class="doc doc-object-name doc-function-name">arguably.command</span>
 
 
-<a href="#arguably.command" class="headerlink" title="Permanent link">&para;</a></h2>
+<a href="#arguably.command" class="headerlink" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
 
@@ -747,11 +832,11 @@ that follows.</p>
 
 
 
-<h2 id="arguably.run" class="doc doc-heading">
+<h3 id="arguably.run" class="doc doc-heading">
         <span class="doc doc-object-name doc-function-name">arguably.run</span>
 
 
-<a href="#arguably.run" class="headerlink" title="Permanent link">&para;</a></h2>
+<a href="#arguably.run" class="headerlink" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
     <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">call_ancestors</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -968,11 +1053,11 @@ conflicting argument name.</p>
 
 
 
-<h2 id="arguably.error" class="doc doc-heading">
+<h3 id="arguably.error" class="doc doc-heading">
         <span class="doc doc-object-name doc-function-name">arguably.error</span>
 
 
-<a href="#arguably.error" class="headerlink" title="Permanent link">&para;</a></h2>
+<a href="#arguably.error" class="headerlink" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 </code></pre></div>
 
@@ -1045,11 +1130,11 @@ this.</p>
 
 
 
-<h2 id="arguably.is_target" class="doc doc-heading">
+<h3 id="arguably.is_target" class="doc doc-heading">
         <span class="doc doc-object-name doc-function-name">arguably.is_target</span>
 
 
-<a href="#arguably.is_target" class="headerlink" title="Permanent link">&para;</a></h2>
+<a href="#arguably.is_target" class="headerlink" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">is_target</span><span class="p">()</span>
 </code></pre></div>
 
@@ -1095,11 +1180,11 @@ in every other case.</p>
 
 
 
-<h2 id="arguably.subtype" class="doc doc-heading">
+<h3 id="arguably.subtype" class="doc doc-heading">
         <span class="doc doc-object-name doc-function-name">arguably.subtype</span>
 
 
-<a href="#arguably.subtype" class="headerlink" title="Permanent link">&para;</a></h2>
+<a href="#arguably.subtype" class="headerlink" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">subtype</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">alias</span><span class="p">)</span>
 </code></pre></div>
 
@@ -1187,11 +1272,11 @@ any time an applicable arg is given a string starting with <code>foo,...</code><
 
 
 
-<h2 id="arguably.arg" class="doc doc-heading">
+<h3 id="arguably.arg" class="doc doc-heading">
         <span class="doc doc-object-name doc-class-name">arguably.arg</span>
 
 
-<a href="#arguably.arg" class="headerlink" title="Permanent link">&para;</a></h2>
+<a href="#arguably.arg" class="headerlink" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="p">()</span>
 </code></pre></div>
 
@@ -1219,7 +1304,7 @@ any time an applicable arg is given a string starting with <code>foo,...</code><
 
 
 
-<h3 id="arguably.arg.required" class="doc doc-heading">
+<h4 id="arguably.arg.required" class="doc doc-heading">
         <span class="doc doc-object-name doc-function-name">arguably.arg.required</span>
 
   
@@ -1227,7 +1312,7 @@ any time an applicable arg is given a string starting with <code>foo,...</code><
       <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
   </span>
 
-<a href="#arguably.arg.required" class="headerlink" title="Permanent link">&para;</a></h3>
+<a href="#arguably.arg.required" class="headerlink" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">required</span><span class="p">()</span>
 </code></pre></div>
 
@@ -1270,7 +1355,7 @@ any time an applicable arg is given a string starting with <code>foo,...</code><
 
 
 
-<h3 id="arguably.arg.count" class="doc doc-heading">
+<h4 id="arguably.arg.count" class="doc doc-heading">
         <span class="doc doc-object-name doc-function-name">arguably.arg.count</span>
 
   
@@ -1278,7 +1363,7 @@ any time an applicable arg is given a string starting with <code>foo,...</code><
       <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
   </span>
 
-<a href="#arguably.arg.count" class="headerlink" title="Permanent link">&para;</a></h3>
+<a href="#arguably.arg.count" class="headerlink" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </code></pre></div>
 
@@ -1321,7 +1406,7 @@ any time an applicable arg is given a string starting with <code>foo,...</code><
 
 
 
-<h3 id="arguably.arg.choices" class="doc doc-heading">
+<h4 id="arguably.arg.choices" class="doc doc-heading">
         <span class="doc doc-object-name doc-function-name">arguably.arg.choices</span>
 
   
@@ -1329,7 +1414,7 @@ any time an applicable arg is given a string starting with <code>foo,...</code><
       <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
   </span>
 
-<a href="#arguably.arg.choices" class="headerlink" title="Permanent link">&para;</a></h3>
+<a href="#arguably.arg.choices" class="headerlink" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="o">*</span><span class="n">choices</span><span class="p">)</span>
 </code></pre></div>
 
@@ -1402,7 +1487,7 @@ this parameter.</p>
 
 
 
-<h3 id="arguably.arg.missing" class="doc doc-heading">
+<h4 id="arguably.arg.missing" class="doc doc-heading">
         <span class="doc doc-object-name doc-function-name">arguably.arg.missing</span>
 
   
@@ -1410,7 +1495,7 @@ this parameter.</p>
       <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
   </span>
 
-<a href="#arguably.arg.missing" class="headerlink" title="Permanent link">&para;</a></h3>
+<a href="#arguably.arg.missing" class="headerlink" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">missing</span><span class="p">(</span><span class="n">omit_value</span><span class="p">)</span>
 </code></pre></div>
 
@@ -1495,7 +1580,7 @@ but no value is provided.</p>
 
 
 
-<h3 id="arguably.arg.handler" class="doc doc-heading">
+<h4 id="arguably.arg.handler" class="doc doc-heading">
         <span class="doc doc-object-name doc-function-name">arguably.arg.handler</span>
 
   
@@ -1503,7 +1588,7 @@ but no value is provided.</p>
       <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
   </span>
 
-<a href="#arguably.arg.handler" class="headerlink" title="Permanent link">&para;</a></h3>
+<a href="#arguably.arg.handler" class="headerlink" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">handler</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
 </code></pre></div>
 
@@ -1575,7 +1660,7 @@ the types from type annotations.</p>
 
 
 
-<h3 id="arguably.arg.builder" class="doc doc-heading">
+<h4 id="arguably.arg.builder" class="doc doc-heading">
         <span class="doc doc-object-name doc-function-name">arguably.arg.builder</span>
 
   
@@ -1583,7 +1668,7 @@ the types from type annotations.</p>
       <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
   </span>
 
-<a href="#arguably.arg.builder" class="headerlink" title="Permanent link">&para;</a></h3>
+<a href="#arguably.arg.builder" class="headerlink" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">builder</span><span class="p">()</span>
 </code></pre></div>
 
@@ -1635,11 +1720,11 @@ the types from type annotations.</p>
 
 
 
-<h2 id="arguably.ArguablyException" class="doc doc-heading">
+<h3 id="arguably.ArguablyException" class="doc doc-heading">
         <span class="doc doc-object-name doc-class-name">arguably.ArguablyException</span>
 
 
-<a href="#arguably.ArguablyException" class="headerlink" title="Permanent link">&para;</a></h2>
+<a href="#arguably.ArguablyException" class="headerlink" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">ArguablyException</span><span class="p">()</span>
 </code></pre></div>
 
@@ -1676,11 +1761,11 @@ incorrect input to the CLI.</p>
 
 
 
-<h2 id="arguably.ArguablyWarning" class="doc doc-heading">
+<h3 id="arguably.ArguablyWarning" class="doc doc-heading">
         <span class="doc doc-object-name doc-class-name">arguably.ArguablyWarning</span>
 
 
-<a href="#arguably.ArguablyWarning" class="headerlink" title="Permanent link">&para;</a></h2>
+<a href="#arguably.ArguablyWarning" class="headerlink" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">ArguablyWarning</span><span class="p">()</span>
 </code></pre></div>
 
@@ -1756,7 +1841,7 @@ when a user provides incorrect input to the CLI.</p>
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "..", "features": ["content.tabs.link", "content.code.annotate", "announce.dismiss", "navigation.tabs"], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["content.tabs.link", "content.code.annotate", "announce.dismiss"], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="../assets/javascripts/bundle.a51614de.min.js"></script>
