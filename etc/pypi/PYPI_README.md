@@ -25,7 +25,7 @@ then call `arguably.run()`. If multiple functions are decorated, they'll all app
 *multiple levels* of subcommands: `def s3__ls()` becomes `s3 ls`.
 
 <div align="right"><sub>
-    <a href="https://raw.githubusercontent.com/treykeown/arguably/main/etc/scripts/readme-1.py">[source]</a>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/readme-1.py">[source]</a>
 </sub></div>
 
 ```python
@@ -87,7 +87,7 @@ functions. Using `arguably.arg.builder()`, you can even build an object to pass 
 inspired by QEMU):
 
 <div align="right"><sub>
-    <a href="https://raw.githubusercontent.com/treykeown/arguably/main/etc/scripts/readme-2.py">[source]</a>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/readme-2.py">[source]</a>
 </sub></div>
 
 ```console
@@ -100,7 +100,7 @@ nic=[TapNic(model='e1000'), UserNic(hostfwd='tcp::10022-:22')]
 Don't want to write any code? Simply pass any Python script to `arguably` to give it a command line interface.
 
 <div align="right"><sub>
-    <a href="https://raw.githubusercontent.com/treykeown/arguably/main/etc/scripts/party-trick.py">[source]</a>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/party-trick.py">[source]</a>
 </sub></div>
 
 ```console
