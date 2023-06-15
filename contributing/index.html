@@ -404,10 +404,10 @@
         
           <li class="md-nav__item">
   <a href="#building-docs" class="md-nav__link">
-    Building docs
+    Building Docs
   </a>
   
-    <nav class="md-nav" aria-label="Building docs">
+    <nav class="md-nav" aria-label="Building Docs">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -522,10 +522,10 @@
         
           <li class="md-nav__item">
   <a href="#building-docs" class="md-nav__link">
-    Building docs
+    Building Docs
   </a>
   
-    <nav class="md-nav" aria-label="Building docs">
+    <nav class="md-nav" aria-label="Building Docs">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -582,9 +582,10 @@
 <li>Install the pre-commit hooks - <code>pre-commit install</code></li>
 </ol>
 <p>That's it! You should be ready to make a change and <a href="https://github.com/treykeown/arguably/pulls">open a pull request</a>.
-Just remember to run <code>pytest</code> to make sure everything works. It takes a little longer, but running <code>nox</code> will make sure
-all supported Python versions (3.8-3.11) work - please run this before submitting. I can help debug if you're having
-issues.</p>
+Just remember to run <code>pytest</code> as you're developing to make sure everything works.</p>
+<p>I can help debug if you're having issues, just <a href="https://github.com/treykeown/arguably/discussions">open a discussion</a>.</p>
+<p>It's not necessary, but if you're using <code>pyenv</code>, you can install all the supported Python versions to make sure all
+tests pass before submitting your pull request. See the <a href="#testing">Testing section</a> below.</p>
 <h2 id="pre-commit-hooks">Pre-commit Hooks<a class="headerlink" href="#pre-commit-hooks" title="Permanent link">&para;</a></h2>
 <p>If this is your first time using pre-commit hooks, all you need to know is that when you run <code>git commit</code>, a lot of
 tools are invoked to check the code. Notably absent is <code>pytest</code> - tests take quite a bit of time to run, and
@@ -617,7 +618,12 @@ invoke each, from the project root directory:</p>
 <li><code>pytest test --cov arguably --cov-report html</code> (will put a coverage report in the <code>htmlcov/</code> directory)</li>
 <li><code>nox</code> (automatically runs <code>noxfile.py</code>)</li>
 </ul>
-<h3 id="building-docs">Building docs<a class="headerlink" href="#building-docs" title="Permanent link">&para;</a></h3>
+<p><code>nox</code> will require extra setup. You'll need to install Python versions 3.8 through 3.11 using <code>pyenv</code>:</p>
+<ul>
+<li><code>pyenv install 3.11 3.10 3.9 3.8</code></li>
+<li><code>pyenv global 3.11 3.10 3.9 3.8</code></li>
+</ul>
+<h3 id="building-docs">Building Docs<a class="headerlink" href="#building-docs" title="Permanent link">&para;</a></h3>
 <p>I've been fighting <code>mkdocs</code>. I'm not sure that I'm winning.</p>
 <p>I ran into an issue where all the functions which were aliases of class methods weren't appearing in the automatically
 generated docs. Snippet is below, link to source is <a href="https://github.com/treykeown/arguably/blob/9c3655480aaa2bdd714db209de4ed7b74f8f1fd5/arguably/_context.py#L784-L786">here</a>.</p>
