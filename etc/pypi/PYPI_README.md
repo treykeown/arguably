@@ -29,10 +29,12 @@ multiple levels of subcommands.
 def some_function(required, not_required=2, *others: int, option: float = 3.14):
     """
     this function is on the command line!
-    :param required: a required parameter
-    :param not_required: this one isn't required, since it has a default
-    :param others: all the other positional arguments go here
-    :param option: [-x] an option, short name is in brackets
+
+    Args:
+        required: a required parameter
+        not_required: this one isn't required, since it has a default
+        *others: all the other positional arguments go here
+        option: [-x] an option, short name is in brackets
     """
     ...
 ```

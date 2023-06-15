@@ -44,6 +44,13 @@ def _get_session_versions(session_func: Any) -> List[str]:
     return sessions_list
 
 
+# 3.8 compat for str.removeprefix
+def remove_prefix(input_string: str, prefix: str) -> str:
+    if prefix and input_string.startswith(prefix):
+        return input_string[len(prefix) :]
+    return input_string
+
+
 @nox.session(python=False)
 def get_versions(session: nox.Session) -> None:
     """(mandatory arg: <base_session_name>) prints all sessions for <base_session_name> for Github Actions"""
@@ -60,7 +67,7 @@ def get_latest_version(session: nox.Session) -> None:
     versions = _get_session_versions(session_func)
     prefix: str = "".join(next(iter(versions)).partition("-")[0:2])
     for version in versions:
-        version = version.removeprefix(prefix)
+        version = remove_prefix(version, prefix)
         if cpython_matcher.match(version):
             version_tuple = tuple(int(x) for x in version.split("."))
             if latest is None or version_tuple > latest:
