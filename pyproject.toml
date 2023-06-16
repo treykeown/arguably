@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "arguably"
-version = "1.1.0"
+version = "1.2.0"
 description = "turns functions into command line interfaces"
 authors = ["treykeown <2755914+treykeown@users.noreply.github.com>"]
 readme = "etc/pypi/PYPI_README.md"
