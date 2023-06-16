@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://treykeown.github.io/arguably/api-reference/">
       
       
-        <link rel="prev" href="../get-started/">
+        <link rel="prev" href="../tutorial/">
       
       
         <link rel="next" href="../contributing/">
@@ -230,8 +230,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../get-started/" class="md-nav__link">
-        Get Started
+      <a href="../tutorial/" class="md-nav__link">
+        Tutorial
       </a>
     </li>
   
@@ -322,11 +322,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#detailed-description" class="md-nav__link">
-    Detailed Description
+  <a href="#details" class="md-nav__link">
+    Details
   </a>
   
-    <nav class="md-nav" aria-label="Detailed Description">
+    <nav class="md-nav" aria-label="Details">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -531,11 +531,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#detailed-description" class="md-nav__link">
-    Detailed Description
+  <a href="#details" class="md-nav__link">
+    Details
   </a>
   
-    <nav class="md-nav" aria-label="Detailed Description">
+    <nav class="md-nav" aria-label="Details">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -671,7 +671,7 @@
 <p>In short, only two functions are required to use <code>arguably</code>:</p>
 <ul>
 <li><a href="#arguably.command"><code>@arguably.command</code></a> to mark which functions to put on the CLI</li>
-<li><a href="#arguably.run"><code>arguably.run()</code></a> to initiate argument parsing and dispatch to a function</li>
+<li><a href="#arguably.run"><code>arguably.run()</code></a> parses the CLI arguments and calls the marked functions</li>
 </ul>
 <h3 id="extras">Extras<a class="headerlink" href="#extras" title="Permanent link">&para;</a></h3>
 <p>The rest of the functions aren't necessary except in specific use cases:</p>
@@ -682,7 +682,7 @@ ancestors is being run</li>
 <li><a href="#arguably.subtype"><code>@arguably.subtype</code></a> marks a class as being a subclass buildable through <code>arguably.arg.builder()</code></li>
 </ul>
 <h3 id="special-behaviors">Special behaviors<a class="headerlink" href="#special-behaviors" title="Permanent link">&para;</a></h3>
-<p>There are special behaviors you can attach to a parameter:</p>
+<p>There are a number of special behaviors you can attach to a parameter:</p>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span>
     <span class="n">param</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="o">&lt;</span><span class="n">param_type</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.*</span><span class="p">()]</span>
 <span class="p">):</span>
@@ -706,7 +706,7 @@ be omitted: just <code>--option</code> will use the given <code>omit_value</code
 <code>arguably</code>, but not badly. Also used if <code>python3 -m arguably &lt;script.py&gt;</code> is used, but there were some problems running
 the script.</li>
 </ul>
-<h2 id="detailed-description">Detailed Description<a class="headerlink" href="#detailed-description" title="Permanent link">&para;</a></h2>
+<h2 id="details">Details<a class="headerlink" href="#details" title="Permanent link">&para;</a></h2>
 
 
 <div class="doc doc-object doc-module">

@@ -2,22 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://treykeown.github.io/arguably/</loc>
-         <lastmod>2023-06-15</lastmod>
+         <lastmod>2023-06-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://treykeown.github.io/arguably/api-reference/</loc>
-         <lastmod>2023-06-15</lastmod>
+         <lastmod>2023-06-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://treykeown.github.io/arguably/contributing/</loc>
-         <lastmod>2023-06-15</lastmod>
+         <lastmod>2023-06-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://treykeown.github.io/arguably/get-started/</loc>
-         <lastmod>2023-06-15</lastmod>
+         <loc>https://treykeown.github.io/arguably/tutorial/</loc>
+         <lastmod>2023-06-16</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
