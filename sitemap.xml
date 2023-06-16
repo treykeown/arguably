@@ -16,6 +16,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://treykeown.github.io/arguably/example/</loc>
+         <lastmod>2023-06-16</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://treykeown.github.io/arguably/tutorial/</loc>
          <lastmod>2023-06-16</lastmod>
          <changefreq>daily</changefreq>

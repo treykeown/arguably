@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://treykeown.github.io/arguably/tutorial/">
       
       
-        <link rel="prev" href="..">
+        <link rel="prev" href="../example/">
       
       
         <link rel="next" href="../api-reference/">
@@ -228,6 +228,21 @@
 
   
   
+  
+    <li class="md-nav__item">
+      <a href="../example/" class="md-nav__link">
+        Example
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
     
   
   
@@ -377,6 +392,46 @@
   <a href="#type-hints" class="md-nav__link">
     Type hints
   </a>
+  
+    <nav class="md-nav" aria-label="Type hints">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#enumenum" class="md-nav__link">
+    enum.Enum
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enumflag" class="md-nav__link">
+    enum.Flag
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#special-behaviors" class="md-nav__link">
+    Special behaviors
+  </a>
+  
+    <nav class="md-nav" aria-label="Special behaviors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -558,6 +613,46 @@
   <a href="#type-hints" class="md-nav__link">
     Type hints
   </a>
+  
+    <nav class="md-nav" aria-label="Type hints">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#enumenum" class="md-nav__link">
+    enum.Enum
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enumflag" class="md-nav__link">
+    enum.Flag
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#special-behaviors" class="md-nav__link">
+    Special behaviors
+  </a>
+  
+    <nav class="md-nav" aria-label="Special behaviors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1015,7 +1110,267 @@ called as an ancestor of the target command, and <code>True</code> every other t
 <span class="go">hi is the target!</span>
 </code></pre></div></p>
 <h2 id="type-hints">Type hints<a class="headerlink" href="#type-hints" title="Permanent link">&para;</a></h2>
-<p>More coming soon.</p>
+<p><code>arguably</code> uses type hints to convert from text passed in by the CLI to the class needed by your functions.</p>
+<p><div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">arguably</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">basic</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">age</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">percent</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;all basic types like str, int, float, etc are supported&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">age</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">percent</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">tuple_</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;tuples can contain any supported type that isn&#39;t a list or tuple&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">value</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">UserType</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">val</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(val=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">val</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">any_type</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">UserType</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;any type that can be initialized from a string is supported&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">value</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">path</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">list_</span><span class="p">(</span><span class="n">files</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;lists are supported. if they appear as an option</span>
+<span class="sd">    (like `coord` does), they can be specified multiple times&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">files</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">nums</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>type-hint.py<span class="w"> </span>basic<span class="w"> </span>Monty<span class="w"> </span><span class="m">42</span><span class="w"> </span><span class="m">33</span>.3
+<span class="go">name=&#39;Monty&#39; age=42 percent=33.3</span>
+
+<span class="gp">user@machine:~$ </span>python3<span class="w"> </span>type-hint.py<span class="w"> </span>tuple<span class="w"> </span>foo,1,3.14
+<span class="go">value=(&#39;foo&#39;, 1, 3.14)</span>
+
+<span class="gp">user@machine:~$ </span>python3<span class="w"> </span>type-hint.py<span class="w"> </span>any-type<span class="w"> </span><span class="m">123</span><span class="w"> </span>.
+<span class="go">value=UserType(val=123) path=PosixPath(&#39;.&#39;)</span>
+
+<span class="gp">user@machine:~$ </span>python3<span class="w"> </span>type-hint.py<span class="w"> </span>list<span class="w"> </span>foo.txt,bar.exe<span class="w"> </span>--nums<span class="w"> </span><span class="m">1</span><span class="w"> </span>--nums<span class="w"> </span><span class="m">2</span>,3
+<span class="go">files=[PosixPath(&#39;foo.txt&#39;), PosixPath(&#39;bar.exe&#39;)] nums=[1, 2, 3]</span>
+</code></pre></div></p>
+<p>Allowed types are:</p>
+<ul>
+<li>Any type that can be constructed by passing in a single string value. This includes:</li>
+<li>Basic built-in types like <code>str</code>, <code>int</code>, <code>float</code>, <code>bool</code></li>
+<li>Other built-ins like <code>pathlib.Path</code></li>
+<li>Any user-defined classes that also have this kind of constructor</li>
+<li><code>enum.Enum</code> and <code>enum.Flag</code> - values are referenced by the lowercased name</li>
+<li>The docstring for <code>enum.Flag</code> values is parsed as well, meaning you can create help messages for each entry and
+  specify a shorthand through <code>[-x]</code></li>
+<li><code>Optional[some_type]</code> / <code>some_type | None</code> - any union with <code>None</code> is ignored, so this would be parsed as <code>some_type</code></li>
+<li><code>tuple[int, float, etc]</code> - handled as comma-separated values <code>1,3.14,etc</code></li>
+<li><code>list[some_type]</code> - handled as comma-separated values if positional, but can be specified multiple times as an option</li>
+</ul>
+<h3 id="enumenum"><code>enum.Enum</code><a class="headerlink" href="#enumenum" title="Permanent link">&para;</a></h3>
+<p>Enums are processed to allow each of the member names to be input, but no other values.</p>
+<p><div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">arguably</span>
+<span class="kn">import</span> <span class="nn">enum</span>
+
+<span class="k">class</span> <span class="nc">Direction</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">UP</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">DOWN</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">LEFT</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">RIGHT</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">move</span><span class="p">(</span><span class="n">start</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span><span class="p">):</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="n">direction</span><span class="o">.</span><span class="n">value</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">start</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">direction</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">end</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>enum-1.py<span class="w"> </span><span class="m">100</span>,100<span class="w"> </span>diagonally
+<span class="go">usage: enum-1.py [-h] start,start {up,down,left,right}</span>
+<span class="go">enum-1.py: error: argument direction: invalid choice: &#39;diagonally&#39; (choose from &#39;up&#39;, &#39;down&#39;, &#39;left&#39;, &#39;right&#39;)</span>
+
+<span class="gp">user@machine:~$ </span>python3<span class="w"> </span>enum-1.py<span class="w"> </span><span class="m">100</span>,100<span class="w"> </span>down
+<span class="go">start=(100, 100) Direction.DOWN end=(100, 99)</span>
+</code></pre></div></p>
+<h3 id="enumflag"><code>enum.Flag</code><a class="headerlink" href="#enumflag" title="Permanent link">&para;</a></h3>
+<p>Flag values never appear directly. Instead, each member always appears as an <code>--option</code>.</p>
+<p><div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">arguably</span>
+<span class="kn">import</span> <span class="nn">enum</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="k">class</span> <span class="nc">Permissions</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Flag</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Permission flags</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        READ: [-r] allows for reads</span>
+<span class="sd">        WRITE: [-w] allows for writes</span>
+<span class="sd">        EXECUTE: [-x] allows for execution</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">READ</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">WRITE</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">EXECUTE</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="k">class</span> <span class="nc">PermissionsAlt</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Flag</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Annotations can also appear like this&quot;&quot;&quot;</span>
+
+    <span class="n">READ</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;[-r] allows for reads&quot;&quot;&quot;</span>
+    <span class="n">WRITE</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;[-w] allows for writes&quot;&quot;&quot;</span>
+    <span class="n">EXECUTE</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;[-x] allows for execution&quot;&quot;&quot;</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">chmod</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">flags</span><span class="p">:</span> <span class="n">Permissions</span> <span class="o">=</span> <span class="n">Permissions</span><span class="p">(</span><span class="mi">0</span><span class="p">)):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    change file permissions</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        file: the file to modify</span>
+<span class="sd">        flags: permission flags</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">flags</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>flag.py<span class="w"> </span>-h
+<span class="go">usage: flag.py [-h] [-r] [-w] [-x] file</span>
+
+<span class="go">change file permissions</span>
+
+<span class="go">positional arguments:</span>
+<span class="go">  file           the file to modify (type: Path)</span>
+
+<span class="go">options:</span>
+<span class="go">  -h, --help     show this help message and exit</span>
+<span class="go">  -r, --read     allows for reads</span>
+<span class="go">  -w, --write    allows for writes</span>
+<span class="go">  -x, --execute  allows for execution</span>
+
+<span class="gp">user@machine:~$ </span>python3<span class="w"> </span>flag.py<span class="w"> </span>foo.txt<span class="w"> </span>-rwx
+<span class="go">file=PosixPath(&#39;foo.txt&#39;) flags=&lt;Permissions.READ|WRITE|EXECUTE: 7&gt;</span>
+</code></pre></div></p>
+<h3 id="special-behaviors">Special behaviors<a class="headerlink" href="#special-behaviors" title="Permanent link">&para;</a></h3>
+<p>There are a number of special behaviors you can attach to a parameter. These utilize the ability to attach metadata to
+a type using <code>typing.Annotated[]</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span>
+    <span class="n">param</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="o">&lt;</span><span class="n">param_type</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.*</span><span class="p">()]</span>
+<span class="p">):</span>
+</code></pre></div>
+<ul>
+<li><a href="#arguably.arg.required"><code>arguably.arg.required()</code></a> requires <code>list[]</code> and <code>*args</code> params to not be empty, or marks an
+<code>--option</code> as required.</li>
+<li><a href="#arguably.arg.count"><code>arguably.arg.count()</code></a> counts the number of times an option appears: <code>-vvvv</code> gives <code>4</code>.</li>
+<li><a href="#arguably.arg.choices"><code>arguably.arg.choices(*choices)</code></a> restricts inputs to <code>choices</code></li>
+<li><a href="#arguably.arg.missing"><code>arguably.arg.missing(omit_value)</code></a> <code>--option foo</code> yields <code>foo</code>, but this allows the value to
+be omitted: just <code>--option</code> will use the given <code>omit_value</code>.</li>
+<li><a href="#arguably.arg.handler"><code>arguably.arg.handler(func)</code></a> skips all the argument processing <code>arguably</code> does and just calls
+<code>func</code></li>
+<li><a href="#arguably.arg.builder"><code>arguably.arg.builder()</code></a> treats the input as instructions on how to build a class</li>
+</ul>
+<h4 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h4>
+<p>Here's an example of each being used</p>
+<p><div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span> <span class="nn">arguably</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Annotated</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">email</span><span class="p">(</span>
+    <span class="n">from_</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="n">to</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">required</span><span class="p">()]</span>
+<span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">from_</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">to</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">process</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">count</span><span class="p">()],</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :param verbose: [-v] verbosity</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">verbose</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">move</span><span class="p">(</span>
+    <span class="n">direction</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="s2">&quot;up&quot;</span><span class="p">,</span> <span class="s2">&quot;down&quot;</span><span class="p">)]</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;An enum is usually recommended for cases like this&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">direction</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">do_something</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">log</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">missing</span><span class="p">(</span><span class="s2">&quot;~/.log.txt&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">log</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">handle_it</span><span class="p">(</span>
+    <span class="n">version</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">handler</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">version</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># The following lines are for arguably.arg.builder()</span>
+<span class="k">class</span> <span class="nc">Nic</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">subtype</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;tap&quot;</span><span class="p">)</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">TapNic</span><span class="p">(</span><span class="n">Nic</span><span class="p">):</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">subtype</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;user&quot;</span><span class="p">)</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">UserNic</span><span class="p">(</span><span class="n">Nic</span><span class="p">):</span>
+    <span class="n">hostfwd</span><span class="p">:</span> <span class="nb">str</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">builder</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">nic</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Nic</span><span class="p">],</span> <span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">builder</span><span class="p">()]</span>
+<span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">nic</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>annotated.py<span class="w"> </span>email<span class="w"> </span>example@google.com
+<span class="go">usage: annotated.py email [-h] from to [to ...]</span>
+<span class="go">annotated.py email: error: the following arguments are required: to</span>
+
+<span class="gp">user@machine:~$ </span>python3<span class="w"> </span>annotated.py<span class="w"> </span>email<span class="w"> </span>foo@example.com<span class="w"> </span>monty@python.org<span class="w"> </span>shrubbery-interest@example.com
+<span class="go">from_=&#39;foo@example.com&#39; to=(&#39;monty@python.org&#39;, &#39;shrubbery-interest@example.com&#39;)</span>
+
+<span class="gp">user@machine:~$ </span>python3<span class="w"> </span>annotated.py<span class="w"> </span>process<span class="w"> </span>-vvvv
+<span class="go">verbose=4</span>
+
+<span class="gp">user@machine:~$ </span>python3<span class="w"> </span>annotated.py<span class="w"> </span>move<span class="w"> </span>diagonally
+<span class="go">usage: annotated.py move [-h] {left,right,up,down}</span>
+<span class="go">annotated.py move: error: argument direction: invalid choice: &#39;diagonally&#39; (choose from &#39;left&#39;, &#39;right&#39;, &#39;up&#39;, &#39;down&#39;)</span>
+
+<span class="gp">user@machine:~$ </span>python3<span class="w"> </span>annotated.py<span class="w"> </span><span class="k">do</span>-something
+<span class="go">log=None</span>
+
+<span class="gp">user@machine:~$ </span>python3<span class="w"> </span>annotated.py<span class="w"> </span><span class="k">do</span>-something<span class="w"> </span>--log
+<span class="go">log=PosixPath(&#39;~/.log.txt&#39;)</span>
+
+<span class="gp">user@machine:~$ </span>python3<span class="w"> </span>annotated.py<span class="w"> </span><span class="k">do</span>-something<span class="w"> </span>--log<span class="w"> </span>here.log
+<span class="go">log=PosixPath(&#39;here.log&#39;)</span>
+
+<span class="gp">user@machine:~$ </span>python3<span class="w"> </span>annotated.py<span class="w"> </span>handle-it<span class="w"> </span>python-3
+<span class="go">version=3</span>
+
+<span class="gp">user@machine:~$ </span>python3<span class="w"> </span>annotated.py<span class="w"> </span>builder<span class="w"> </span>--nic<span class="w"> </span>tap,model<span class="o">=</span>e1000<span class="w"> </span>--nic<span class="w"> </span>user,hostfwd<span class="o">=</span>tcp::10022-:22
+<span class="go">nic=[TapNic(model=&#39;e1000&#39;), UserNic(hostfwd=&#39;tcp::10022-:22&#39;)]</span>
+</code></pre></div></p>
 
 
 
@@ -1039,7 +1394,7 @@ called as an ancestor of the target command, and <code>True</code> every other t
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href=".." class="md-footer__link md-footer__link--prev" aria-label="Previous: Home" rel="prev">
+          <a href="../example/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Example" rel="prev">
             <div class="md-footer__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
             </div>
@@ -1048,7 +1403,7 @@ called as an ancestor of the target command, and <code>True</code> every other t
                 Previous
               </span>
               <div class="md-ellipsis">
-                Home
+                Example
               </div>
             </div>
           </a>
