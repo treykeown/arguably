@@ -33,11 +33,13 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
 line-length = 120
+exclude = ["etc/"]
 
 [tool.mypy]
 disallow_untyped_defs = true
 warn_unused_ignores = true
 warn_redundant_casts = true
+exclude = "^etc/"
 
 [tool.black]
 line-length = 120
