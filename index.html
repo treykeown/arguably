@@ -522,11 +522,10 @@ reStructuredText, Google, Numpydoc, and Epydoc.</p>
 <p>Type annotations are optional, but <code>arguably</code> can use them to automatically convert arguments to their type. It has
 smart handling for a few built-in types:</p>
 <ul>
-<li><code>tuple</code> takes in comma-separated values. <code>tuple[str,float]</code> takes in <code>foo,2.0</code></li>
-<li><code>list</code> is like <code>tuple</code>, but if it's a keyword-only argument, it can be specified multiple times. <code>nums: list[int]</code>
-takes in <code>--nums 1 --nums 2</code>.</li>
-<li><code>enum.Enum</code> takes in a lowercase enum item name, like <code>read</code> or <code>write</code>.</li>
-<li><code>enum.Flag</code> is like <code>enum.Enum</code>, but its values become options that can be specified multiple times: <code>-r -w -x</code></li>
+<li><code>tuple</code> is comma-separated: <code>tuple[str,float]</code> &rightarrow; <code>foo,2.0</code></li>
+<li><code>list</code> is like <code>tuple</code>, but <code>--option</code>s can be repeated: <code>nums: list[int]</code> &rightarrow; <code>--nums 1 --nums 2</code></li>
+<li><code>enum.Enum</code> takes lowercase enum item names, like <code>read</code> or <code>write</code>.</li>
+<li><code>enum.Flag</code> is like <code>enum.Enum</code>, but values can be specified multiple times: <code>-r -w -x</code></li>
 </ul>
 <p>There are also a few special behaviors you can attach to a parameter via <code>Annotated[]</code> and the <code>arguably.arg.*</code>
 functions. Using <code>arguably.arg.builder()</code>, you can even build an object to pass in from the command line (using syntax
