@@ -326,6 +326,60 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#subcommands" class="md-nav__link">
+    Subcommands
+  </a>
+  
+    <nav class="md-nav" aria-label="Subcommands">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multi-level-subcommands" class="md-nav__link">
+    Multi-level subcommands
+  </a>
+  
+    <nav class="md-nav" aria-label="Multi-level subcommands">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hierarchy" class="md-nav__link">
+    Hierarchy
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-__root__-function" class="md-nav__link">
+    The __root__ function
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#checking-arguablyis_target" class="md-nav__link">
+    Checking arguably.is_target()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#type-hints" class="md-nav__link">
+    Type hints
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -450,6 +504,60 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#subcommands" class="md-nav__link">
+    Subcommands
+  </a>
+  
+    <nav class="md-nav" aria-label="Subcommands">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multi-level-subcommands" class="md-nav__link">
+    Multi-level subcommands
+  </a>
+  
+    <nav class="md-nav" aria-label="Multi-level subcommands">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hierarchy" class="md-nav__link">
+    Hierarchy
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-__root__-function" class="md-nav__link">
+    The __root__ function
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#checking-arguablyis_target" class="md-nav__link">
+    Checking arguably.is_target()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#type-hints" class="md-nav__link">
+    Type hints
+  </a>
   
 </li>
       
@@ -650,8 +758,8 @@ value. More explanation for that <a href="https://docs.python.org/3/library/argp
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>process.py<span class="w"> </span>-h
-<span class="go">usage: process.py [-h] [FILE ...]</span>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>process-1.py<span class="w"> </span>-h
+<span class="go">usage: process-1.py [-h] [FILE ...]</span>
 
 <span class="go">process many files</span>
 
@@ -661,11 +769,253 @@ value. More explanation for that <a href="https://docs.python.org/3/library/argp
 <span class="go">options:</span>
 <span class="go">  -h, --help  show this help message and exit</span>
 
-<span class="gp">user@machine:~$ </span>python3<span class="w"> </span>process.py<span class="w"> </span>report-1.csv<span class="w"> </span>report-2.csv<span class="w"> </span>report-3.csv
+<span class="gp">user@machine:~$ </span>python3<span class="w"> </span>process-1.py<span class="w"> </span>report-1.csv<span class="w"> </span>report-2.csv<span class="w"> </span>report-3.csv
 <span class="go">Processing report-1.csv...</span>
 <span class="go">Processing report-2.csv...</span>
 <span class="go">Processing report-3.csv...</span>
 </code></pre></div></p>
+<p>To require at least one input to <code>*args</code>, <a href="#TODO">see here</a></p>
+<h2 id="subcommands">Subcommands<a class="headerlink" href="#subcommands" title="Permanent link">&para;</a></h2>
+<p>Marking multiple functions with <code>@arguably.command</code> will make them show up as subcommands on the CLI:</p>
+<p><div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">arguably</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;this will say hello to someone&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">goodbye</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;this will say goodbye to someone&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Goodbye, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>goodbye-1.py<span class="w"> </span>-h
+<span class="go">usage: goodbye-1.py [-h] command ...</span>
+
+<span class="go">positional arguments:</span>
+<span class="go">  command</span>
+<span class="go">    hello     this will say hello to someone</span>
+<span class="go">    goodbye   this will say goodbye to someone</span>
+
+<span class="go">options:</span>
+<span class="go">  -h, --help  show this help message and exit</span>
+
+<span class="gp">user@machine:~$ </span>python3<span class="w"> </span>goodbye-1.py<span class="w"> </span>hello<span class="w"> </span>Python
+<span class="go">Hello, Python!</span>
+
+<span class="gp">user@machine:~$ </span>python3<span class="w"> </span>goodbye-1.py<span class="w"> </span>goodbye<span class="w"> </span>Python
+<span class="go">Goodbye, Python!</span>
+</code></pre></div></p>
+<p>Note that single underscores <code>_</code> in a function name are converted to a dash <code>-</code>. Also, any leading or trailing
+underscores are stripped.</p>
+<ul>
+<li><code>def foo_bar():</code> &rightarrow; <code>foo-bar</code></li>
+<li><code>def list_():</code> &rightarrow; <code>list</code></li>
+<li><code>def _asdf():</code> &rightarrow; <code>asdf</code></li>
+<li><code>def __foo__():</code> &rightarrow; <code>foo</code></li>
+<li><code>def ___really_really_long_name():</code> &rightarrow; <code>really-really-long-name</code></li>
+</ul>
+<h3 id="multi-level-subcommands">Multi-level subcommands<a class="headerlink" href="#multi-level-subcommands" title="Permanent link">&para;</a></h3>
+<p>Making multi-level subcommands is easy. To add a subcommand to a parent command, separate their names with two
+underscores <code>__</code>. So <code>s3__ls</code> becomes <code>s3 ls</code>, and <code>ec2__start_instances</code> becomes <code>ec2 start-instances</code>. Using these
+<a href="https://docs.aws.amazon.com/cli/latest/reference/s3/#synopsis">S3</a> and <a href="https://docs.aws.amazon.com/cli/latest/reference/ec2/start-instances.html#examples">EC2</a>
+commands for the AWS CLI as an example:</p>
+<p><div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">arguably</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">ec2__start_instances</span><span class="p">(</span><span class="o">*</span><span class="n">instances</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    start instances</span>
+<span class="sd">    Args:</span>
+<span class="sd">        *instances: {instance}s to start</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">inst</span> <span class="ow">in</span> <span class="n">instances</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Starting </span><span class="si">{</span><span class="n">inst</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">ec2__stop_instances</span><span class="p">(</span><span class="o">*</span><span class="n">instances</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    stop instances</span>
+<span class="sd">    Args:</span>
+<span class="sd">        *instances: {instance}s to stop</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">inst</span> <span class="ow">in</span> <span class="n">instances</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stopping </span><span class="si">{</span><span class="n">inst</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">s3__ls</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    list objects</span>
+<span class="sd">    Args:</span>
+<span class="sd">        path: path to list under</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Listing objects under </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">s3__cp</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    copy objects</span>
+<span class="sd">    Args:</span>
+<span class="sd">        src: source object</span>
+<span class="sd">        dst: destination path</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Copy </span><span class="si">{</span><span class="n">src</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">dst</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>aws-1.py<span class="w"> </span>-h
+<span class="go">usage: aws-1.py [-h] command ...</span>
+
+<span class="go">positional arguments:</span>
+<span class="go">  command</span>
+<span class="go">    ec2</span>
+<span class="go">    s3</span>
+
+<span class="go">options:</span>
+<span class="go">  -h, --help  show this help message and exit</span>
+
+<span class="gp">user@machine:~$ </span>python3<span class="w"> </span>aws-1.py<span class="w"> </span>s3<span class="w"> </span>-h
+<span class="go">usage: aws-1.py s3 [-h] command ...</span>
+
+<span class="go">positional arguments:</span>
+<span class="go">  command</span>
+<span class="go">    ls        list objects</span>
+<span class="go">    cp        copy objects</span>
+
+<span class="go">options:</span>
+<span class="go">  -h, --help  show this help message and exit</span>
+
+<span class="gp">user@machine:~$ </span>python3<span class="w"> </span>aws-1.py<span class="w"> </span>s3<span class="w"> </span>ls<span class="w"> </span>-h
+<span class="go">usage: aws-1.py s3 ls [-h] [path]</span>
+
+<span class="go">list objects</span>
+
+<span class="go">positional arguments:</span>
+<span class="go">  path        path to list under (type: str, default: /)</span>
+
+<span class="go">options:</span>
+<span class="go">  -h, --help  show this help message and exit</span>
+
+<span class="gp">user@machine:~$ </span>python3<span class="w"> </span>aws-1.py<span class="w"> </span>s3<span class="w"> </span>ls<span class="w"> </span>/foo/bar
+<span class="go">Listing objects under /foo/bar</span>
+</code></pre></div></p>
+<h4 id="hierarchy">Hierarchy<a class="headerlink" href="#hierarchy" title="Permanent link">&para;</a></h4>
+<p>You may have noticed that <code>ec2</code> and <code>s3</code> had no description. This is because they are automatically created stubs. We
+can define them ourselves and attach arguments to them:</p>
+<p><div class="highlight"><pre><span></span><code><span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">s3</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">bucket</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    s3 commands</span>
+<span class="sd">    Args:</span>
+<span class="sd">        bucket: the bucket to use</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Using bucket: </span><span class="si">{</span><span class="n">bucket</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>aws-2.py<span class="w"> </span>s3<span class="w"> </span>-h
+<span class="go">usage: aws-2.py s3 [-h] [--bucket BUCKET] command ...</span>
+
+<span class="go">s3 commands</span>
+
+<span class="go">positional arguments:</span>
+<span class="go">  command</span>
+<span class="go">    ls             list objects</span>
+<span class="go">    cp             copy objects</span>
+
+<span class="go">options:</span>
+<span class="go">  -h, --help       show this help message and exit</span>
+<span class="go">  --bucket BUCKET  the bucket to use (type: str)</span>
+
+<span class="gp">user@machine:~$ </span>python3<span class="w"> </span>aws-2.py<span class="w"> </span>s3<span class="w"> </span>--bucket<span class="w"> </span>mybucket<span class="w"> </span>ls
+<span class="go">Using bucket: mybucket</span>
+<span class="go">Listing objects under /</span>
+</code></pre></div></p>
+<p>As you can see, <code>def s3(*, bucket)</code> was called first and printed the bucket name to use. After that,
+<code>def s3__ls(path="/")</code> was invoked. This is because all ancestors are invoked before the target command is invoked. For
+a more complex example:</p>
+<p><div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">arguably</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">first</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;first&quot;</span><span class="p">)</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">first__second</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;second&quot;</span><span class="p">)</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">first__second__third</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;third&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">always_subcommand</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>nested-1.py<span class="w"> </span>first<span class="w"> </span>second<span class="w"> </span>third
+<span class="go">first</span>
+<span class="go">second</span>
+<span class="go">third</span>
+</code></pre></div></p>
+<h3 id="the-__root__-function">The <code>__root__</code> function<a class="headerlink" href="#the-__root__-function" title="Permanent link">&para;</a></h3>
+<p>If a function named <code>__root__</code> is marked with <code>@arguably.command</code>, it always appears as the highest ancestor for
+commands in the script. This allows global options and actions to be placed at the root of the script.</p>
+<p><div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">arguably</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">__root__</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;__root__&quot;</span><span class="p">)</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">hi</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;hi&quot;</span><span class="p">)</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">bye</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;bye&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>root-1.py<span class="w"> </span>hi
+<span class="go">__root__</span>
+<span class="go">hi</span>
+</code></pre></div></p>
+<h3 id="checking-arguablyis_target">Checking <code>arguably.is_target()</code><a class="headerlink" href="#checking-arguablyis_target" title="Permanent link">&para;</a></h3>
+<p>Sometimes you'll want to allow a command in the heirarchy to process its input arguments, but bail if it wasn't the
+target. For that, you can use <code>arguably.is_target()</code>. This returns <code>False</code> if the currently-executing function was
+called as an ancestor of the target command, and <code>True</code> every other time.</p>
+<p><div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">arguably</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">__root__</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">config_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Using config </span><span class="si">{</span><span class="n">config_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">arguably</span><span class="o">.</span><span class="n">is_target</span><span class="p">():</span>
+        <span class="k">return</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;__root__ is the target!&quot;</span><span class="p">)</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">hi</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;hi is the target!&quot;</span><span class="p">)</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">bye</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;bye is the target!&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>root-2.py<span class="w"> </span>--config-file<span class="w"> </span>foo.yml
+<span class="go">Using config foo.yml</span>
+<span class="go">__root__ is the target!</span>
+
+<span class="gp">user@machine:~$ </span>python3<span class="w"> </span>root-2.py<span class="w"> </span>--config-file<span class="w"> </span>foo.yml<span class="w"> </span>hi
+<span class="go">Using config foo.yml</span>
+<span class="go">hi is the target!</span>
+</code></pre></div></p>
+<h2 id="type-hints">Type hints<a class="headerlink" href="#type-hints" title="Permanent link">&para;</a></h2>
+<p>More coming soon.</p>
 
 
 
@@ -683,6 +1033,44 @@ value. More explanation for that <a href="https://docs.python.org/3/library/argp
       </main>
       
         <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href=".." class="md-footer__link md-footer__link--prev" aria-label="Previous: Home" rel="prev">
+            <div class="md-footer__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Home
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../api-reference/" class="md-footer__link md-footer__link--next" aria-label="Next: API Reference" rel="next">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                API Reference
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -705,7 +1093,7 @@ value. More explanation for that <a href="https://docs.python.org/3/library/argp
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "..", "features": ["content.tabs.link", "content.code.annotate", "announce.dismiss"], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["content.tabs.link", "content.code.annotate", "announce.dismiss", "navigation.footer"], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="../assets/javascripts/bundle.a51614de.min.js"></script>
