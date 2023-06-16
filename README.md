@@ -133,6 +133,7 @@ Install using `pip install arguably`. If you want to install using `conda`, plea
 
 ## Documentation
 
+* All-in-one Example: [https://treykeown.github.io/arguably/example/](https://treykeown.github.io/arguably/example/)
 * Tutorial: [https://treykeown.github.io/arguably/tutorial/](https://treykeown.github.io/arguably/tutorial/)
 * API Reference: [https://treykeown.github.io/arguably/api-reference/](https://treykeown.github.io/arguably/api-reference/)
 

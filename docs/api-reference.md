@@ -20,7 +20,8 @@ ancestors is being run
 
 ### Special behaviors
 
-There are a number of special behaviors you can attach to a parameter:
+There are a number of special behaviors you can attach to a parameter. These utilize the ability to attach metadata to
+a type using `typing.Annotated[]`:
 
 ```python
 def foo(
