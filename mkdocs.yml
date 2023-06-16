@@ -63,7 +63,7 @@ plugins:
 
 nav:
   - Home: index.md
-  - Get Started: get-started.md
+  - Tutorial: tutorial.md
   - API Reference: api-reference.md
   - Contributing: contributing.md
 

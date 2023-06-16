@@ -7,7 +7,7 @@
 In short, only two functions are required to use `arguably`:
 
 * [`@arguably.command`](#arguably.command) to mark which functions to put on the CLI
-* [`arguably.run()`](#arguably.run) to initiate argument parsing and dispatch to a function
+* [`arguably.run()`](#arguably.run) parses the CLI arguments and calls the marked functions
 
 ### Extras
 
@@ -20,7 +20,7 @@ ancestors is being run
 
 ### Special behaviors
 
-There are special behaviors you can attach to a parameter:
+There are a number of special behaviors you can attach to a parameter:
 
 ```python
 def foo(
@@ -47,6 +47,6 @@ Additionally, there are two exceptions:
 `arguably`, but not badly. Also used if `python3 -m arguably <script.py>` is used, but there were some problems running
 the script.
 
-## Detailed Description
+## Details
 
 ::: arguably

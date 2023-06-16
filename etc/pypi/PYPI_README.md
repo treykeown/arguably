@@ -66,9 +66,6 @@ options:
   -x, --option OPTION  an option, short name is in brackets (type: float, default: 3.14)
 ```
 
-`arguably` uses your docstrings to automatically generate help messages. It supports all major formats for docstrings:
-reStructuredText, Google, Numpydoc, and Epydoc.
-
 `arguably` looks at any decorated functions and maps their arguments from Python to the CLI:
 
 | This Python ...                                | ... becomes this on the CLI.                   |
@@ -77,6 +74,9 @@ reStructuredText, Google, Numpydoc, and Epydoc.
 | positional args, with default `not_required=2` | positional CLI args, optional `[not-required]` |
 | positional args, variadic `*others`            | any extra positional CLI args `[others ...]`   |
 | keyword-only arguments `option`                | command-line options `[-x OPTION]`             |
+
+`arguably` uses your docstrings to automatically generate help messages. It supports all major formats for docstrings:
+reStructuredText, Google, Numpydoc, and Epydoc.
 
 Type annotations are optional, but `arguably` can use them to automatically convert arguments to their type. It has
 smart handling for a few built-in types:
@@ -131,7 +131,7 @@ Install using `pip install arguably`. If you want to install using `conda`, plea
 
 ## Documentation
 
-* Get Started: [https://treykeown.github.io/arguably/get-started/](https://treykeown.github.io/arguably/get-started/)
+* Tutorial: [https://treykeown.github.io/arguably/guide/](https://treykeown.github.io/arguably/guide/)
 * API Reference: [https://treykeown.github.io/arguably/api-reference/](https://treykeown.github.io/arguably/api-reference/)
 
 ## Dependencies
