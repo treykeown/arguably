@@ -232,7 +232,7 @@ class Command:
             elif arg.input_method.is_positional and arg.is_variadic:
                 args.extend(filtered_args[arg.cli_arg_name])
             else:
-                kwargs[arg.func_arg_name] = filtered_args[arg.cli_arg_name]
+                kwargs[arg.func_arg_name] = filtered_args[arg.func_arg_name]
 
         # Call the function
         return self.function(*args, **kwargs)

@@ -88,7 +88,7 @@ def get_ancestors(command_name: str) -> List[str]:
     if command_name == "__root__":
         return []
     tokens = command_name.split(" ")
-    return ["__root__"] + ["".join(tokens[: i + 1]) for i in range(len(tokens))][:-1]
+    return ["__root__"] + [" ".join(tokens[: i + 1]) for i in range(len(tokens))][:-1]
 
 
 def normalize_name(name: str, spaces: bool = True) -> str:

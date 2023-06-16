@@ -1,6 +1,5 @@
 import arguably
 
-
 @arguably.command
 def process(*files):
     """
@@ -11,7 +10,6 @@ def process(*files):
     """
     for file in files:
         print(f"Processing {file}...")
-
 
 if __name__ == "__main__":
     arguably.run()

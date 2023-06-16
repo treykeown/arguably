@@ -25,6 +25,7 @@ theme:
     - content.tabs.link
     - content.code.annotate
     - announce.dismiss
+    - navigation.footer
   logo: arguably_small.png
   favicon: arguably_tiny.png
 

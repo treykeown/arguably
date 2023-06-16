@@ -43,6 +43,9 @@ def test_hey_you(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
 
     cli, manual = run_cli_and_manual(iobuf, scope_advanced["hey_you"], argv, args, kwargs)
 
+    assert "> root\n" in cli
+    cli = cli.replace("> root\n", "")
+
     assert "> hey-you\n" in cli
     assert cli == manual
 
@@ -53,6 +56,9 @@ def test_give(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
     kwargs = dict()
 
     cli, manual = run_cli_and_manual(iobuf, scope_advanced["give"], argv, args, kwargs)
+
+    assert "> root\n" in cli
+    cli = cli.replace("> root\n", "")
 
     assert "> give\n" in cli
     assert "give is main\n" in cli
@@ -66,6 +72,12 @@ def test_give_zen(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
 
     cli, manual = run_cli_and_manual(iobuf, scope_advanced["give__zen"], argv, args, kwargs)
 
+    assert "> root\n" in cli
+    cli = cli.replace("> root\n", "")
+
+    assert "> give\n" in cli
+    cli = cli.replace("> give\n", "")
+
     assert "> give zen\n" in cli
     assert "give zen rotten\n" in cli
     assert cli == manual
@@ -78,7 +90,7 @@ def test_give_zen_ancestor(iobuf: StringIO, scope_advanced: Dict[str, Callable])
 
     scope_advanced["__root__"]()
     scope_advanced["give"](slowly=True)
-    cli, manual = run_cli_and_manual(iobuf, scope_advanced["give__zen"], argv, args, kwargs, dict(call_ancestors=True))
+    cli, manual = run_cli_and_manual(iobuf, scope_advanced["give__zen"], argv, args, kwargs)
 
     cli_lines = list(sorted(cli.split("\n")))
     manual_lines = list(sorted(manual.split("\n")))
@@ -97,6 +109,9 @@ def test_do__a_dance(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> No
 
     cli, manual = run_cli_and_manual(iobuf, scope_advanced["do__a_dance"], argv, args, kwargs)
 
+    assert "> root\n" in cli
+    cli = cli.replace("> root\n", "")
+
     assert "> do a-dance\n" in cli
     assert cli == manual
 
@@ -107,6 +122,9 @@ def test_add(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
     kwargs = dict(coords=(10, 20, 30))
 
     cli, manual = run_cli_and_manual(iobuf, scope_advanced["add"], argv, args, kwargs)
+
+    assert "> root\n" in cli
+    cli = cli.replace("> root\n", "")
 
     assert "> add\n" in cli
     assert "add sum: 7\n" in cli
@@ -134,6 +152,9 @@ def test_mixed_tuple(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> No
     kwargs = dict()
 
     cli, manual = run_cli_and_manual(iobuf, scope_advanced["mixed_tuple"], argv, args, kwargs)
+
+    assert "> root\n" in cli
+    cli = cli.replace("> root\n", "")
 
     assert "> mixed-tuple\n" in cli
     assert "'foo', 10, 123.45\n" in cli

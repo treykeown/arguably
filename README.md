@@ -86,7 +86,7 @@ smart handling for a few built-in types:
 
 * `tuple` is comma-separated: `tuple[str,float]` &rightarrow; `foo,2.0`
 * `list` is like `tuple`, but `--option`s can be repeated: `nums: list[int]` &rightarrow; `--nums 1 --nums 2`
-* `enum.Enum` takes lowercase enum item names, like `read` or `write`.
+* `enum.Enum` takes lowercase enum item names, like `read` or `write`
 * `enum.Flag` is like `enum.Enum`, but values can be specified multiple times: `-r -w -x`
 
 There are also a few special behaviors you can attach to a parameter via `Annotated[]` and the `arguably.arg.*`

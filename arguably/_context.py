@@ -32,7 +32,6 @@ class _ContextOptions:
     name: Optional[str]
 
     # Behavior options
-    call_ancestors: bool
     always_subcommand: bool
     version_flag: Union[bool, List[str]]
 
@@ -493,7 +492,6 @@ class _Context:
     def run(
         self,
         name: Optional[str] = None,
-        call_ancestors: bool = False,
         always_subcommand: bool = False,
         version_flag: Union[bool, Tuple[str], Tuple[str, str]] = False,
         show_defaults: bool = True,
@@ -509,10 +507,6 @@ class _Context:
         Args:
             name: Name of the script/program. Defaults to the filename or module name, depending on how the script is
                 run. `$ python3 my/script.py` yields `script.py`, and `python3 -m my.script` yeilds `script`.
-            call_ancestors: If true, all members of the targeted command's heirarchy are called. For example, a command
-                like `$ ./script.py git init` will first call `__root__()`, then `git()`, then `git__init()`. This
-                allows parents to handle options. Parents can determine if they are actually the target command (instead
-                of being called through the heirarchy) through the `is_target()` method.
             always_subcommand: If true, will force a subcommand interface to be used, even if there's only one command.
             version_flag: If true, adds an option to show the script version using the value of `__version__` in the
                 invoked script. If a tuple of one or two strings is passed in, like `("-V", "--ver")`, those are used
@@ -661,8 +655,7 @@ class _Context:
             cmd = next(iter(self._commands.values()))
             self._current_parser = self._parsers["__root__"]
         else:
-            # Find the actual command we need to execute by traversing the subparser tree. Call each stop along the way
-            # if the call_ancestors option is set to True.
+            # Find the actual command we need to execute by traversing the subparser tree. Call each stop along the way.
             path = "__root__"
             while path in self._subparsers:
                 # Find the variable name for this subparser's command metavar and read the value. If it's none, run the
@@ -676,11 +669,9 @@ class _Context:
                 if subcmd_name in self._command_aliases:
                     subcmd_name = self._command_aliases[subcmd_name]
 
-                # Call the ancestor if call_ancestors is set
-                if self._options.call_ancestors:
-                    self._is_calling_target = False
-                    self._current_parser = self._parsers[path]
-                    self._commands[path].call(parsed_args)
+                self._is_calling_target = False
+                self._current_parser = self._parsers[path]
+                self._commands[path].call(parsed_args)
 
                 # Update the path and continue
                 if path == "__root__":
@@ -692,7 +683,7 @@ class _Context:
             if path not in self._commands:
                 self._parsers[path.rsplit(" ", 1)[0]].print_help(file=self._options.output)
                 return None
-            if path == "__root__":
+            if path == "__root__" and self._commands["__root__"].function.__name__ == "<lambda>":
                 root_parser.print_help(file=self._options.output)
                 return None
 
