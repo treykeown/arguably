@@ -14,9 +14,9 @@
       
       
       
-        <link rel="next" href="example/">
+        <link rel="next" href="examples/">
       
-      <link rel="icon" href="arguably_tiny.png">
+      <link rel="icon" href="images/arguably_tiny.png">
       <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.16">
     
     
@@ -46,7 +46,7 @@
     
       <link rel="stylesheet" href="assets/_mkdocstrings.css">
     
-      <link rel="stylesheet" href="extra.css">
+      <link rel="stylesheet" href="styles/extra.css">
     
     <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -95,7 +95,7 @@
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="." title="arguably" class="md-header__button md-logo" aria-label="arguably" data-md-component="logo">
       
-  <img src="arguably_small.png" alt="logo">
+  <img src="images/arguably_small.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -185,7 +185,7 @@
   <label class="md-nav__title" for="__drawer">
     <a href="." title="arguably" class="md-nav__button md-logo" aria-label="arguably" data-md-component="logo">
       
-  <img src="arguably_small.png" alt="logo">
+  <img src="images/arguably_small.png" alt="logo">
 
     </a>
     arguably
@@ -281,7 +281,7 @@
       
         <li class="md-nav__item">
   <a href="#future-roadmap" class="md-nav__link">
-    Future Roadmap
+    Future roadmap
   </a>
   
 </li>
@@ -302,8 +302,8 @@
   
   
     <li class="md-nav__item">
-      <a href="example/" class="md-nav__link">
-        Example
+      <a href="examples/" class="md-nav__link">
+        Examples
       </a>
     </li>
   
@@ -316,10 +316,74 @@
   
   
   
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          Tutorial
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Tutorial
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
     <li class="md-nav__item">
-      <a href="tutorial/" class="md-nav__link">
-        Tutorial
+      <a href="tutorial/intro/" class="md-nav__link">
+        Introduction
       </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="tutorial/subcommands/" class="md-nav__link">
+        Subcommands
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="tutorial/type-hints/" class="md-nav__link">
+        Type Hints
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -417,7 +481,7 @@
       
         <li class="md-nav__item">
   <a href="#future-roadmap" class="md-nav__link">
-    Future Roadmap
+    Future roadmap
   </a>
   
 </li>
@@ -535,13 +599,7 @@ then call <code>arguably.run()</code>. If multiple functions are decorated, they
 <p><code>arguably</code> uses your docstrings to automatically generate help messages. It supports all major formats for docstrings:
 reStructuredText, Google, Numpydoc, and Epydoc.</p>
 <p>Type annotations are optional, but <code>arguably</code> can use them to automatically convert arguments to their type. It has
-smart handling for a few built-in types:</p>
-<ul>
-<li><code>tuple</code> is comma-separated: <code>tuple[str,float]</code> &rightarrow; <code>foo,2.0</code></li>
-<li><code>list</code> is like <code>tuple</code>, but <code>--option</code>s can be repeated: <code>nums: list[int]</code> &rightarrow; <code>--nums 1 --nums 2</code></li>
-<li><code>enum.Enum</code> takes lowercase enum item names, like <code>read</code> or <code>write</code></li>
-<li><code>enum.Flag</code> is like <code>enum.Enum</code>, but values can be specified multiple times: <code>-r -w -x</code></li>
-</ul>
+smart handling for mapping built-in types to the command line, including <code>tuple</code>, <code>list</code>, <code>enum.Enum</code>, and <code>enum.Flag</code>.</p>
 <p>There are also a few special behaviors you can attach to a parameter via <code>Annotated[]</code> and the <code>arguably.arg.*</code>
 functions. Using <code>arguably.arg.builder()</code>, you can even build an object to pass in from the command line (using syntax
 inspired by QEMU):</p>
@@ -577,8 +635,8 @@ inspired by QEMU):</p>
 <a href="https://github.com/treykeown/arguably/issues/12">this issue</a>.</p>
 <h2 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h2>
 <ul>
-<li>All-in-one Example: <a href="https://treykeown.github.io/arguably/example/">https://treykeown.github.io/arguably/example/</a></li>
-<li>Tutorial: <a href="https://treykeown.github.io/arguably/tutorial/">https://treykeown.github.io/arguably/tutorial/</a></li>
+<li>All-in-one Example: <a href="https://treykeown.github.io/arguably/examples/">https://treykeown.github.io/arguably/examples/</a></li>
+<li>Tutorial: <a href="https://treykeown.github.io/arguably/tutorial/intro/">https://treykeown.github.io/arguably/tutorial/intro/</a></li>
 <li>API Reference: <a href="https://treykeown.github.io/arguably/api-reference/">https://treykeown.github.io/arguably/api-reference/</a></li>
 </ul>
 <h2 id="dependencies">Dependencies<a class="headerlink" href="#dependencies" title="Permanent link">&para;</a></h2>
@@ -593,7 +651,7 @@ you how to run tests and pre-commit hooks.</p>
 <ul>
 <li>Contributing: <a href="https://treykeown.github.io/arguably/contributing/">https://treykeown.github.io/arguably/contributing/</a></li>
 </ul>
-<h2 id="future-roadmap">Future Roadmap<a class="headerlink" href="#future-roadmap" title="Permanent link">&para;</a></h2>
+<h2 id="future-roadmap">Future roadmap<a class="headerlink" href="#future-roadmap" title="Permanent link">&para;</a></h2>
 <p>If you have any interest in these (either as a user or implementer), please leave a comment!</p>
 <ul>
 <li><a href="https://github.com/treykeown/arguably/issues/8">#8 - Display all enum options in a command group</a></li>
@@ -625,13 +683,13 @@ you how to run tests and pre-commit hooks.</p>
         
         
           
-          <a href="example/" class="md-footer__link md-footer__link--next" aria-label="Next: Example" rel="next">
+          <a href="examples/" class="md-footer__link md-footer__link--next" aria-label="Next: Examples" rel="next">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Example
+                Examples
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -663,10 +721,18 @@ you how to run tests and pre-commit hooks.</p>
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": ".", "features": ["content.tabs.link", "content.code.annotate", "announce.dismiss", "navigation.footer"], "search": "assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": ".", "features": ["content.tabs.link", "content.code.annotate", "announce.dismiss", "navigation.footer", "navigation.expand"], "search": "assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="assets/javascripts/bundle.a51614de.min.js"></script>
+      
+        
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+        
+      
+        
+          <script src="scripts/extra.js"></script>
+        
       
     
   </body>
