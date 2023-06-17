@@ -76,7 +76,7 @@ jobs:
       if: ${{ matrix.python-version == env.latest-python-version }}
       run: |
         . .venv/bin/activate
-        ./docs/run build
+        ./mkdocs.py build
         rm htmlcov/.gitignore
         cp -R htmlcov ./site/coverage
         echo "COVERAGE_PERCENT=$(jq '.totals.percent_covered_display' < coverage.json | tr -d '"')" >> $GITHUB_ENV

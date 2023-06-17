@@ -82,12 +82,7 @@ options:
 reStructuredText, Google, Numpydoc, and Epydoc.
 
 Type annotations are optional, but `arguably` can use them to automatically convert arguments to their type. It has
-smart handling for a few built-in types:
-
-* `tuple` is comma-separated: `tuple[str,float]` &rightarrow; `foo,2.0`
-* `list` is like `tuple`, but `--option`s can be repeated: `nums: list[int]` &rightarrow; `--nums 1 --nums 2`
-* `enum.Enum` takes lowercase enum item names, like `read` or `write`
-* `enum.Flag` is like `enum.Enum`, but values can be specified multiple times: `-r -w -x`
+smart handling for mapping built-in types to the command line, including `tuple`, `list`, `enum.Enum`, and `enum.Flag`.
 
 There are also a few special behaviors you can attach to a parameter via `Annotated[]` and the `arguably.arg.*`
 functions. Using `arguably.arg.builder()`, you can even build an object to pass in from the command line (using syntax
