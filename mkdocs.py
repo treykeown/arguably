@@ -1,33 +1,63 @@
 #!/usr/bin/env python3
+"""
+Build script for the docs. Contains a few workarounds for issues encountered with `mkdocs`.
+
+From `docs/contributing.md`:
+
+I ran into an issue where all the functions which were aliases of class methods weren't appearing in the automatically
+generated docs. Snippet is below, link to source is here:
+https://github.com/treykeown/arguably/blob/9c3655480aaa2bdd714db209de4ed7b74f8f1fd5/arguably/_context.py#L784-L786
+
+```python
+run = context.run
+is_target = context.is_target
+error = context.error
+```
+
+So I wrote a script, `mkdocs.py`. It temporarily swaps out the real `__init__.py` for a generated one which consists
+solely of skeletons of the functions and classes exposed in `__all__`. No code is in the generated file, only signatures
+and docstrings. The script also does a few other things:
+
+* Strips the docstring from `__init__.py`
+* Copies in images from `etc/logo`
+* Tweaks `README.md` so that the light and dark mode images work
+"""
+
 import inspect
 import os
 import shutil
 import subprocess
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Annotated, Tuple
+from typing import Any, Annotated, Tuple, Iterator
 
 import arguably
 
-project_root = Path(__file__).parent.parent
+project_root = Path(__file__).parent
 module_root = project_root / "arguably"
+
+logos = ["arguably_black.png", "arguably_white.png", "arguably_small.png", "arguably_tiny.png"]
 
 
 @contextmanager
-def swap_file(real, tmp):
-    shutil.move(real, tmp)
+def swap_file(real: Path, real_tmp: Path) -> Iterator:
+    """Temporarily swaps a file to another location"""
+    shutil.move(real, real_tmp)
     try:
         yield
     finally:
-        shutil.copy(real, module_root / ".doc.__init__.py")
-        shutil.move(tmp, real)
+        fake = real  # The fake file is currently at the real path
+        shutil.copy(fake, fake.parent / f".fake.{fake.name}")
+        shutil.move(real_tmp, real)  # Restore real file
 
 
-def get_members(obj) -> list[Any]:
+def get_members(obj: Any) -> list[Any]:
+    """Get members of a class or module"""
     return [v for k, v in vars(obj).items() if not k.startswith("_") and not type(v).__name__.startswith("_")]
 
 
-def get_signature(obj) -> inspect.Signature:
+def get_signature(obj: Any) -> inspect.Signature:
+    """Get the signature of a function or class"""
     try:
         return inspect.signature(obj)
     except ValueError:
@@ -39,9 +69,10 @@ def get_signature(obj) -> inspect.Signature:
     raise Exception(f"Unable to find signature for {obj}")
 
 
-def get_bases(cls) -> Tuple[type]:
-    classtree = inspect.getclasstree(inspect.getmro(cls))
-    real_bases = tuple()
+def get_bases(cls: type) -> Tuple[type, ...]:
+    """Get the classes this one inherits from, excluding any redundant ones."""
+    classtree = inspect.getclasstree(list(inspect.getmro(cls)))
+    real_bases: Tuple[type, ...] = tuple()
     stack = [classtree]
     while len(stack) > 0:
         curr = stack.pop()
@@ -57,7 +88,8 @@ def get_bases(cls) -> Tuple[type]:
     return real_bases
 
 
-def produce_file(path: Path):
+def produce_file(path: Path) -> None:
+    """Make the fake __init__.py"""
     with path.open("w") as fh:
         # good_doc_lines = "\n\n".join(arguably.__doc__.split("\n\n")[1:-1])
         # fh.write(f'"""\n{good_doc_lines}\n"""\n')
@@ -99,20 +131,20 @@ def produce_file(path: Path):
             fh.write("\n")
 
 
-def run_mkdocs(target):
+def run_mkdocs(target: str) -> None:
     args = ["mkdocs", target]
     print(f"running: {' '.join(args)}")
     print()
     subprocess.run(args)
 
 
-def copy_logos():
-    logos = ["arguably_black.png", "arguably_white.png", "arguably_small.png", "arguably_tiny.png"]
+def copy_logos() -> None:
     for logo in logos:
         shutil.copy(project_root / "etc" / "logo" / logo, project_root / "docs")
 
 
-def copy_readme():
+def copy_readme() -> None:
+    """Copy the README to use as the index page, but fix the dark/light mode images"""
     readme = project_root / "README.md"
     index = project_root / "docs" / "index.md"
     with readme.open("r") as src:
@@ -134,7 +166,7 @@ def copy_readme():
 
 
 @arguably.command
-def main(mkdocs_cmd: Annotated[str, arguably.arg.choices("build", "serve")]):
+def main(mkdocs_cmd: Annotated[str, arguably.arg.choices("build", "serve")]) -> None:
     """
     due to issues running mkdocs directly on our module, we stub out a fake one and run mkdocs on that
 

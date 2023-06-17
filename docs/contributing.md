@@ -80,7 +80,7 @@ is_target = context.is_target
 error = context.error
 ```
 
-So I wrote a script, `docs/run`. It temporarily swaps out the real `__init__.py` for a generated one which consists
+So I wrote a script, `mkdocs.py`. It temporarily swaps out the real `__init__.py` for a generated one which consists
 solely of skeletons of the functions and classes exposed in `__all__`. No code is in the generated file, only signatures
 and docstrings. The script also does a few other things:
 
@@ -94,8 +94,8 @@ If you can save me from my own madness here, please help me.
 
 #### TL;DR
 
-Run `./docs/run serve` to check the docs. `arguably` will not be usable as long as this is running, since I do some
-magic to work around a few `mkdocs` issues. Don't try to make a commit while `./docs/run serve` is running.
+Run `./mkdocs.py serve` to check the docs. `arguably` will not be usable as long as this is running, since I do some
+magic to work around a few `mkdocs` issues. Don't try to make a commit while `./mkdocs.py serve` is running.
 
 ### Making Releases
 

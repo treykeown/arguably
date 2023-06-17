@@ -1,14 +1,9 @@
 import arguably
 
 @arguably.command
-def hello(*, name="world"):
-    """
-    this will say hello to someone
-
-    Args:
-        name: is who this will greet
-    """
+def hello(*from_, name="world"):
     print(f"Hello, {name}!")
+    print(f"From: {', '.join(from_)}")
 
 if __name__ == "__main__":
     arguably.run()

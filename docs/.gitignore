@@ -1,5 +1,3 @@
 # These are copied during the build process
 index.md
-arguably_black.png
-arguably_white.png
-arguably_small.png
+images/*

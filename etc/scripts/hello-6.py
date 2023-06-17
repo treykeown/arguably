@@ -7,7 +7,7 @@ def hello(*from_, name="world"):
 
     Args:
         from_: greetings are sent from these people
-        name: is who this will greet
+        name: [-n] is {who} this will greet
     """
     print(f"Hello, {name}!")
     print(f"From: {', '.join(from_)}")

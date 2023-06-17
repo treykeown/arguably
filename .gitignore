@@ -3,7 +3,7 @@ test_scripts/
 .ruff_cache/
 coverage.json
 
-.doc.*
+.fake.*
 .real.*
 
 

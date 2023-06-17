@@ -26,12 +26,16 @@ theme:
     - content.code.annotate
     - announce.dismiss
     - navigation.footer
-  logo: arguably_small.png
-  favicon: arguably_tiny.png
+    - navigation.expand
+  logo: images/arguably_small.png
+  favicon: images/arguably_tiny.png
 
 
+extra_javascript:
+  - https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js
+  - scripts/extra.js
 extra_css:
-  - extra.css
+  - styles/extra.css
 
 
 repo_name: treykeown/arguably
@@ -64,8 +68,11 @@ plugins:
 
 nav:
   - Home: index.md
-  - Example: example.md
-  - Tutorial: tutorial.md
+  - Examples: examples.md
+  - Tutorial:
+    - Introduction: tutorial/intro.md
+    - Subcommands: tutorial/subcommands.md
+    - Type Hints: tutorial/type-hints.md
   - API Reference: api-reference.md
   - Contributing: contributing.md
 

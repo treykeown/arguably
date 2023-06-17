@@ -130,8 +130,8 @@ Install using `pip install arguably`. If you want to install using `conda`, plea
 
 ## Documentation
 
-* All-in-one Example: [https://treykeown.github.io/arguably/example/](https://treykeown.github.io/arguably/example/)
-* Tutorial: [https://treykeown.github.io/arguably/tutorial/](https://treykeown.github.io/arguably/tutorial/)
+* All-in-one Example: [https://treykeown.github.io/arguably/examples/](https://treykeown.github.io/arguably/examples/)
+* Tutorial: [https://treykeown.github.io/arguably/tutorial/intro/](https://treykeown.github.io/arguably/tutorial/intro/)
 * API Reference: [https://treykeown.github.io/arguably/api-reference/](https://treykeown.github.io/arguably/api-reference/)
 
 ## Dependencies
@@ -148,7 +148,7 @@ you how to run tests and pre-commit hooks.
 
 * Contributing: [https://treykeown.github.io/arguably/contributing/](https://treykeown.github.io/arguably/contributing/)
 
-## Future Roadmap
+## Future roadmap
 
 If you have any interest in these (either as a user or implementer), please leave a comment!
 

@@ -4,6 +4,7 @@ A demo script to show all features
 """
 
 import enum
+import operator
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Annotated
@@ -28,17 +29,15 @@ def add(
         include_z: [-z] whether to include a value for Z
     """
     print(f"Coordinates: {coords}")
-    x, y = coords
-    z = 0
-    for value in values:
-        print(f"Adding {value}")
-        x += value
-        y += value
-        z += value
     if include_z:
-        print(f"Result: {(x, y, z)}")
-    else:
-        print(f"Result: {(x, y)}")
+        x, y = coords
+        z = 0
+        coords = (x, y, z)
+    for value in values:
+        value_arr = (value,) * len(coords)
+        coords = tuple(map(operator.add, coords, value_arr))
+        print(f"Added {value}: {coords}")
+    print(f"Result: {coords}")
 
 
 class Permissions(enum.Flag):
@@ -170,7 +169,7 @@ def __root__(*, verbose: Annotated[int, arguably.arg.count()] = 0):
     """
     __root__ is always called first, before any subcommand
     Args:
-        verbose: [-v] the verbosity
+        verbose: [-v] the verbosity - flag occurrences are counted
     """
     print(f"Verbosity: {verbose}")
     if not arguably.is_target():
@@ -179,4 +178,4 @@ def __root__(*, verbose: Annotated[int, arguably.arg.count()] = 0):
 
 
 if __name__ == "__main__":
-    arguably.run(name="EVERYthing", version_flag=True)
+    arguably.run(name="kitchen-sink", version_flag=True)
