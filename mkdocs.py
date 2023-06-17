@@ -27,9 +27,16 @@ import inspect
 import os
 import shutil
 import subprocess
+import sys
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Annotated, Tuple, Iterator
+from typing import Any, Tuple, Iterator, List
+
+# Annotated is 3.9 and up
+if sys.version_info >= (3, 9):
+    from typing import Annotated
+else:
+    from typing_extensions import Annotated
 
 import arguably
 
@@ -42,16 +49,16 @@ logos = ["arguably_black.png", "arguably_white.png", "arguably_small.png", "argu
 @contextmanager
 def swap_file(real: Path, real_tmp: Path) -> Iterator:
     """Temporarily swaps a file to another location"""
-    shutil.move(real, real_tmp)
+    shutil.move(str(real), str(real_tmp))
     try:
         yield
     finally:
         fake = real  # The fake file is currently at the real path
-        shutil.copy(fake, fake.parent / f".fake.{fake.name}")
-        shutil.move(real_tmp, real)  # Restore real file
+        shutil.copy(str(fake), str(fake.parent / f".fake.{fake.name}"))
+        shutil.move(str(real_tmp), str(real))  # Restore real file
 
 
-def get_members(obj: Any) -> list[Any]:
+def get_members(obj: Any) -> List[Any]:
     """Get members of a class or module"""
     return [v for k, v in vars(obj).items() if not k.startswith("_") and not type(v).__name__.startswith("_")]
 
