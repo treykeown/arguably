@@ -147,7 +147,7 @@ def run_mkdocs(target: str) -> None:
 
 def copy_logos() -> None:
     for logo in logos:
-        shutil.copy(project_root / "etc" / "logo" / logo, project_root / "docs" / "images")
+        shutil.copy(project_root / "etc" / "logo" / logo, project_root / "docs" / "images" / logo)
 
 
 def copy_readme() -> None:
