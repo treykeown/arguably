@@ -384,6 +384,54 @@
     Example
   </a>
   
+    <nav class="md-nav" aria-label="Example">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#arguablyargrequired" class="md-nav__link">
+    arguably.arg.required
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arguablyargcount" class="md-nav__link">
+    arguably.arg.count
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arguablyargchoices" class="md-nav__link">
+    arguably.arg.choices
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arguablyargmissing" class="md-nav__link">
+    arguably.arg.missing
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arguablyarghandler" class="md-nav__link">
+    arguably.arg.handler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arguablyargbuilder" class="md-nav__link">
+    arguably.arg.builder
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
       </ul>
@@ -510,6 +558,54 @@
   <a href="#example" class="md-nav__link">
     Example
   </a>
+  
+    <nav class="md-nav" aria-label="Example">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#arguablyargrequired" class="md-nav__link">
+    arguably.arg.required
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arguablyargcount" class="md-nav__link">
+    arguably.arg.count
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arguablyargchoices" class="md-nav__link">
+    arguably.arg.choices
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arguablyargmissing" class="md-nav__link">
+    arguably.arg.missing
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arguablyarghandler" class="md-nav__link">
+    arguably.arg.handler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arguablyargbuilder" class="md-nav__link">
+    arguably.arg.builder
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -710,6 +806,7 @@ class</li>
 </ul>
 <h3 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h3>
 <p>Here's an example of each being used. This is all the same script, but results are shown after each example.</p>
+<h4 id="arguablyargrequired"><code>arguably.arg.required</code><a class="headerlink" href="#arguablyargrequired" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 <span class="kn">import</span> <span class="nn">arguably</span>
@@ -730,6 +827,7 @@ class</li>
 <div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>annotated.py<span class="w"> </span>email<span class="w"> </span>foo@example.com<span class="w"> </span>monty@python.org<span class="w"> </span>shrubbery-interest@example.com
 <span class="go">from_=&#39;foo@example.com&#39; to=(&#39;monty@python.org&#39;, &#39;shrubbery-interest@example.com&#39;)</span>
 </code></pre></div></p>
+<h4 id="arguablyargcount"><code>arguably.arg.count</code><a class="headerlink" href="#arguablyargcount" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
 <span class="k">def</span> <span class="nf">process</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
@@ -743,6 +841,7 @@ class</li>
 <div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>annotated.py<span class="w"> </span>process<span class="w"> </span>-vvvv
 <span class="go">verbose=4</span>
 </code></pre></div>
+<h4 id="arguablyargchoices"><code>arguably.arg.choices</code><a class="headerlink" href="#arguablyargchoices" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
 <span class="k">def</span> <span class="nf">move</span><span class="p">(</span>
     <span class="n">direction</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="s2">&quot;up&quot;</span><span class="p">,</span> <span class="s2">&quot;down&quot;</span><span class="p">)]</span>
@@ -754,6 +853,7 @@ class</li>
 <span class="go">usage: annotated.py move [-h] {left,right,up,down}</span>
 <span class="go">annotated.py move: error: argument direction: invalid choice: &#39;diagonally&#39; (choose from &#39;left&#39;, &#39;right&#39;, &#39;up&#39;, &#39;down&#39;)</span>
 </code></pre></div>
+<h4 id="arguablyargmissing"><code>arguably.arg.missing</code><a class="headerlink" href="#arguablyargmissing" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
 <span class="k">def</span> <span class="nf">do_something</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
@@ -770,6 +870,7 @@ class</li>
 <div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>annotated.py<span class="w"> </span><span class="k">do</span>-something<span class="w"> </span>--log<span class="w"> </span>here.log
 <span class="go">log=PosixPath(&#39;here.log&#39;)</span>
 </code></pre></div></p>
+<h4 id="arguablyarghandler"><code>arguably.arg.handler</code><a class="headerlink" href="#arguablyarghandler" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
 <span class="k">def</span> <span class="nf">handle_it</span><span class="p">(</span>
     <span class="n">version</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">handler</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))]</span> <span class="o">=</span> <span class="kc">None</span>
@@ -779,6 +880,7 @@ class</li>
 <div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>annotated.py<span class="w"> </span>handle-it<span class="w"> </span>python-3
 <span class="go">version=3</span>
 </code></pre></div>
+<h4 id="arguablyargbuilder"><code>arguably.arg.builder</code><a class="headerlink" href="#arguablyargbuilder" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Nic</span><span class="p">:</span> <span class="o">...</span>
 
 <span class="nd">@arguably</span><span class="o">.</span><span class="n">subtype</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;tap&quot;</span><span class="p">)</span>
