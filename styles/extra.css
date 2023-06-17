@@ -2,6 +2,10 @@
   display: none;
 }
 
+#arguably\.arg + .highlight + .doc-contents .doc-class-bases {
+  display: none;
+}
+
 .highlight.lang-console {
   border-left: 5px solid rgba(255, 255, 255, 0.3);
   background-color: var(--md-code-bg-color);
