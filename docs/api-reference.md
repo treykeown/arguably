@@ -16,7 +16,7 @@ The rest of the functions aren't necessary except in specific use cases:
 * [`arguably.error()`](#arguably.error) lets you error out if an input is the correct type but isn't acceptable
 * [`arguably.is_target()`](#arguably.is_target) tells you if the targeted command is being run, or if one of its
 ancestors is being run
-* [`@arguably.subtype`](#arguably.subtype) marks a class as being a subclass buildable through `arguably.arg.builder()`
+* [`@arguably.subtype`](#arguably.subtype) marks a subclass as buildable through `arguably.arg.builder()`
 
 ### Special behaviors
 

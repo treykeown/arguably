@@ -146,6 +146,7 @@ def run_mkdocs(target: str) -> None:
 
 
 def copy_logos() -> None:
+    os.makedirs(project_root / "docs" / "images", exist_ok=True)
     for logo in logos:
         shutil.copy(project_root / "etc" / "logo" / logo, project_root / "docs" / "images" / logo)
 
