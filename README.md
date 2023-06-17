@@ -81,8 +81,8 @@ options:
 `arguably` uses your docstrings to automatically generate help messages. It supports all major formats for docstrings:
 reStructuredText, Google, Numpydoc, and Epydoc.
 
-Type annotations are optional, but `arguably` can use them to automatically convert arguments to their type. It has
-smart handling for mapping built-in types to the command line, including `tuple`, `list`, `enum.Enum`, and `enum.Flag`.
+Type annotations are optional, but `arguably` can use them to automatically convert arguments. It has smart handling for
+mapping built-in types to the command line, including `tuple`, `list`, `enum.Enum`, and `enum.Flag`.
 
 There are also a few special behaviors you can attach to a parameter via `Annotated[]` and the `arguably.arg.*`
 functions. Using `arguably.arg.builder()`, you can even build an object to pass in from the command line (using syntax
@@ -128,7 +128,7 @@ Install using `pip install arguably`. If you want to install using `conda`, plea
 
 ## Documentation
 
-* All-in-one Example: [https://treykeown.github.io/arguably/examples/](https://treykeown.github.io/arguably/examples/)
+* Examples: [https://treykeown.github.io/arguably/examples/](https://treykeown.github.io/arguably/examples/)
 * Tutorial: [https://treykeown.github.io/arguably/tutorial/intro/](https://treykeown.github.io/arguably/tutorial/intro/)
 * API Reference: [https://treykeown.github.io/arguably/api-reference/](https://treykeown.github.io/arguably/api-reference/)
 

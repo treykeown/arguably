@@ -6,16 +6,30 @@
   display: none;
 }
 
-.highlight.lang-console {
-  border-left: 5px solid rgba(255, 255, 255, 0.3);
+.highlight {
+  border-left: 5px solid var(--md-primary-fg-color);
   background-color: var(--md-code-bg-color);
 }
 
-.highlight.lang-console code {
+.highlight.lang-console {
+  border-left: 5px solid var(--md-code-hl-generic-color);
+}
+
+.highlight code {
   background: none;
   margin-left: -5px;
 }
 
 .highlight.lang-console .m, .highlight.lang-console .k {
   color: var(--md-code-fg-color);
+}
+
+article.md-content__inner {
+  position: relative;
+}
+
+.code-source {
+  position: absolute;
+  right: 15px;
+  z-index: 10;
 }

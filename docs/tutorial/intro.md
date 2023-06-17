@@ -145,7 +145,7 @@ Hello, Python!
 From: Graham, John, Terry, Eric, Terry, Michael
 ```
 
-To require at least one input to `*args`, use [`arguably.arg.required()`](../api-reference/#arguably.arg.required).
+To require at least one input to `*args`, use [`arguably.arg.required()`](../../api-reference/#arguably.arg.required).
 
 ## Adding help messages
 

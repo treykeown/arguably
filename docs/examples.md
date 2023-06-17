@@ -1,8 +1,75 @@
 # Example Scripts
 
-In the spirit of "show, don't tell", here are a few example scripts.
+In the spirit of "show, don't tell", here are a few example scripts. Some of the scripts may be broken up to better show
+the code for a subcommand next to its output.
 
-## A simple script
+## Hello, world!
+
+A "Hello, world!" script. Can accept a different name to greet, and has a `--shout` option. Because there is only one
+command, it's automatically selected - no need to specify subcommand.
+
+The `*`, if you're not familiar, works similarly to `*args` - it separates positional args from keyword-only args. In
+`arguably`, keyword-only args each appear as an `--option`.
+
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/example-hello.py">[source]</a>
+</sub></div>
+
+```python
+import arguably
+
+@arguably.command
+def hello(name="world", *, shout=False):
+    """
+    says hello to someone
+    Args:
+        name: {who} to greet
+        shout: will only use uppercase
+    """
+    message = f"Hello, {name}!"
+    if shout:
+        message = message.upper()
+    print(message)
+
+if __name__ == "__main__":
+    arguably.run()
+```
+```console
+user@machine:~$ python3 example-hello.py -h
+usage: example-hello.py [-h] [--shout] [WHO]
+
+says hello to someone
+
+positional arguments:
+  WHO         who to greet (type: str, default: world)
+
+options:
+  -h, --help  show this help message and exit
+  --shout     will only use uppercase (type: bool, default: False)
+```
+```console
+user@machine:~$ python3 example-hello.py
+Hello, world!
+```
+```console
+user@machine:~$ python3 example-hello.py Python
+Hello, Python!
+```
+```console
+user@machine:~$ python3 example-hello.py --shout Python
+HELLO, PYTHON!
+```
+
+## Subcommands
+
+A simple script showing subcommands and multi-level subcommands being used. Outputs for each command are shown next to
+the its code.
+
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/simple.py">[source]</a>
+</sub></div>
+
+### Imports and `hey_there`
 
 ```python
 """this docstring is the description for the script"""
@@ -11,7 +78,7 @@ import arguably
 import builtins
 
 @arguably.command
-def hello(first_name, last_name: str | None = None):
+def hey_there(first_name, last_name: str | None = None):
     """
     this will say hello to someone
 
@@ -28,7 +95,35 @@ def hello(first_name, last_name: str | None = None):
     else:
         full_name = f"{first_name} {last_name}"
     print(f"Hello, {full_name}!")
+```
+```console
+user@machine:~$ python3 simple.py hey-there -h
+usage: simple.py hey-there [-h] FIRST [LAST]
 
+this will say hello to someone
+
+positional arguments:
+  FIRST       the first name of the person to greet (type: str)
+  LAST        their last name (type: str, default: None)
+
+options:
+  -h, --help  show this help message and exit
+```
+```console
+user@machine:~$ python3 simple.py hey-there Monty
+Hello, Monty!
+```
+```console
+user@machine:~$ python3 simple.py hey-there Monty Python
+Hello, Monty Python!
+```
+
+### `good`
+
+`good` has two subcommands. The `-s/--shout` option is able to be passed to `good` any time one of these subcommands is
+invoked.
+
+```python
 @arguably.command(alias="g")
 def good(*, shout=False):
     """
@@ -45,56 +140,6 @@ def good(*, shout=False):
         # All prints are now UPPERCASE
         global print
         print = lambda msg: builtins.print(msg.upper())
-
-@arguably.command
-def good__morning(name):
-    """Greet someone early in the day"""
-    print(f"Good morning, {name}!")
-
-@arguably.command
-def good__night(name):
-    """Say goodbye at night"""
-    print(f"Good night, {name}!")
-
-if __name__ == "__main__":
-    arguably.run()
-```
-
-```console
-user@machine:~$ python3 simple.py
-usage: simple.py [-h] command ...
-
-this docstring is the description for the script
-
-positional arguments:
-  command
-    hey-there  this will say hello to someone
-    good (g)   this is a command with two subcommands
-
-options:
-  -h, --help   show this help message and exit
-```
-```console
-user@machine:~$ python3 simple.py hey-there -h
-usage: simple.py hey-there [-h] FIRST [LAST]
-
-this will say hello to someone
-
-positional arguments:
-  FIRST       the first name of the person to greet (type: str)
-  LAST        their last name (type: str, default: None)
-
-options:
-  -h, --help  show this help message and exit
-
-```
-```console
-user@machine:~$ python3 simple.py hey-there Monty
-Hello, Monty!
-```
-```console
-user@machine:~$ python3 simple.py hey-there Monty Python
-Hello, Monty Python!
 ```
 ```console
 user@machine:~$ python3 simple.py good -h
@@ -111,13 +156,52 @@ options:
   -h, --help   show this help message and exit
   -s, --shout  will shout out the greeting (type: bool, default: False)
 ```
+
+### `good__morning`
+
+```python
+@arguably.command
+def good__morning(name):
+    """Greet someone early in the day"""
+    print(f"Good morning, {name}!")
+```
 ```console
 user@machine:~$ python3 simple.py good -s morning Monty
 GOOD MORNING, MONTY!
 ```
+
+### `good__night`
+
+```python
+@arguably.command
+def good__night(name):
+    """Say goodbye at night"""
+    print(f"Good night, {name}!")
+```
 ```console
 user@machine:~$ python3 simple.py good night Python
 Good night, Python!
+```
+
+### `arguably.run()`
+
+```python
+if __name__ == "__main__":
+    arguably.run()
+```
+```console
+user@machine:~$ python3 simple.py
+usage: simple.py [-h] command ...
+
+this docstring is the description for the script
+
+positional arguments:
+  command
+    hey-there  this will say hello to someone
+    good (g)   this is a command with two subcommands
+
+options:
+  -h, --help   show this help message and exit
 ```
 
 ## One of everything
@@ -126,6 +210,12 @@ This script includes one of every feature. `arguably` is designed so that you do
 behind `Annotated[]` except in special cases, but this script makes heavy use of them.
 
 It's a long script, so it's periodically broken up to show the results on the CLI.
+
+### Imports and `__root__`
+
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/everything.py">[source]</a>
+</sub></div>
 
 ```python
 #!/usr/bin/env python3
@@ -165,7 +255,7 @@ Verbosity: 4
 __root__ is the target!
 ```
 
-<hr>
+### `add`
 
 ```python
 @arguably.command
@@ -178,7 +268,7 @@ def add(
     this is the CLI description for this command
     Args:
         coords: some coordinates {X,Y}
-        *values: scalar {value}s to add to the coords
+        *values: scalar {value}s to add to the coords, requires one or more
         include_z: [-z] whether to include a value for Z
     """
     print(f"Coordinates: {coords}")
@@ -192,7 +282,6 @@ def add(
         print(f"Added {value}: {coords}")
     print(f"Result: {coords}")
 ```
-
 ```console
 user@machine:~$ ./everything.py add -h
 usage: kitchen-sink add [-h] [-z] X,Y VALUE [VALUE ...]
@@ -218,7 +307,7 @@ Added 4: (15, 15, 10)
 Result: (15, 15, 10)
 ```
 
-<hr>
+### `chmod`
 
 ```python
 class Permissions(enum.Flag):
@@ -240,7 +329,6 @@ def chmod(file: Path, *, flags: Permissions = Permissions(0)):
     """
     print(f"{file=}", f"{flags=}")
 ```
-
 ```console
 user@machine:~$ ./everything.py chmod -h
 usage: kitchen-sink chmod [-h] [-r] [-w] [-x] file
@@ -262,7 +350,7 @@ Verbosity: 0
 file=PosixPath('foo.exe') flags=<Permissions.READ|WRITE|EXECUTE: 7>
 ```
 
-<hr>
+### `move`
 
 ```python
 class Direction(enum.Enum):
@@ -281,7 +369,6 @@ def move(direction: Direction):
     dx, dy = direction.value
     print(f"Will move {dx}, {dy}")
 ```
-
 ```console
 user@machine:~$ ./everything.py move -h
 usage: kitchen-sink move [-h] {up,down,left,right}
@@ -300,7 +387,7 @@ Verbosity: 0
 Will move 0, 1
 ```
 
-<hr>
+### `make`
 
 ```python
 @arguably.command
@@ -322,7 +409,6 @@ def make(
     else:
         print(f"Logging to {log}")
 ```
-
 ```console
 user@machine:~$ ./everything.py make -h
 usage: kitchen-sink make [-h] [--log [LOG]] {build,install,clean}
@@ -355,7 +441,7 @@ Running `make build`
 Logging to foo.log
 ```
 
-<hr>
+### `arg`
 
 ```python
 @arguably.command
@@ -369,7 +455,6 @@ def arg():
     if arguably.is_target():
         print("arg() is the target!")
 ```
-
 ```console
 user@machine:~$ ./everything.py arg -h
 usage: kitchen-sink arg [-h] command ...
@@ -391,7 +476,7 @@ Hello from arg()!
 arg() is the target!
 ```
 
-<hr>
+### `arg__handler`
 
 ```python
 @arguably.command
@@ -407,7 +492,6 @@ def arg__handler(
     """
     print(f"Python version: {version}")
 ```
-
 ```console
 user@machine:~$ ./everything.py arg handler -h
 usage: kitchen-sink arg handler [-h] version
@@ -427,7 +511,7 @@ Hello from arg()!
 Python version: 3.10
 ```
 
-<hr>
+### `arg__builder`
 
 ```python
 class Nic: ...
@@ -454,7 +538,6 @@ def arg__builder(
     """
     print(f"Built nics: {nic}")
 ```
-
 ```console
 user@machine:~$ ./everything.py arg builder -h
 usage: kitchen-sink arg builder [-h] --nic NIC
@@ -472,7 +555,7 @@ Hello from arg()!
 Built nics: [TapNic(model='e1000'), UserNic(hostfwd='tcp::10022-:22')]
 ```
 
-<hr>
+### `list_`
 
 ```python
 @arguably.command
@@ -490,7 +573,6 @@ def list_(files: list[Path], *, output: list[str]):
     for out in output:
         print(f"Will output to {out}")
 ```
-
 ```console
 user@machine:~$ ./everything.py list -h
 usage: kitchen-sink list [-h] --output OUTPUT files
@@ -514,13 +596,12 @@ Will output to en0
 Will output to en1
 ```
 
-<hr>
+### `arguably.run()`
 
 ```python
 if __name__ == "__main__":
     arguably.run(name="kitchen-sink", version_flag=True)
 ```
-
 ```console
 user@machine:~$ ./everything.py -h
 usage: kitchen-sink [-h] [--version] [-v] command ...

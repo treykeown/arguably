@@ -14,6 +14,18 @@ import arguably
 # used if version_flag is set
 __version__ = "1.0.0"
 
+@arguably.command
+def __root__(*, verbose: Annotated[int, arguably.arg.count()] = 0):
+    """
+    __root__ is always called first, before any subcommand
+    Args:
+        verbose: [-v] the verbosity - flag occurrences are counted
+    """
+    print(f"Verbosity: {verbose}")
+    if not arguably.is_target():
+        return
+    print("__root__ is the target!")
+
 
 @arguably.command
 def add(
@@ -25,7 +37,7 @@ def add(
     this is the CLI description for this command
     Args:
         coords: some coordinates {X,Y}
-        *values: scalar {value}s to add to the coords
+        *values: scalar {value}s to add to the coords, requires one or more
         include_z: [-z] whether to include a value for Z
     """
     print(f"Coordinates: {coords}")
@@ -162,19 +174,6 @@ def list_(files: list[Path], *, output: list[str]):
         print(f"Resolved path: {file.resolve()}")
     for out in output:
         print(f"Will output to {out}")
-
-
-@arguably.command
-def __root__(*, verbose: Annotated[int, arguably.arg.count()] = 0):
-    """
-    __root__ is always called first, before any subcommand
-    Args:
-        verbose: [-v] the verbosity - flag occurrences are counted
-    """
-    print(f"Verbosity: {verbose}")
-    if not arguably.is_target():
-        return
-    print("__root__ is the target!")
 
 
 if __name__ == "__main__":

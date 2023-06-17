@@ -50,4 +50,5 @@ def good__night(name):
     print(f"Good night, {name}!")
 
 if __name__ == "__main__":
+    # Parses the CLI arguments and calls the decorated functions
     arguably.run()
