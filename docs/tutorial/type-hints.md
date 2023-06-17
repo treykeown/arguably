@@ -12,12 +12,22 @@ from pathlib import Path
 def basic(name: str, age: int, percent: float):
     """all basic types like str, int, float, etc are supported"""
     print(f"{name=}", f"{age=}", f"{percent=}")
-
+```
+```console
+user@machine:~$ python3 type-hint.py basic Monty 42 33.3
+name='Monty' age=42 percent=33.3
+```
+```python
 @arguably.command
 def tuple_(value: tuple[str, int, float]):
     """tuples can contain any supported type that isn't a list or tuple"""
     print(f"{value=}")
-
+```
+```console
+user@machine:~$ python3 type-hint.py tuple foo,1,3.14
+value=('foo', 1, 3.14)
+```
+```python
 class UserType:
     def __init__(self, val: str):
         self.val = int(val)
@@ -28,46 +38,39 @@ class UserType:
 def any_type(value: UserType, path: Path):
     """any type that can be initialized from a string is supported"""
     print(f"{value=}", f"{path=}")
-
-@arguably.command
-def list_(files: list[Path], *, nums: list[int]):
-    """lists are supported. if they appear as an option
-    (like `coord` does), they can be specified multiple times"""
-    print(f"{files=}", f"{nums=}")
-
-if __name__ == "__main__":
-    arguably.run()
-```
-
-```console
-user@machine:~$ python3 type-hint.py basic Monty 42 33.3
-name='Monty' age=42 percent=33.3
-```
-```console
-user@machine:~$ python3 type-hint.py tuple foo,1,3.14
-value=('foo', 1, 3.14)
 ```
 ```console
 user@machine:~$ python3 type-hint.py any-type 123 .
 value=UserType(val=123) path=PosixPath('.')
 ```
+```python
+@arguably.command
+def list_(files: list[Path], *, nums: list[int]):
+    """lists are supported. if they appear as an option
+    (like `coord` does), they can be specified multiple times"""
+    print(f"{files=}", f"{nums=}")
+```
 ```console
 user@machine:~$ python3 type-hint.py list foo.txt,bar.exe --nums 1 --nums 2,3
 files=[PosixPath('foo.txt'), PosixPath('bar.exe')] nums=[1, 2, 3]
+```
+```python
+if __name__ == "__main__":
+    arguably.run()
 ```
 
 ## Allowed types
 
 * Any type that can be constructed by passing in a single string value. This includes:
-  * Basic built-in types like `str`, `int`, `float`, `bool`
-  * Other built-ins like `pathlib.Path`
-  * Any user-defined classes that also have this kind of constructor
+    * Basic built-in types like `str`, `int`, `float`, `bool`
+    * Other built-ins like `pathlib.Path`
+    * Any user-defined classes that also have this kind of constructor
 * `enum.Enum` and `enum.Flag` - values are referenced by the lowercased name
-  * The docstring for `enum.Flag` values is parsed as well, meaning you can create help messages for each entry and
+    * The docstring for `enum.Flag` values is parsed as well, meaning you can create help messages for each entry and
   specify a shorthand through `[-x]`
-* `Optional[some_type]` / `some_type | None` - any union with `None` is ignored, so this would be parsed as `some_type`
-* `tuple[int, float, etc]` - handled as comma-separated values `1,3.14,etc`
-* `list[some_type]` - handled as comma-separated values if positional, but can be specified multiple times as an option
+* `Optional[some_type]` or `some_type | None` - any union with `None` is ignored, so this would be parsed as `some_type`
+* `tuple[int, float, str]` - handled as comma-separated values `1,3.14,etc`
+* `list[some_type]` - if positional, handled as comma-separated. As an option, can be specified multiple times.
 
 ### `enum.Enum`
 
