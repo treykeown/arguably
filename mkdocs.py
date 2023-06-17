@@ -147,7 +147,7 @@ def run_mkdocs(target: str) -> None:
 
 def copy_logos() -> None:
     for logo in logos:
-        shutil.copy(project_root / "etc" / "logo" / logo, project_root / "docs")
+        shutil.copy(project_root / "etc" / "logo" / logo, project_root / "docs" / "images")
 
 
 def copy_readme() -> None:
@@ -157,8 +157,8 @@ def copy_readme() -> None:
     with readme.open("r") as src:
         with index.open("w") as dst:
             in_picture = False
-            dst.write("![Image title](arguably_black.png#only-light)\n")
-            dst.write("![Image title](arguably_white.png#only-dark)\n")
+            dst.write("![arguably logo](images/arguably_black.png#only-light)\n")
+            dst.write("![arguably logo](images/arguably_white.png#only-dark)\n")
             for line in src.readlines():
                 stripped_line = line.lstrip(" ")
                 if stripped_line.startswith("<picture"):
