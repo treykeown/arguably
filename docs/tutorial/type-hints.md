@@ -200,6 +200,7 @@ class
 
 Here's an example of each being used. This is all the same script, but results are shown after each example.
 
+#### `arguably.arg.required`
 ```python
 from pathlib import Path
 
@@ -225,6 +226,7 @@ user@machine:~$ python3 annotated.py email foo@example.com monty@python.org shru
 from_='foo@example.com' to=('monty@python.org', 'shrubbery-interest@example.com')
 ```
 
+#### `arguably.arg.count`
 ```python
 @arguably.command
 def process(
@@ -242,6 +244,7 @@ user@machine:~$ python3 annotated.py process -vvvv
 verbose=4
 ```
 
+#### `arguably.arg.choices`
 ```python
 @arguably.command
 def move(
@@ -257,6 +260,7 @@ usage: annotated.py move [-h] {left,right,up,down}
 annotated.py move: error: argument direction: invalid choice: 'diagonally' (choose from 'left', 'right', 'up', 'down')
 ```
 
+#### `arguably.arg.missing`
 ```python
 @arguably.command
 def do_something(
@@ -279,6 +283,7 @@ user@machine:~$ python3 annotated.py do-something --log here.log
 log=PosixPath('here.log')
 ```
 
+#### `arguably.arg.handler`
 ```python
 @arguably.command
 def handle_it(
@@ -292,6 +297,7 @@ user@machine:~$ python3 annotated.py handle-it python-3
 version=3
 ```
 
+#### `arguably.arg.builder`
 ```python
 class Nic: ...
 
