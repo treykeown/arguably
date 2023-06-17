@@ -598,8 +598,8 @@ then call <code>arguably.run()</code>. If multiple functions are decorated, they
 </table>
 <p><code>arguably</code> uses your docstrings to automatically generate help messages. It supports all major formats for docstrings:
 reStructuredText, Google, Numpydoc, and Epydoc.</p>
-<p>Type annotations are optional, but <code>arguably</code> can use them to automatically convert arguments to their type. It has
-smart handling for mapping built-in types to the command line, including <code>tuple</code>, <code>list</code>, <code>enum.Enum</code>, and <code>enum.Flag</code>.</p>
+<p>Type annotations are optional, but <code>arguably</code> can use them to automatically convert arguments. It has smart handling for
+mapping built-in types to the command line, including <code>tuple</code>, <code>list</code>, <code>enum.Enum</code>, and <code>enum.Flag</code>.</p>
 <p>There are also a few special behaviors you can attach to a parameter via <code>Annotated[]</code> and the <code>arguably.arg.*</code>
 functions. Using <code>arguably.arg.builder()</code>, you can even build an object to pass in from the command line (using syntax
 inspired by QEMU):</p>
@@ -635,7 +635,7 @@ inspired by QEMU):</p>
 <a href="https://github.com/treykeown/arguably/issues/12">this issue</a>.</p>
 <h2 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h2>
 <ul>
-<li>All-in-one Example: <a href="https://treykeown.github.io/arguably/examples/">https://treykeown.github.io/arguably/examples/</a></li>
+<li>Examples: <a href="https://treykeown.github.io/arguably/examples/">https://treykeown.github.io/arguably/examples/</a></li>
 <li>Tutorial: <a href="https://treykeown.github.io/arguably/tutorial/intro/">https://treykeown.github.io/arguably/tutorial/intro/</a></li>
 <li>API Reference: <a href="https://treykeown.github.io/arguably/api-reference/">https://treykeown.github.io/arguably/api-reference/</a></li>
 </ul>
