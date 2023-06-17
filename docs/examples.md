@@ -65,13 +65,14 @@ HELLO, PYTHON!
 A simple script showing subcommands and multi-level subcommands being used. Outputs for each command are shown next to
 the its code.
 
+### Imports and `hey_there`
+
 <div align="right" class="code-source"><sub>
     <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/simple.py">[source]</a>
 </sub></div>
 
-### Imports and `hey_there`
-
 ```python
+#!/usr/bin/env python3
 """this docstring is the description for the script"""
 
 import arguably
