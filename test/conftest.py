@@ -1,4 +1,5 @@
 import abc
+import asyncio
 import dataclasses
 import io
 import sys
@@ -73,6 +74,30 @@ def fn_hello(iobuf: StringIO) -> Callable:
         iobuf.write(f"{greeting}, {name} {lastname}! You'll be {age + 1} next year.\n")
 
     return hello
+
+
+########################################################################################################################
+# async_hello
+
+
+@pytest.fixture
+def fn_async_hello(iobuf: StringIO) -> Callable:
+    @arguably.command
+    async def async_hello(name, age=30, *, howdy=False, lastname=None) -> None:
+        """
+        says hello to you, asynchronously
+        :param name: your name
+        :param age: your age
+        :param howdy: [-H] say howdy instead of hello
+        :param lastname: [-l] your {SURNAME}
+        """
+        await asyncio.sleep(0.1)
+        greeting = "Howdy" if howdy else "Hello"
+        if lastname is None:
+            lastname = ""
+        iobuf.write(f"{greeting}, {name} {lastname}! You'll be {age + 1} next year.\n")
+
+    return async_hello
 
 
 ########################################################################################################################

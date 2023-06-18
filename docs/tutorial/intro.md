@@ -48,6 +48,28 @@ usage: hello-1.py [-h] name
 hello-1.py: error: the following arguments are required: name
 ```
 
+!!! note
+    If desired, `async` functions are also supported.
+    <div align="right" class="code-source"><sub>
+        <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/hello-async-1.py">[source]</a>
+    </sub></div>
+    ```python
+    import arguably
+    import asyncio
+
+    @arguably.command
+    async def hello(name):
+        await asyncio.sleep(1)
+        print(f"Hello, {name}!")
+
+    if __name__ == "__main__":
+        arguably.run()
+    ```
+    ```console
+    user@machine:~$ python3 hello-async-1.py Python
+    Hello, Python!
+    ```
+
 ## Optional arguments
 
 To make an argument optional, give it a default value.

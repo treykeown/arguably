@@ -219,5 +219,20 @@ def test_version_flags(iobuf: StringIO) -> None:
     assert f"{test_version_flags.__name__} 1.2.3\n" == cli
 
 
+########################################################################################################################
+# async_hello()
+
+
+def test_async_func(iobuf: StringIO, fn_async_hello: Callable) -> None:
+    argv = ["John", "-H"]
+    args = ["John"]
+    kwargs = dict(howdy=True)
+
+    cli, manual = run_cli_and_manual(iobuf, fn_async_hello, argv, args, kwargs, is_async=True)
+
+    assert cli.startswith("Howdy")
+    assert cli == manual
+
+
 if __name__ == "__main__":
     pytest.cmdline.main(["-s", "--verbose", __file__])

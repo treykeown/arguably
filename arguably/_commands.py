@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import enum
 import inspect
 from dataclasses import dataclass, field
@@ -235,7 +236,10 @@ class Command:
                 kwargs[arg.func_arg_name] = filtered_args[arg.func_arg_name]
 
         # Call the function
-        return self.function(*args, **kwargs)
+        if util.is_async_callable(self.function):
+            return asyncio.get_event_loop().run_until_complete(self.function(*args, **kwargs))
+        else:
+            return self.function(*args, **kwargs)
 
     def get_subcommand_metavar(self, command_metavar: str) -> str:
         """If this command has a subparser (for subcommands of its own), this can be called to generate a unique name

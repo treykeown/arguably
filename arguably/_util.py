@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import ast
+import asyncio
 import enum
+import functools
 import importlib.util
 import inspect
 import logging
@@ -34,6 +36,13 @@ else:  # pragma: no cover
 
 
 logger = logging.getLogger("arguably")
+
+
+def is_async_callable(obj: Any) -> bool:
+    """Checks if an object is an async callable - https://stackoverflow.com/a/72682939"""
+    while isinstance(obj, functools.partial):
+        obj = obj.func
+    return asyncio.iscoroutinefunction(obj) or (callable(obj) and asyncio.iscoroutinefunction(obj.__call__))
 
 
 def split_unquoted(unsplit: str, delimeter: str, limit: Union[int, float] = math.inf) -> List[str]:

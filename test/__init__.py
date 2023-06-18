@@ -1,3 +1,4 @@
+import asyncio
 import enum
 import runpy
 
@@ -27,11 +28,15 @@ def run_cli_and_manual(
     args: List[Any],
     kwargs: Optional[Dict[str, Any]] = None,
     arguably_kwargs: Optional[Dict[str, Any]] = None,
+    is_async: bool = False,
 ):
     if arguably_kwargs is None:
         arguably_kwargs = dict()
 
-    func(*args, **kwargs)
+    if is_async:
+        asyncio.get_event_loop().run_until_complete(func(*args, **kwargs))
+    else:
+        func(*args, **kwargs)
     manual = get_and_clear_io(iobuf)
 
     sys.argv.extend(argv)
