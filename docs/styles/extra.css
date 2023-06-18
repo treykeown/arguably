@@ -15,6 +15,14 @@
   border-left: 5px solid var(--md-code-hl-generic-color);
 }
 
+.highlight.lang-other {
+  border-left-color: transparent;
+}
+
+.doc-object > .highlight {
+  border-left-color: transparent;
+}
+
 .highlight code {
   background: none;
   margin-left: -5px;
@@ -30,6 +38,10 @@ article.md-content__inner {
 
 .code-source {
   position: absolute;
-  right: 15px;
-  z-index: 10;
+  right: 0;
+  z-index: 3;
+  padding: 4px 6px;
+  background: var(--md-code-bg-color);
+  line-height: 0.5em;
+  margin-top: -16px;
 }

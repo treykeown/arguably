@@ -170,6 +170,9 @@ def copy_readme() -> None:
                     continue
                 if in_picture:
                     continue
+                if stripped_line == '<div align="right"><sub>\n':
+                    dst.write('<div class="code-source" align="right"><sub>')
+                    continue
                 dst.write(line)
 
 

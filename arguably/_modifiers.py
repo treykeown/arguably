@@ -200,11 +200,11 @@ class arg(abc.ABC):
             ```
 
             ```shell
-            $ ./test.py
+            user@machine:~$ ./test.py
             no-flag
-            $ ./test.py --opt input
+            user@machine:~$ ./test.py --opt input
             input
-            $ ./test.py --opt
+            user@machine:~$ ./test.py --opt
             omit-val
             ```
 

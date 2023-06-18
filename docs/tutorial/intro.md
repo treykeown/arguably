@@ -9,6 +9,10 @@ When it comes to `arguably`, the most important things to know are:
 
 Here's a simple "Hello, world!" script:
 
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/hello-1.py">[source]</a>
+</sub></div>
+
 ```python
 import arguably
 
@@ -48,6 +52,10 @@ hello-1.py: error: the following arguments are required: name
 
 To make an argument optional, give it a default value.
 
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/hello-2.py">[source]</a>
+</sub></div>
+
 ```python
 @arguably.command
 def hello(name="world"):
@@ -77,6 +85,10 @@ options:
 
 To make an `--option` instead of a positional argument, use [keyword-only arguments](https://docs.python.org/3/tutorial/controlflow.html#keyword-only-arguments).
 These are the arguments that appear after the `*` in the parameter list.
+
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/hello-3.py">[source]</a>
+</sub></div>
 
 ```python
 @arguably.command
@@ -116,6 +128,10 @@ Hello, Python!
 
 To take in a variable number of positional arguments, use `*args`:
 
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/hello-4.py">[source]</a>
+</sub></div>
+
 ```python
 import arguably
 
@@ -151,6 +167,10 @@ To require at least one input to `*args`, use [`arguably.arg.required()`](../../
 
 To add help messages to parameters, add a docstring. It can be any of the major formats: reStructuredText (Sphinx),
 Google, Numpydoc, or Epydoc. We'll use Google's style for this example.
+
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/hello-5.py">[source]</a>
+</sub></div>
 
 ```python
 @arguably.command
@@ -191,6 +211,10 @@ A metavar is what gets printed in the usage string to represent the user-provide
 [here](https://docs.python.org/3/library/argparse.html#metavar).
 
 An example of using these directives to alias `--name` to `-n`, and to make its metavar `who`:
+
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/hello-6.py">[source]</a>
+</sub></div>
 
 ```python
 @arguably.command

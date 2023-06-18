@@ -4,6 +4,10 @@
 
 Marking multiple functions with `@arguably.command` will make them show up as subcommands on the CLI:
 
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/goodbye-1.py">[source]</a>
+</sub></div>
+
 ```python
 import arguably
 
@@ -61,6 +65,10 @@ To add a subcommand to a parent command, separate their names with two underscor
 * `ec2__start_instances` &rightarrow; `ec2 start-instances`
 
 Continuing this example:
+
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/aws-1.py">[source]</a>
+</sub></div>
 
 ```python
 import arguably
@@ -154,6 +162,10 @@ Listing objects under /foo/bar
 You may have noticed that `ec2` and `s3` had no description. This is because they are automatically created stubs. We
 can define them ourselves and attach arguments to them:
 
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/aws-2.py">[source]</a>
+</sub></div>
+
 ```python
 @arguably.command
 def s3(*, bucket):
@@ -190,6 +202,10 @@ As you can see, `def s3(*, bucket)` was called first and printed the bucket name
 `def s3__ls(path="/")` was invoked. This is because all ancestors are invoked before the target command is invoked. For
 a more complex example:
 
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/nested-1.py">[source]</a>
+</sub></div>
+
 ```python
 import arguably
 
@@ -221,6 +237,10 @@ third
 If a function named `__root__` is marked with `@arguably.command`, it always appears as the highest ancestor for
 commands in the script. This allows global options and actions to be placed at the root of the script.
 
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/root-1.py">[source]</a>
+</sub></div>
+
 ```python
 import arguably
 
@@ -251,6 +271,10 @@ hi
 Sometimes you'll want to allow a command in the heirarchy to process its input arguments, but bail if it wasn't the
 target. For that, you can use `arguably.is_target()`. This returns `False` if the currently-executing function was
 called as an ancestor of the target command, and `True` every other time.
+
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/root-2.py">[source]</a>
+</sub></div>
 
 ```python
 import arguably

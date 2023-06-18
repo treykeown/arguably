@@ -4,6 +4,10 @@
 
 `arguably` uses type hints to convert from text passed in by the CLI to the class needed by your functions.
 
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/type-hint.py">[source]</a>
+</sub></div>
+
 ```python
 import arguably
 from pathlib import Path
@@ -76,6 +80,10 @@ if __name__ == "__main__":
 
 Enums are processed to allow each of the member names to be input, but no other values.
 
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/enum-1.py">[source]</a>
+</sub></div>
+
 ```python
 import arguably
 import enum
@@ -108,6 +116,10 @@ start=(100, 100) Direction.DOWN end=(100, 99)
 ### `enum.Flag`
 
 Flag values never appear directly. Instead, each member always appears as an `--option`.
+
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/flag.py">[source]</a>
+</sub></div>
 
 ```python
 import arguably
@@ -152,7 +164,6 @@ def chmod(file: Path, *, flags: Permissions = Permissions(0)):
 if __name__ == "__main__":
     arguably.run()
 ```
-
 ```console
 user@machine:~$ python3 flag.py -h
 usage: flag.py [-h] [-r] [-w] [-x] file
@@ -201,6 +212,11 @@ class
 Here's an example of each being used. This is all the same script, but results are shown after each example.
 
 #### `arguably.arg.required`
+
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/annotated.py">[source]</a>
+</sub></div>
+
 ```python
 from pathlib import Path
 
