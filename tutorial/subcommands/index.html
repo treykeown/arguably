@@ -539,6 +539,10 @@
 <h1 id="subcommands">Subcommands<a class="headerlink" href="#subcommands" title="Permanent link">&para;</a></h1>
 <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
 <p>Marking multiple functions with <code>@arguably.command</code> will make them show up as subcommands on the CLI:</p>
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/goodbye-1.py">[source]</a>
+</sub></div>
+
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">arguably</span>
 
 <span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
@@ -588,6 +592,10 @@ stripped.</p>
 <li><code>ec2__start_instances</code> &rightarrow; <code>ec2 start-instances</code></li>
 </ul>
 <p>Continuing this example:</p>
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/aws-1.py">[source]</a>
+</sub></div>
+
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">arguably</span>
 
 <span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
@@ -671,6 +679,10 @@ stripped.</p>
 <h3 id="hierarchy">Hierarchy<a class="headerlink" href="#hierarchy" title="Permanent link">&para;</a></h3>
 <p>You may have noticed that <code>ec2</code> and <code>s3</code> had no description. This is because they are automatically created stubs. We
 can define them ourselves and attach arguments to them:</p>
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/aws-2.py">[source]</a>
+</sub></div>
+
 <div class="highlight"><pre><span></span><code><span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
 <span class="k">def</span> <span class="nf">s3</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">bucket</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -701,6 +713,10 @@ can define them ourselves and attach arguments to them:</p>
 <p>As you can see, <code>def s3(*, bucket)</code> was called first and printed the bucket name to use. After that,
 <code>def s3__ls(path="/")</code> was invoked. This is because all ancestors are invoked before the target command is invoked. For
 a more complex example:</p>
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/nested-1.py">[source]</a>
+</sub></div>
+
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">arguably</span>
 
 <span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
@@ -726,6 +742,10 @@ a more complex example:</p>
 <h2 id="the-__root__-function">The <code>__root__</code> function<a class="headerlink" href="#the-__root__-function" title="Permanent link">&para;</a></h2>
 <p>If a function named <code>__root__</code> is marked with <code>@arguably.command</code>, it always appears as the highest ancestor for
 commands in the script. This allows global options and actions to be placed at the root of the script.</p>
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/root-1.py">[source]</a>
+</sub></div>
+
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">arguably</span>
 
 <span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
@@ -751,6 +771,10 @@ commands in the script. This allows global options and actions to be placed at t
 <p>Sometimes you'll want to allow a command in the heirarchy to process its input arguments, but bail if it wasn't the
 target. For that, you can use <code>arguably.is_target()</code>. This returns <code>False</code> if the currently-executing function was
 called as an ancestor of the target command, and <code>True</code> every other time.</p>
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/root-2.py">[source]</a>
+</sub></div>
+
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">arguably</span>
 
 <span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
@@ -862,7 +886,7 @@ called as an ancestor of the target command, and <code>True</code> every other t
       <script src="../../assets/javascripts/bundle.a51614de.min.js"></script>
       
         
-          <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+          <script src="../../scripts/jquery.min.js"></script>
         
       
         

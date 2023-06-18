@@ -532,6 +532,10 @@
 </ul>
 <h2 id="hello-world">Hello, world!<a class="headerlink" href="#hello-world" title="Permanent link">&para;</a></h2>
 <p>Here's a simple "Hello, world!" script:</p>
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/hello-1.py">[source]</a>
+</sub></div>
+
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">arguably</span>
 
 <span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
@@ -561,6 +565,10 @@ script is run without giving a <code>name</code>, it prints a message stating th
 </code></pre></div>
 <h2 id="optional-arguments">Optional arguments<a class="headerlink" href="#optional-arguments" title="Permanent link">&para;</a></h2>
 <p>To make an argument optional, give it a default value.</p>
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/hello-2.py">[source]</a>
+</sub></div>
+
 <div class="highlight"><pre><span></span><code><span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
 <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;world&quot;</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
@@ -583,6 +591,10 @@ script is run without giving a <code>name</code>, it prints a message stating th
 <h2 id="adding-an-option">Adding an <code>[--option]</code><a class="headerlink" href="#adding-an-option" title="Permanent link">&para;</a></h2>
 <p>To make an <code>--option</code> instead of a positional argument, use <a href="https://docs.python.org/3/tutorial/controlflow.html#keyword-only-arguments">keyword-only arguments</a>.
 These are the arguments that appear after the <code>*</code> in the parameter list.</p>
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/hello-3.py">[source]</a>
+</sub></div>
+
 <div class="highlight"><pre><span></span><code><span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
 <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;world&quot;</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
@@ -612,6 +624,10 @@ These are the arguments that appear after the <code>*</code> in the parameter li
 </code></pre></div></p>
 <h2 id="flexible-number-of-args">Flexible number of args<a class="headerlink" href="#flexible-number-of-args" title="Permanent link">&para;</a></h2>
 <p>To take in a variable number of positional arguments, use <code>*args</code>:</p>
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/hello-4.py">[source]</a>
+</sub></div>
+
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">arguably</span>
 
 <span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
@@ -640,6 +656,10 @@ These are the arguments that appear after the <code>*</code> in the parameter li
 <h2 id="adding-help-messages">Adding help messages<a class="headerlink" href="#adding-help-messages" title="Permanent link">&para;</a></h2>
 <p>To add help messages to parameters, add a docstring. It can be any of the major formats: reStructuredText (Sphinx),
 Google, Numpydoc, or Epydoc. We'll use Google's style for this example.</p>
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/hello-5.py">[source]</a>
+</sub></div>
+
 <div class="highlight"><pre><span></span><code><span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
 <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;world&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -688,6 +708,10 @@ Google, Numpydoc, or Epydoc. We'll use Google's style for this example.</p>
 <p>A metavar is what gets printed in the usage string to represent the user-provided value. More explanation for that
 <a href="https://docs.python.org/3/library/argparse.html#metavar">here</a>.</p>
 <p>An example of using these directives to alias <code>--name</code> to <code>-n</code>, and to make its metavar <code>who</code>:</p>
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/hello-6.py">[source]</a>
+</sub></div>
+
 <div class="highlight"><pre><span></span><code><span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
 <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="o">*</span><span class="n">from_</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;world&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -799,7 +823,7 @@ Google, Numpydoc, or Epydoc. We'll use Google's style for this example.</p>
       <script src="../../assets/javascripts/bundle.a51614de.min.js"></script>
       
         
-          <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+          <script src="../../scripts/jquery.min.js"></script>
         
       
         

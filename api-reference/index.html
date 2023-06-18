@@ -1574,11 +1574,11 @@ used, but if it is omitted, <code>omit_value</code> will be used.</p>
     <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">opt</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">missing</span><span class="p">(</span><span class="s2">&quot;omit-val&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;no-flag&quot;</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">opt</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>$<span class="w"> </span>./test.py
+<div class="highlight"><pre><span></span><code>user@machine:~$<span class="w"> </span>./test.py
 no-flag
-$<span class="w"> </span>./test.py<span class="w"> </span>--opt<span class="w"> </span>input
+user@machine:~$<span class="w"> </span>./test.py<span class="w"> </span>--opt<span class="w"> </span>input
 input
-$<span class="w"> </span>./test.py<span class="w"> </span>--opt
+user@machine:~$<span class="w"> </span>./test.py<span class="w"> </span>--opt
 omit-val
 </code></pre></div>
 
@@ -1951,7 +1951,7 @@ when a user provides incorrect input to the CLI.</p>
       <script src="../assets/javascripts/bundle.a51614de.min.js"></script>
       
         
-          <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+          <script src="../scripts/jquery.min.js"></script>
         
       
         

@@ -531,8 +531,7 @@ integrate. You can also use it directly through <code>python3 -m arguably your_s
 <p>To use <code>arguably</code> in a script, decorate any functions that should appear on the command line with <code>@arguably.command</code>,
 then call <code>arguably.run()</code>. If multiple functions are decorated, they'll all appear as subcommands. You can even have
 <em>multiple levels</em> of subcommands: <code>def s3__ls()</code> becomes <code>s3 ls</code>.</p>
-<div align="right"><sub>
-    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/readme-1.py">[source]</a>
+<div class="code-source" align="right"><sub>    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/readme-1.py">[source]</a>
 </sub></div>
 
 <div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
@@ -603,8 +602,7 @@ mapping built-in types to the command line, including <code>tuple</code>, <code>
 <p>There are also a few special behaviors you can attach to a parameter via <code>Annotated[]</code> and the <code>arguably.arg.*</code>
 functions. Using <code>arguably.arg.builder()</code>, you can even build an object to pass in from the command line (using syntax
 inspired by QEMU):</p>
-<div align="right"><sub>
-    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/readme-2.py">[source]</a>
+<div class="code-source" align="right"><sub>    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/readme-2.py">[source]</a>
 </sub></div>
 
 <div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>./readme-2.py<span class="w"> </span>--nic<span class="w"> </span>tap,model<span class="o">=</span>e1000<span class="w"> </span>--nic<span class="w"> </span>user,hostfwd<span class="o">=</span>tcp::10022-:22
@@ -612,8 +610,7 @@ inspired by QEMU):</p>
 </code></pre></div>
 <h2 id="no-integration-required">No integration required<a class="headerlink" href="#no-integration-required" title="Permanent link">&para;</a></h2>
 <p>Don't want to write any code? Simply pass any Python script to <code>arguably</code> to give it a command line interface.</p>
-<div align="right"><sub>
-    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/party-trick.py">[source]</a>
+<div class="code-source" align="right"><sub>    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/party-trick.py">[source]</a>
 </sub></div>
 
 <div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>-m<span class="w"> </span>arguably<span class="w"> </span>party-trick.py
@@ -727,7 +724,7 @@ you how to run tests and pre-commit hooks.</p>
       <script src="assets/javascripts/bundle.a51614de.min.js"></script>
       
         
-          <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+          <script src="scripts/jquery.min.js"></script>
         
       
         
