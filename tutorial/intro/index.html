@@ -563,6 +563,27 @@ script is run without giving a <code>name</code>, it prints a message stating th
 <span class="go">usage: hello-1.py [-h] name</span>
 <span class="go">hello-1.py: error: the following arguments are required: name</span>
 </code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If desired, <code>async</code> functions are also supported.
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/hello-async-1.py">[source]</a>
+</sub></div>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">arguably</span>
+<span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>hello-async-1.py<span class="w"> </span>Python
+<span class="go">Hello, Python!</span>
+</code></pre></div></p>
+</div>
 <h2 id="optional-arguments">Optional arguments<a class="headerlink" href="#optional-arguments" title="Permanent link">&para;</a></h2>
 <p>To make an argument optional, give it a default value.</p>
 <div align="right" class="code-source"><sub>

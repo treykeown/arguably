@@ -45,3 +45,7 @@ article.md-content__inner {
   line-height: 0.5em;
   margin-top: -16px;
 }
+
+.admonition .code-source {
+  right: 0.65rem;
+}
