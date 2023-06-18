@@ -1163,7 +1163,7 @@ behind <code>Annotated[]</code> except in special cases, but this script makes h
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    builds a complex class - can pick between subtypes of class</span>
 <span class="sd">    Args:</span>
-<span class="sd">        nic:</span>
+<span class="sd">        nic: network interfaces - will build subclasses of `Nic`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Built nics: </span><span class="si">{</span><span class="n">nic</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
@@ -1174,7 +1174,7 @@ behind <code>Annotated[]</code> except in special cases, but this script makes h
 
 <span class="go">options:</span>
 <span class="go">  -h, --help  show this help message and exit</span>
-<span class="go">  --nic NIC   (type: list[Nic])</span>
+<span class="go">  --nic NIC   network interfaces - will build subclasses of `Nic` (type: list[Nic])</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>./everything.py<span class="w"> </span>-vvv<span class="w"> </span>arg<span class="w"> </span>builder<span class="w"> </span>--nic<span class="w"> </span>tap,model<span class="o">=</span>e1000<span class="w"> </span>--nic<span class="w"> </span>user,hostfwd<span class="o">=</span>tcp::10022-:22
 <span class="go">Verbosity: 3</span>
