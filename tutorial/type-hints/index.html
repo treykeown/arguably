@@ -804,17 +804,15 @@ a type using <code>typing.Annotated[]</code>:</p>
 <span class="p">):</span>
 </code></pre></div>
 <ul>
-<li><a href="../api-reference#arguably.arg.required"><code>arguably.arg.required()</code></a> requires <code>list[]</code> and <code>*args</code> params to not be
-empty, or marks an <code>--option</code> as required.</li>
-<li><a href="../api-reference#arguably.arg.count"><code>arguably.arg.count()</code></a> counts the number of times an option appears: <code>-vvvv</code>
-gives <code>4</code>.</li>
-<li><a href="../api-reference#arguably.arg.choices"><code>arguably.arg.choices(*choices)</code></a> restricts inputs to <code>choices</code></li>
-<li><a href="../api-reference#arguably.arg.missing"><code>arguably.arg.missing(omit_value)</code></a> <code>--option foo</code> yields <code>foo</code>, but this
-allows the value to be omitted: just <code>--option</code> will use the given <code>omit_value</code>.</li>
-<li><a href="../api-reference#arguably.arg.handler"><code>arguably.arg.handler(func)</code></a> skips all the argument processing <code>arguably</code>
-does and just calls <code>func</code></li>
-<li><a href="../api-reference#arguably.arg.builder"><code>arguably.arg.builder()</code></a> treats the input as instructions on how to build a
-class</li>
+<li><a href="#arguablyargrequired"><code>arguably.arg.required()</code></a> requires <code>list[]</code> and <code>*args</code> params to not be empty, or marks an
+<code>--option</code> as required.</li>
+<li><a href="#arguablyargcount"><code>arguably.arg.count()</code></a> counts the number of times an option appears: <code>-vvvv</code> gives <code>4</code>.</li>
+<li><a href="#arguablyargchoices"><code>arguably.arg.choices(*choices)</code></a> restricts inputs to <code>choices</code></li>
+<li><a href="#arguablyargmissing"><code>arguably.arg.missing(omit_value)</code></a> <code>--option foo</code> yields <code>foo</code>, but this allows the value to be
+omitted: just <code>--option</code> will use the given <code>omit_value</code>.</li>
+<li><a href="#arguablyarghandler"><code>arguably.arg.handler(func)</code></a> skips all the argument processing <code>arguably</code> does and just calls
+<code>func</code></li>
+<li><a href="#arguablyargbuilder"><code>arguably.arg.builder()</code></a> treats the input as instructions on how to build a class</li>
 </ul>
 <h3 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h3>
 <p>Here's an example of each being used. This is all the same script, but results are shown after each example.</p>
