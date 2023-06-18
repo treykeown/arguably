@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "arguably"
-version = "1.2.0"
-description = "turns functions into command line interfaces"
+version = "1.2.1"
+description = "The best Python CLI library, arguably."
 authors = ["treykeown <2755914+treykeown@users.noreply.github.com>"]
 readme = "etc/pypi/PYPI_README.md"
 homepage = "https://treykeown.github.io/arguably/"
