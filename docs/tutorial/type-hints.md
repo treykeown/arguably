@@ -195,17 +195,15 @@ def foo(
 ):
 ```
 
-* [`arguably.arg.required()`](../api-reference#arguably.arg.required) requires `list[]` and `*args` params to not be
-empty, or marks an `--option` as required.
-* [`arguably.arg.count()`](../api-reference#arguably.arg.count) counts the number of times an option appears: `-vvvv`
-gives `4`.
-* [`arguably.arg.choices(*choices)`](../api-reference#arguably.arg.choices) restricts inputs to `choices`
-* [`arguably.arg.missing(omit_value)`](../api-reference#arguably.arg.missing) `--option foo` yields `foo`, but this
-allows the value to be omitted: just `--option` will use the given `omit_value`.
-* [`arguably.arg.handler(func)`](../api-reference#arguably.arg.handler) skips all the argument processing `arguably`
-does and just calls `func`
-* [`arguably.arg.builder()`](../api-reference#arguably.arg.builder) treats the input as instructions on how to build a
-class
+* [`arguably.arg.required()`](#arguablyargrequired) requires `list[]` and `*args` params to not be empty, or marks an
+`--option` as required.
+* [`arguably.arg.count()`](#arguablyargcount) counts the number of times an option appears: `-vvvv` gives `4`.
+* [`arguably.arg.choices(*choices)`](#arguablyargchoices) restricts inputs to `choices`
+* [`arguably.arg.missing(omit_value)`](#arguablyargmissing) `--option foo` yields `foo`, but this allows the value to be
+omitted: just `--option` will use the given `omit_value`.
+* [`arguably.arg.handler(func)`](#arguablyarghandler) skips all the argument processing `arguably` does and just calls
+`func`
+* [`arguably.arg.builder()`](#arguablyargbuilder) treats the input as instructions on how to build a class
 
 ### Example
 

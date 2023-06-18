@@ -72,7 +72,11 @@ invoke each, from the project root directory:
 I've been fighting `mkdocs`. I'm not sure that I'm winning.
 
 I ran into an issue where all the functions which were aliases of class methods weren't appearing in the automatically
-generated docs. Snippet is below, link to source is [here](https://github.com/treykeown/arguably/blob/9c3655480aaa2bdd714db209de4ed7b74f8f1fd5/arguably/_context.py#L784-L786).
+generated docs:
+
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/9c3655480aaa2bdd714db209de4ed7b74f8f1fd5/arguably/_context.py#L784-L786">[source]</a>
+</sub></div>
 
 ```python
 run = context.run
