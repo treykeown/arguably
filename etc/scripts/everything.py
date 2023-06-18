@@ -155,7 +155,7 @@ def arg__builder(
     """
     builds a complex class - can pick between subtypes of class
     Args:
-        nic:
+        nic: network interfaces - will build subclasses of `Nic`
     """
     print(f"Built nics: {nic}")
 

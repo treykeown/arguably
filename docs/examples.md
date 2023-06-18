@@ -535,7 +535,7 @@ def arg__builder(
     """
     builds a complex class - can pick between subtypes of class
     Args:
-        nic:
+        nic: network interfaces - will build subclasses of `Nic`
     """
     print(f"Built nics: {nic}")
 ```
@@ -547,7 +547,7 @@ builds a complex class - can pick between subtypes of class
 
 options:
   -h, --help  show this help message and exit
-  --nic NIC   (type: list[Nic])
+  --nic NIC   network interfaces - will build subclasses of `Nic` (type: list[Nic])
 ```
 ```console
 user@machine:~$ ./everything.py -vvv arg builder --nic tap,model=e1000 --nic user,hostfwd=tcp::10022-:22
