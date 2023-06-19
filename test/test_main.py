@@ -12,7 +12,7 @@ def test_no_args(capsys: pytest.CaptureFixture):
 
     assert out == ""
     assert (
-        err == "usage: arguably [-h] [--debug] file [args ...]\n"
+        err == "usage: arguably [-h] [--debug] [--no-warn] file [args ...]\n"
         "arguably: error: the following arguments are required: file\n"
     )
 
