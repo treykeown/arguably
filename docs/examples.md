@@ -590,8 +590,8 @@ options:
 ```console
 user@machine:~$ ./everything.py list foo.txt,bar.bat --output wifi0,en0 --output en1
 Verbosity: 0
-Resolved path: /Users/gosling/Documents/Projects/arguably/etc/scripts/foo.txt
-Resolved path: /Users/gosling/Documents/Projects/arguably/etc/scripts/bar.bat
+Resolved path: .../arguably/etc/scripts/foo.txt
+Resolved path: .../arguably/etc/scripts/bar.bat
 Will output to wifi0
 Will output to en0
 Will output to en1

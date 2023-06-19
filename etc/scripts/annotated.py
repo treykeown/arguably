@@ -41,7 +41,6 @@ def handle_it(
 ):
     print(f"{version=}")
 
-# The following lines are for arguably.arg.builder()
 class Nic: ...
 
 @arguably.subtype(alias="tap")

@@ -95,51 +95,52 @@ def get_bases(cls: type) -> Tuple[type, ...]:
     return real_bases
 
 
+def format_doc(doc: str) -> str:
+    return doc.replace('"""', '\\"\\"\\"')
+
+
 def produce_file(path: Path) -> None:
     """Make the fake __init__.py"""
     with path.open("w") as fh:
-        # good_doc_lines = "\n\n".join(arguably.__doc__.split("\n\n")[1:-1])
-        # fh.write(f'"""\n{good_doc_lines}\n"""\n')
-        # fh.write("\n")
         fh.write("import enum\n")
         fh.write("from typing import *\n")
         fh.write("from abc import ABC\n")
         fh.write("\n")
 
         members = get_members(arguably)
-        for member in sorted(members, key=lambda x: arguably.__all__.index(x.__name__)):
-            signature_str = str(get_signature(member))
-            if isinstance(member, type):
-                signature_str = "(self, " + signature_str[1:]
-                real_bases = get_bases(member)
-                fh.write(f"class {member.__name__}({', '.join(b.__name__ for b in real_bases)}):\n")
-                if member.__doc__ is not None:
-                    fh.write(f'    """{member.__doc__}"""\n')
-                fh.write(f"    def __init__{signature_str}:\n")
-                fh.write("        pass\n")
-                fh.write("\n")
-                for cls_member in get_members(member):
-                    signature = get_signature(cls_member)
-                    if callable(cls_member):
-                        static_cls_member = inspect.getattr_static(member, cls_member.__name__)
-                        if isinstance(static_cls_member, classmethod):
-                            fh.write("    @classmethod\n")
-                        elif isinstance(static_cls_member, staticmethod):
-                            fh.write("    @staticmethod\n")
-                        fh.write(f"    def {cls_member.__name__}{signature}:\n")
-                        fh.write(f'        """{cls_member.__doc__}"""\n')
-                        fh.write("\n")
-                    else:
-                        raise Exception(f"Unsupported member type {type(cls_member)} for {cls_member} in {member}")
-            else:
-                assert callable(member)
-                fh.write(f"def {member.__name__}{signature_str}:\n")
-                fh.write(f'    """{member.__doc__}"""\n')
+        for member in sorted(members, key=lambda x: arguably.__all__.index(x.__name__.split(".")[-1])):
+            if callable(member):
+                signature_str = str(get_signature(member))
+                if isinstance(member, type):
+                    signature_str = "(self, " + signature_str[1:]
+                    real_bases = get_bases(member)
+                    fh.write(f"class {member.__name__}({', '.join(b.__name__ for b in real_bases)}):\n")
+                    if member.__doc__ is not None:
+                        fh.write(f'    """{format_doc(member.__doc__)}"""\n')
+                    fh.write(f"    def __init__{signature_str}:\n")
+                    fh.write("        pass\n")
+                    fh.write("\n")
+                    for cls_member in get_members(member):
+                        signature = get_signature(cls_member)
+                        if callable(cls_member):
+                            static_cls_member = inspect.getattr_static(member, cls_member.__name__)
+                            if isinstance(static_cls_member, classmethod):
+                                fh.write("    @classmethod\n")
+                            elif isinstance(static_cls_member, staticmethod):
+                                fh.write("    @staticmethod\n")
+                            fh.write(f"    def {cls_member.__name__}{signature}:\n")
+                            fh.write(f'        """{format_doc(cls_member.__doc__)}"""\n')
+                            fh.write("\n")
+                        else:
+                            raise Exception(f"Unsupported member type {type(cls_member)} for {cls_member} in {member}")
+                else:
+                    fh.write(f"def {member.__name__}{signature_str}:\n")
+                    fh.write(f'    """{format_doc(member.__doc__)}"""\n')
             fh.write("\n")
 
 
 def run_mkdocs(target: str) -> None:
-    args = ["mkdocs", target]
+    args = ["mkdocs", target, "-v"]
     print(f"running: {' '.join(args)}")
     print()
     subprocess.run(args)

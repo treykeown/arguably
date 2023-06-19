@@ -54,7 +54,6 @@ plugins:
             ignore_init_summary: true
           separate_signature: true
           merge_init_into_class: true
-          show_submodules: true
           show_object_full_path: true
           members_order: source
           group_by_category: false

@@ -48,6 +48,10 @@ Additionally, there are two exceptions:
 `arguably`, but not badly. Also used if `python3 -m arguably <script.py>` is used, but there were some problems running
 the script.
 
-## Details
+## arguably
 
 ::: arguably
+
+## arguably.arg
+
+::: arguably.arg

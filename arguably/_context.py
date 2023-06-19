@@ -34,6 +34,7 @@ class _ContextOptions:
     # Behavior options
     always_subcommand: bool
     version_flag: Union[bool, List[str]]
+    strict: bool
 
     # Formatting options
     show_defaults: bool
@@ -113,6 +114,41 @@ class _Context:
         Returns:
             `False` if `arguably.run()` was called and the currently running command is not the targeted command, `True`
                 in every other case.
+
+        Examples:
+            ```python
+            import arguably
+
+            @arguably.command
+            def __root__(*, config_file=None):
+                print(f"Using config {config_file}")
+                if not arguably.is_target():
+                    return
+                print("__root__ is the target!")
+
+            @arguably.command
+            def hi():
+                print("hi is the target!")
+
+            @arguably.command
+            def bye():
+                print("bye is the target!")
+
+            if __name__ == "__main__":
+                arguably.run()
+            ```
+
+            ```console
+            user@machine:~$ python3 is_target.py --config-file foo.yml
+            Using config foo.yml
+            __root__ is the target!
+            ```
+
+            ```console
+            user@machine:~$ python3 is_target.py --config-file foo.yml hi
+            Using config foo.yml
+            hi is the target!
+            ```
         """
         return self._is_calling_target
 
@@ -484,6 +520,28 @@ class _Context:
 
         Raises:
             SystemExit: The script will exit.
+
+        Examples:
+            ```python
+            #!/usr/bin/env python3
+            import arguably
+
+            @arguably.command
+            def high_five(*people):
+                if len(people) > 5:
+                    arguably.error("Too many people to high-five!")
+                for person in people:
+                    print(f"High five, {person}!")
+
+            if __name__ == "__main__":
+                arguably.run()
+            ```
+
+            ```console
+            user@machine:~$ python3 error.py Graham John Terry Eric Terry Michael
+            usage: error.py [-h] [people ...]
+            error.py: error: Too many people to high-five!
+            ```
         """
         if self._current_parser is None:
             raise ArguablyException("Unknown current parser.")
@@ -494,6 +552,7 @@ class _Context:
         name: Optional[str] = None,
         always_subcommand: bool = False,
         version_flag: Union[bool, Tuple[str], Tuple[str, str]] = False,
+        strict: bool = True,
         show_defaults: bool = True,
         show_types: bool = True,
         max_description_offset: int = 60,
@@ -511,6 +570,8 @@ class _Context:
             version_flag: If true, adds an option to show the script version using the value of `__version__` in the
                 invoked script. If a tuple of one or two strings is passed in, like `("-V", "--ver")`, those are used
                 instead of the default `--version`.
+            strict: Will prevent the script from running if there are any `ArguablyException`s raised during CLI
+                initialization.
             show_defaults: Show the default value (if any) for each argument at the end of its help string.
             show_types: Show the type of each argument at the end of its help string.
             max_description_offset: The maximum number of columns before argument descriptions are printed. Equivalent
@@ -523,6 +584,59 @@ class _Context:
 
         Returns:
             The return value from the called function.
+
+        Examples:
+            ```python
+            #!/usr/bin/env python3
+            \"\"\"description for this script'''
+            from io import StringIO
+
+            import arguably
+
+            __version__ = "1.2.3"
+
+            @arguably.command
+            def example(): ...
+
+            if __name__ == "__main__":
+                output = StringIO()
+                try:
+                    arguably.run(
+                        name="myname",
+                        always_subcommand=True,
+                        version_flag=True,
+                        command_metavar="mycmd",
+                        output=output
+                    )
+                finally:
+                    print(f"Captured output length: {len(output.getvalue())=}")
+                    print()
+                    print(output.getvalue(), end="")
+            ```
+
+            ```console
+            user@machine:~$ python3 run.py -h
+            Captured output length: len(output.getvalue())=222
+
+            usage: myname [-h] [--version] mycmd ...
+
+            description for this script
+
+            positional arguments:
+              mycmd
+                example
+
+            options:
+              -h, --help  show this help message and exit
+              --version   show program's version number and exit
+            ```
+
+            ```console
+            user@machine:~$ python3 run.py --version
+            Captured output length: len(output.getvalue())=13
+
+            myname 1.2.3
+            ```
         """
 
         # Set options
@@ -799,6 +913,91 @@ def command(
     Returns:
         If called with parens `@arguably.command(...)`, returns the decorated function. If called without parens
             `@arguably.command`, returns the function `wrap(func_)`, which returns `func_`.
+
+    Examples:
+        ```python
+        #!/usr/bin/env python3
+        import arguably
+
+        @arguably.command
+        def some_function(required, not_required=2, *others: int, option: float = 3.14):
+            \"\"\"
+            this function is on the command line!
+
+            Args:
+                required: a required parameter
+                not_required: this one isn't required, since it has a default
+                *others: all the other positional arguments go here
+                option: [-x] an option, short name is in brackets
+            \"\"\"
+
+        if __name__ == "__main__":
+            arguably.run()
+        ```
+
+        ```console
+        user@machine:~$ python3 readme-1.py -h
+        usage: readme-1.py [-h] [-x OPTION] required [not-required] [others ...]
+
+        this function is on the command line!
+
+        positional arguments:
+          required             a required parameter (type: str)
+          not-required         this one isn't required, since it has a default (type: int, default: 2)
+          others               all the other positional arguments go here (type: int)
+
+        options:
+          -h, --help           show this help message and exit
+          -x, --option OPTION  an option, short name is in brackets (type: float, default: 3.14)
+        ```
+
+        Or, with multiple commands:
+
+        ```python
+        #!/usr/bin/env python3
+        import arguably
+
+        @arguably.command(alias="f")
+        def first(): ...
+
+        @arguably.command(alias="s")
+        def second(): ...
+
+        @arguably.command
+        def second__subcmd1(): ...
+
+        def second__subcmd2(): ...
+        arguably.command(second__subcmd2)  # Can also be invoked this way
+
+        if __name__ == "__main__":
+            arguably.run()
+        ```
+
+        ```console
+        user@machine:~$ python3 command.py -h
+        usage: command-example-2.py [-h] command ...
+
+        positional arguments:
+          command
+            first (f)
+            second (s)
+
+        options:
+          -h, --help    show this help message and exit
+        ```
+
+        ```console
+        user@machine:~$ python3 command.py s -h
+        usage: command-example-2.py second [-h] command ...
+
+        positional arguments:
+          command
+            subcmd1
+            subcmd2
+
+        options:
+          -h, --help  show this help message and exit
+        ```
     """
 
     def wrap(func_: Callable) -> Callable:
@@ -829,6 +1028,38 @@ def subtype(
     Returns:
         If called with parens `@arguably.subtype(...)`, returns the decorated class. If called without parens
             `@arguably.subtype`, returns the function `wrap(cls_)`, which returns `cls_`.
+
+    Examples:
+        ```python
+        import arguably
+        from dataclasses import dataclass
+        from typing import Annotated
+
+        class Nic: ...
+
+        @arguably.subtype(alias="tap")
+        @dataclass
+        class TapNic(Nic):
+            model: str
+
+        @dataclass
+        class UserNic(Nic):
+            hostfwd: str
+
+        arguably.subtype(UserNic, alias="user")  # Can also be called like this
+
+        @arguably.command
+        def qemu_style(*, nic: Annotated[list[Nic], arguably.arg.builder()]):
+            print(f"{nic=}")
+
+        if __name__ == "__main__":
+            arguably.run()
+        ```
+
+        ```console
+        user@machine:~$ python3 subtype.py --nic tap,model=e1000 --nic user,hostfwd=tcp::10022-:22
+        nic=[TapNic(model='e1000'), UserNic(hostfwd='tcp::10022-:22')]
+        ```
     """
 
     def wrap(cls_: type) -> type:

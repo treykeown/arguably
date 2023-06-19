@@ -374,7 +374,7 @@ def load_and_run_inner(file: Path, *args: str, debug: bool) -> LoadAndRunResult:
 
         try:
             arguably.command(function)
-        except arguably.ArguablyException as e:
+        except Exception as e:
             warn(f"Unable to add function {function.__name__}: {str(e)}", function)
             continue
 
@@ -388,7 +388,7 @@ def load_and_run_inner(file: Path, *args: str, debug: bool) -> LoadAndRunResult:
     sys.argv.extend(args)
 
     # Run and return success
-    arguably.run(name=file.stem, always_subcommand=True, show_types=True, show_defaults=True)
+    arguably.run(name=file.stem, always_subcommand=True, strict=False)
     return LoadAndRunResult()
 
 
@@ -408,6 +408,37 @@ class ArguablyException(Exception):
     """
     Raised when a decorated function is incorrectly set up in some way. Will *not* be raised when a user provides
     incorrect input to the CLI.
+
+    Examples:
+        ```python
+        #!/usr/bin/env python3
+        import arguably
+
+        @arguably.command
+        def example(collision_, _collision):
+            print("You should never see this")
+
+        if __name__ == "__main__":
+            arguably.run()
+        ```
+
+        ```console
+        user@machine:~$ python3 arguably-exception.py
+        Traceback (most recent call last):
+          File ".../arguably/etc/scripts/api-examples/arguably-exception.py", line 9, in <module>
+            arguably.run()
+          File ".../arguably/arguably/_context.py", line 706, in run
+            cmd = self._process_decorator_info(command_decorator_info)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          File ".../arguably/arguably/_context.py", line 284, in _process_decorator_info
+            return Command(
+                   ^^^^^^^^
+          File "<string>", line 9, in __init__
+          File ".../arguably/arguably/_commands.py", line 214, in __post_init__
+            raise util.ArguablyException(
+        arguably._util.ArguablyException: Function parameter `_collision` in `example` conflicts with `collision_`, both
+        names simplify to `collision`
+        ```
     """
 
 
