@@ -401,11 +401,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#details" class="md-nav__link">
-    Details
+  <a href="#arguably" class="md-nav__link">
+    arguably
   </a>
   
-    <nav class="md-nav" aria-label="Details">
+    <nav class="md-nav" aria-label="arguably">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -444,11 +444,30 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#arguably.arg" class="md-nav__link">
-    arg
+  <a href="#arguably.ArguablyException" class="md-nav__link">
+    ArguablyException
   </a>
   
-    <nav class="md-nav" aria-label="arg">
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arguably.ArguablyWarning" class="md-nav__link">
+    ArguablyWarning
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arguablyarg" class="md-nav__link">
+    arguably.arg
+  </a>
+  
+    <nav class="md-nav" aria-label="arguably.arg">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -489,25 +508,6 @@
           <li class="md-nav__item">
   <a href="#arguably.arg.builder" class="md-nav__link">
     builder()
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#arguably.ArguablyException" class="md-nav__link">
-    ArguablyException
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#arguably.ArguablyWarning" class="md-nav__link">
-    ArguablyWarning
   </a>
   
 </li>
@@ -610,11 +610,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#details" class="md-nav__link">
-    Details
+  <a href="#arguably" class="md-nav__link">
+    arguably
   </a>
   
-    <nav class="md-nav" aria-label="Details">
+    <nav class="md-nav" aria-label="arguably">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -653,11 +653,30 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#arguably.arg" class="md-nav__link">
-    arg
+  <a href="#arguably.ArguablyException" class="md-nav__link">
+    ArguablyException
   </a>
   
-    <nav class="md-nav" aria-label="arg">
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arguably.ArguablyWarning" class="md-nav__link">
+    ArguablyWarning
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arguablyarg" class="md-nav__link">
+    arguably.arg
+  </a>
+  
+    <nav class="md-nav" aria-label="arguably.arg">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -698,25 +717,6 @@
           <li class="md-nav__item">
   <a href="#arguably.arg.builder" class="md-nav__link">
     builder()
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#arguably.ArguablyException" class="md-nav__link">
-    ArguablyException
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#arguably.ArguablyWarning" class="md-nav__link">
-    ArguablyWarning
   </a>
   
 </li>
@@ -786,7 +786,7 @@ be omitted: just <code>--option</code> will use the given <code>omit_value</code
 <code>arguably</code>, but not badly. Also used if <code>python3 -m arguably &lt;script.py&gt;</code> is used, but there were some problems running
 the script.</li>
 </ul>
-<h2 id="details">Details<a class="headerlink" href="#details" title="Permanent link">&para;</a></h2>
+<h2 id="arguably">arguably<a class="headerlink" href="#arguably" title="Permanent link">&para;</a></h2>
 
 
 <div class="doc doc-object doc-module">
@@ -798,6 +798,10 @@ the script.</li>
   
 
   <div class="doc doc-children">
+
+
+
+
 
 
 
@@ -903,6 +907,81 @@ that follows.</p>
     </tbody>
   </table>
 
+<p><strong>Examples:</strong></p>
+    <div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+<span class="kn">import</span> <span class="nn">arguably</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">some_function</span><span class="p">(</span><span class="n">required</span><span class="p">,</span> <span class="n">not_required</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">*</span><span class="n">others</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">option</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.14</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    this function is on the command line!</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        required: a required parameter</span>
+<span class="sd">        not_required: this one isn&#39;t required, since it has a default</span>
+<span class="sd">        *others: all the other positional arguments go here</span>
+<span class="sd">        option: [-x] an option, short name is in brackets</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>readme-1.py<span class="w"> </span>-h
+<span class="go">usage: readme-1.py [-h] [-x OPTION] required [not-required] [others ...]</span>
+
+<span class="go">this function is on the command line!</span>
+
+<span class="go">positional arguments:</span>
+<span class="go">  required             a required parameter (type: str)</span>
+<span class="go">  not-required         this one isn&#39;t required, since it has a default (type: int, default: 2)</span>
+<span class="go">  others               all the other positional arguments go here (type: int)</span>
+
+<span class="go">options:</span>
+<span class="go">  -h, --help           show this help message and exit</span>
+<span class="go">  -x, --option OPTION  an option, short name is in brackets (type: float, default: 3.14)</span>
+</code></pre></div>
+<p>Or, with multiple commands:</p>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+<span class="kn">import</span> <span class="nn">arguably</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;f&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">first</span><span class="p">():</span> <span class="o">...</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">second</span><span class="p">():</span> <span class="o">...</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">second__subcmd1</span><span class="p">():</span> <span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">second__subcmd2</span><span class="p">():</span> <span class="o">...</span>
+<span class="n">arguably</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">second__subcmd2</span><span class="p">)</span>  <span class="c1"># Can also be invoked this way</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>command.py<span class="w"> </span>-h
+<span class="go">usage: command-example-2.py [-h] command ...</span>
+
+<span class="go">positional arguments:</span>
+<span class="go">  command</span>
+<span class="go">    first (f)</span>
+<span class="go">    second (s)</span>
+
+<span class="go">options:</span>
+<span class="go">  -h, --help    show this help message and exit</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>command.py<span class="w"> </span>s<span class="w"> </span>-h
+<span class="go">usage: command-example-2.py second [-h] command ...</span>
+
+<span class="go">positional arguments:</span>
+<span class="go">  command</span>
+<span class="go">    subcmd1</span>
+<span class="go">    subcmd2</span>
+
+<span class="go">options:</span>
+<span class="go">  -h, --help  show this help message and exit</span>
+</code></pre></div>
+
   </div>
 
 </div>
@@ -925,6 +1004,7 @@ that follows.</p>
     <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">always_subcommand</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">version_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">show_defaults</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">show_types</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">max_description_offset</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
@@ -992,6 +1072,21 @@ instead of the default <code>--version</code>.</p>
           </td>
           <td>
                 <code>False</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>strict</code></td>
+          <td>
+                <code>bool</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Will prevent the script from running if there are any <code>ArguablyException</code>s raised during CLI
+initialization.</p>
+            </div>
+          </td>
+          <td>
+                <code>True</code>
           </td>
         </tr>
         <tr>
@@ -1106,6 +1201,54 @@ conflicting argument name.</p>
     </tbody>
   </table>
 
+<p><strong>Examples:</strong></p>
+    <div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+<span class="s2">&quot;&quot;&quot;description for this script&#39;&#39;&#39;</span>
+<span class="s2">from io import StringIO</span>
+
+<span class="s2">import arguably</span>
+
+<span class="s2">__version__ = &quot;1.2.3&quot;</span>
+
+<span class="s2">@arguably.command</span>
+<span class="s2">def example(): ...</span>
+
+<span class="s2">if __name__ == &quot;__main__&quot;:</span>
+<span class="s2">    output = StringIO()</span>
+<span class="s2">    try:</span>
+<span class="s2">        arguably.run(</span>
+<span class="s2">            name=&quot;myname&quot;,</span>
+<span class="s2">            always_subcommand=True,</span>
+<span class="s2">            version_flag=True,</span>
+<span class="s2">            command_metavar=&quot;mycmd&quot;,</span>
+<span class="s2">            output=output</span>
+<span class="s2">        )</span>
+<span class="s2">    finally:</span>
+<span class="s2">        print(f&quot;Captured output length: {len(output.getvalue())=}&quot;)</span>
+<span class="s2">        print()</span>
+<span class="s2">        print(output.getvalue(), end=&quot;&quot;)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>run.py<span class="w"> </span>-h
+<span class="go">Captured output length: len(output.getvalue())=222</span>
+
+<span class="go">usage: myname [-h] [--version] mycmd ...</span>
+
+<span class="go">description for this script</span>
+
+<span class="go">positional arguments:</span>
+<span class="go">  mycmd</span>
+<span class="go">    example</span>
+
+<span class="go">options:</span>
+<span class="go">  -h, --help  show this help message and exit</span>
+<span class="go">  --version   show program&#39;s version number and exit</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>run.py<span class="w"> </span>--version
+<span class="go">Captured output length: len(output.getvalue())=13</span>
+
+<span class="go">myname 1.2.3</span>
+</code></pre></div>
+
   </div>
 
 </div>
@@ -1183,6 +1326,25 @@ this.</p>
     </tbody>
   </table>
 
+<p><strong>Examples:</strong></p>
+    <div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+<span class="kn">import</span> <span class="nn">arguably</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">high_five</span><span class="p">(</span><span class="o">*</span><span class="n">people</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">people</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="n">arguably</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Too many people to high-five!&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">person</span> <span class="ow">in</span> <span class="n">people</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;High five, </span><span class="si">{</span><span class="n">person</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>error.py<span class="w"> </span>Graham<span class="w"> </span>John<span class="w"> </span>Terry<span class="w"> </span>Eric<span class="w"> </span>Terry<span class="w"> </span>Michael
+<span class="go">usage: error.py [-h] [people ...]</span>
+<span class="go">error.py: error: Too many people to high-five!</span>
+</code></pre></div>
+
   </div>
 
 </div>
@@ -1232,6 +1394,36 @@ in every other case.</p>
         </tr>
     </tbody>
   </table>
+
+<p><strong>Examples:</strong></p>
+    <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">arguably</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">__root__</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">config_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Using config </span><span class="si">{</span><span class="n">config_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">arguably</span><span class="o">.</span><span class="n">is_target</span><span class="p">():</span>
+        <span class="k">return</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;__root__ is the target!&quot;</span><span class="p">)</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">hi</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;hi is the target!&quot;</span><span class="p">)</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">bye</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;bye is the target!&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>is_target.py<span class="w"> </span>--config-file<span class="w"> </span>foo.yml
+<span class="go">Using config foo.yml</span>
+<span class="go">__root__ is the target!</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>is_target.py<span class="w"> </span>--config-file<span class="w"> </span>foo.yml<span class="w"> </span>hi
+<span class="go">Using config foo.yml</span>
+<span class="go">hi is the target!</span>
+</code></pre></div>
 
   </div>
 
@@ -1325,453 +1517,34 @@ any time an applicable arg is given a string starting with <code>foo,...</code><
     </tbody>
   </table>
 
-  </div>
-
-</div>
-
-
-
-
-
-
-<div class="doc doc-object doc-class">
-
-
-
-<h3 id="arguably.arg" class="doc doc-heading">
-        <span class="doc doc-object-name doc-class-name">arguably.arg</span>
-
-
-<a href="#arguably.arg" class="headerlink" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="p">()</span>
-</code></pre></div>
-
-  <div class="doc doc-contents ">
-      <p class="doc doc-class-bases">
-        Bases: <code><span title="abc.ABC">ABC</span></code></p>
-
-  
-      <p>Non-instantiable class.</p>
-<p>A collection of static methods for adding a modifier to a parameter. Should be used in <code>Annotated[]</code>.</p>
-
-
-
-  
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-<div class="doc doc-object doc-function">
-
-
-
-<h4 id="arguably.arg.required" class="doc doc-heading">
-        <span class="doc doc-object-name doc-function-name">arguably.arg.required</span>
-
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
-  </span>
-
-<a href="#arguably.arg.required" class="headerlink" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">required</span><span class="p">()</span>
-</code></pre></div>
-
-  <div class="doc doc-contents ">
-  
-      <p>Marks a field as required. For <code>*args</code> or a <code>list[]</code>, requires at least one item.</p>
-
-  <p><strong>Returns:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td>
-                <code>RequiredModifier</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>A value for use with <code>Annotated[]</code>, stating that this parameter is required.</p>
-            </div>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-  </div>
-
-</div>
-
-
-
-
-
-
-<div class="doc doc-object doc-function">
-
-
-
-<h4 id="arguably.arg.count" class="doc doc-heading">
-        <span class="doc doc-object-name doc-function-name">arguably.arg.count</span>
-
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
-  </span>
-
-<a href="#arguably.arg.count" class="headerlink" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
-</code></pre></div>
-
-  <div class="doc doc-contents ">
-  
-      <p>Counts the number of times a flag is given. For example, <code>-vvvv</code> would yield <code>4</code>.</p>
-
-  <p><strong>Returns:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td>
-                <code>CountedModifier</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>A value for use with <code>Annotated[]</code>, stating that this parameter should be counted.</p>
-            </div>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-  </div>
-
-</div>
-
-
-
-
-
-
-<div class="doc doc-object doc-function">
-
-
-
-<h4 id="arguably.arg.choices" class="doc doc-heading">
-        <span class="doc doc-object-name doc-function-name">arguably.arg.choices</span>
-
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
-  </span>
-
-<a href="#arguably.arg.choices" class="headerlink" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="o">*</span><span class="n">choices</span><span class="p">)</span>
-</code></pre></div>
-
-  <div class="doc doc-contents ">
-  
-      <p>Specifies a fixed set of values that a parameter is allowed to be. If a parameter is an <code>enum.Enum</code> type, this
-logic is already used to restrict the inputs to be one of the enum entries.</p>
-
-  <p><strong>Parameters:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Default</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td><code>*choices</code></td>
-          <td>
-                <code>Union[str, enum.<span title="enum.Enum">Enum</span>]</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>The allowed values. Must all be of the same type, and be compatible with the annotated type for
-this parameter.</p>
-            </div>
-          </td>
-          <td>
-                <code>()</code>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-  <p><strong>Returns:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td>
-                <code>ChoicesModifier</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>A value for use with <code>Annotated[]</code>, stating that this parameter has a fixed set of choices.</p>
-            </div>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-  </div>
-
-</div>
-
-
-
-
-
-
-<div class="doc doc-object doc-function">
-
-
-
-<h4 id="arguably.arg.missing" class="doc doc-heading">
-        <span class="doc doc-object-name doc-function-name">arguably.arg.missing</span>
-
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
-  </span>
-
-<a href="#arguably.arg.missing" class="headerlink" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">missing</span><span class="p">(</span><span class="n">omit_value</span><span class="p">)</span>
-</code></pre></div>
-
-  <div class="doc doc-contents ">
-  
-      <p>Allows an option to be specified, but its value be omitted. In the case where the value is given, the value is
-used, but if it is omitted, <code>omit_value</code> will be used.</p>
-
 <p><strong>Examples:</strong></p>
-    <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">opt</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">missing</span><span class="p">(</span><span class="s2">&quot;omit-val&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;no-flag&quot;</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">opt</span><span class="p">)</span>
+    <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">arguably</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Annotated</span>
+
+<span class="k">class</span> <span class="nc">Nic</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">subtype</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;tap&quot;</span><span class="p">)</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">TapNic</span><span class="p">(</span><span class="n">Nic</span><span class="p">):</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">UserNic</span><span class="p">(</span><span class="n">Nic</span><span class="p">):</span>
+    <span class="n">hostfwd</span><span class="p">:</span> <span class="nb">str</span>
+
+<span class="n">arguably</span><span class="o">.</span><span class="n">subtype</span><span class="p">(</span><span class="n">UserNic</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;user&quot;</span><span class="p">)</span>  <span class="c1"># Can also be called like this</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">qemu_style</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">nic</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Nic</span><span class="p">],</span> <span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">builder</span><span class="p">()]):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">nic</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>user@machine:~$<span class="w"> </span>./test.py
-no-flag
-user@machine:~$<span class="w"> </span>./test.py<span class="w"> </span>--opt<span class="w"> </span>input
-input
-user@machine:~$<span class="w"> </span>./test.py<span class="w"> </span>--opt
-omit-val
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>subtype.py<span class="w"> </span>--nic<span class="w"> </span>tap,model<span class="o">=</span>e1000<span class="w"> </span>--nic<span class="w"> </span>user,hostfwd<span class="o">=</span>tcp::10022-:22
+<span class="go">nic=[TapNic(model=&#39;e1000&#39;), UserNic(hostfwd=&#39;tcp::10022-:22&#39;)]</span>
 </code></pre></div>
-
-  <p><strong>Parameters:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Default</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td><code>omit_value</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>The value that will be used if the flag is present, but the value is omitted.</p>
-            </div>
-          </td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-  <p><strong>Returns:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td>
-                <code>MissingArgDefaultModifier</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>A value for use with <code>Annotated[]</code>, stating that this parameter has a special value if the flag is present,
-but no value is provided.</p>
-            </div>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-  </div>
-
-</div>
-
-
-
-
-
-
-<div class="doc doc-object doc-function">
-
-
-
-<h4 id="arguably.arg.handler" class="doc doc-heading">
-        <span class="doc doc-object-name doc-function-name">arguably.arg.handler</span>
-
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
-  </span>
-
-<a href="#arguably.arg.handler" class="headerlink" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">handler</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
-</code></pre></div>
-
-  <div class="doc doc-contents ">
-  
-      <p>Causes a user-provided handler to be used to process the input string, instead of trying to process it using
-the types from type annotations.</p>
-
-  <p><strong>Parameters:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Default</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td><code>func</code></td>
-          <td>
-                <code>Callable[[str], Any]</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>The function to call to process the input string.</p>
-            </div>
-          </td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-  <p><strong>Returns:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td>
-                <code>HandlerModifier</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>A value for use with <code>Annotated[]</code>, stating that this parameter has a specific handler to call.</p>
-            </div>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-  </div>
-
-</div>
-
-
-
-
-
-
-<div class="doc doc-object doc-function">
-
-
-
-<h4 id="arguably.arg.builder" class="doc doc-heading">
-        <span class="doc doc-object-name doc-function-name">arguably.arg.builder</span>
-
-  
-  <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
-  </span>
-
-<a href="#arguably.arg.builder" class="headerlink" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">builder</span><span class="p">()</span>
-</code></pre></div>
-
-  <div class="doc doc-contents ">
-  
-      <p>Causes the arguably builder logic to be used instead of trying to instantiate the type from the input string.</p>
-
-  <p><strong>Returns:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td>
-                <code>BuilderModifier</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>A value for use with <code>Annotated[]</code>, stating that this parameter should use the builder logic.</p>
-            </div>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-  </div>
-
-</div>
-
-
-
-
-  </div>
 
   </div>
 
@@ -1801,6 +1574,34 @@ the types from type annotations.</p>
   
       <p>Raised when a decorated function is incorrectly set up in some way. Will <em>not</em> be raised when a user provides
 incorrect input to the CLI.</p>
+
+<p><strong>Examples:</strong></p>
+    <div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+<span class="kn">import</span> <span class="nn">arguably</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">example</span><span class="p">(</span><span class="n">collision_</span><span class="p">,</span> <span class="n">_collision</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;You should never see this&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>arguably-exception.py
+<span class="go">Traceback (most recent call last):</span>
+<span class="go">  File &quot;.../arguably/etc/scripts/api-examples/arguably-exception.py&quot;, line 9, in &lt;module&gt;</span>
+<span class="go">    arguably.run()</span>
+<span class="go">  File &quot;.../arguably/arguably/_context.py&quot;, line 706, in run</span>
+<span class="go">    cmd = self._process_decorator_info(command_decorator_info)</span>
+<span class="go">          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+<span class="go">  File &quot;.../arguably/arguably/_context.py&quot;, line 284, in _process_decorator_info</span>
+<span class="go">    return Command(</span>
+<span class="go">           ^^^^^^^^</span>
+<span class="go">  File &quot;&lt;string&gt;&quot;, line 9, in __init__</span>
+<span class="go">  File &quot;.../arguably/arguably/_commands.py&quot;, line 214, in __post_init__</span>
+<span class="go">    raise util.ArguablyException(</span>
+<span class="go">arguably._util.ArguablyException: Function parameter `_collision` in `example` conflicts with `collision_`, both</span>
+<span class="go">names simplify to `collision`</span>
+</code></pre></div>
 
 
 
@@ -1855,6 +1656,548 @@ when a user provides incorrect input to the CLI.</p>
 
 
   </div>
+
+  </div>
+
+</div>
+
+
+
+
+  </div>
+
+  </div>
+
+</div><h2 id="arguablyarg">arguably.arg<a class="headerlink" href="#arguablyarg" title="Permanent link">&para;</a></h2>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+  <div class="doc doc-contents first">
+  
+      <p>A collection of methods for adding a modifier to a parameter. Should be used in <code>Annotated[]</code>.</p>
+
+<p><strong>Examples:</strong></p>
+    <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">count</span><span class="p">()],</span>
+<span class="p">):</span>
+</code></pre></div>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="arguably.arg.required" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">arguably.arg.required</span>
+
+
+<a href="#arguably.arg.required" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">required</span><span class="p">()</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Marks a field as required. For <code>*args</code> or a <code>list[]</code>, requires at least one item.</p>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><span title="arguably._modifiers">mods</span>.<span title="arguably._modifiers.RequiredModifier">RequiredModifier</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A value for use with <code>Annotated[]</code>, stating that this parameter is required.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+<p><strong>Examples:</strong></p>
+    <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">arguably</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Annotated</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">email</span><span class="p">(</span>
+    <span class="n">from_</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="n">to</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">required</span><span class="p">()]</span>
+<span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">from_</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">to</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+<p><div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>arg-required.py<span class="w"> </span>-h
+<span class="go">usage: arg-required.py [-h] from to [to ...]</span>
+
+<span class="go">positional arguments:</span>
+<span class="go">  from        (type: str)</span>
+<span class="go">  to          (type: str)</span>
+
+<span class="go">options:</span>
+<span class="go">  -h, --help  show this help message and exit</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>arg-required.py<span class="w"> </span>sender@example.com
+<span class="go">usage: arg-required.py [-h] from to [to ...]</span>
+<span class="go">arg-required.py: error: the following arguments are required: to</span>
+</code></pre></div></p>
+
+  </div>
+
+</div>
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="arguably.arg.count" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">arguably.arg.count</span>
+
+
+<a href="#arguably.arg.count" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Counts the number of times a flag is given. For example, <code>-vvvv</code> would yield <code>4</code>.</p>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><span title="arguably._modifiers">mods</span>.<span title="arguably._modifiers.CountedModifier">CountedModifier</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A value for use with <code>Annotated[]</code>, stating that this parameter should be counted.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+<p><strong>Examples:</strong></p>
+    <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">arguably</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Annotated</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">process</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">count</span><span class="p">()],</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :param verbose: [-v] verbosity</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">verbose</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>arg-count.py<span class="w"> </span>-vvvv
+<span class="go">verbose=4</span>
+</code></pre></div>
+
+  </div>
+
+</div>
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="arguably.arg.choices" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">arguably.arg.choices</span>
+
+
+<a href="#arguably.arg.choices" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="o">*</span><span class="n">choices</span><span class="p">)</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Specifies a fixed set of values that a parameter is allowed to be. If a parameter is an <code>enum.Enum</code> type, this
+logic is already used to restrict the inputs to be one of the enum entries.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>*choices</code></td>
+          <td>
+                <code><span title="typing.Union">Union</span>[str, enum.<span title="enum.Enum">Enum</span>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The allowed values. Must all be of the same type, and be compatible with the annotated type for
+this parameter.</p>
+            </div>
+          </td>
+          <td>
+                <code>()</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><span title="arguably._modifiers">mods</span>.<span title="arguably._modifiers.ChoicesModifier">ChoicesModifier</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A value for use with <code>Annotated[]</code>, stating that this parameter has a fixed set of choices.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+<p><strong>Examples:</strong></p>
+    <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">arguably</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Annotated</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">move</span><span class="p">(</span>
+    <span class="n">direction</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="s2">&quot;up&quot;</span><span class="p">,</span> <span class="s2">&quot;down&quot;</span><span class="p">)]</span>
+<span class="p">):</span>
+    <span class="s2">&quot;&quot;&quot;An enum is usually recommended for cases like this&#39;&#39;&#39;</span>
+<span class="s2">    print(f&quot;{direction=}&quot;)</span>
+
+<span class="s2">if __name__ == &quot;__main__&quot;:</span>
+<span class="s2">    arguably.run()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>arg-choices.py<span class="w"> </span>north
+<span class="go">usage: arg-choices.py [-h] {left,right,up,down}</span>
+<span class="go">arg-choices.py: error: argument direction: invalid choice: &#39;north&#39; (choose from &#39;left&#39;, &#39;right&#39;, &#39;up&#39;, &#39;down&#39;)</span>
+</code></pre></div>
+
+  </div>
+
+</div>
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="arguably.arg.missing" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">arguably.arg.missing</span>
+
+
+<a href="#arguably.arg.missing" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">missing</span><span class="p">(</span><span class="n">omit_value</span><span class="p">)</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Allows an option to be specified, but its value be omitted. In the case where the value is given, the value is
+used, but if it is omitted, <code>omit_value</code> will be used.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>omit_value</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The value that will be used if the flag is present, but the value is omitted.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><span title="arguably._modifiers">mods</span>.<span title="arguably._modifiers.MissingArgDefaultModifier">MissingArgDefaultModifier</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A value for use with <code>Annotated[]</code>, stating that this parameter has a special value if the flag is present,
+but no value is provided.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+<p><strong>Examples:</strong></p>
+    <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">arguably</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Annotated</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">do_something</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">log</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">missing</span><span class="p">(</span><span class="s2">&quot;~/.log.txt&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">log</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>arg-missing.py
+<span class="go">log=None</span>
+<span class="gp">user@machine:~$ </span>python3<span class="w"> </span>arg-missing.py<span class="w"> </span>--log
+<span class="go">log=PosixPath(&#39;~/.log.txt&#39;)</span>
+<span class="gp">user@machine:~$ </span>python3<span class="w"> </span>arg-missing.py<span class="w"> </span>--log<span class="w"> </span>foo.log
+<span class="go">log=PosixPath(&#39;foo.log&#39;)</span>
+</code></pre></div>
+
+  </div>
+
+</div>
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="arguably.arg.handler" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">arguably.arg.handler</span>
+
+
+<a href="#arguably.arg.handler" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">handler</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Causes a user-provided handler to be used to process the input string, instead of trying to process it using
+the types from type annotations.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>func</code></td>
+          <td>
+                <code><span title="typing.Callable">Callable</span>[[str], <span title="typing.Any">Any</span>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The function to call to process the input string.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><span title="arguably._modifiers">mods</span>.<span title="arguably._modifiers.HandlerModifier">HandlerModifier</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A value for use with <code>Annotated[]</code>, stating that this parameter has a specific handler to call.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+<p><strong>Examples:</strong></p>
+    <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">arguably</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Annotated</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">handle_it</span><span class="p">(</span>
+    <span class="n">version</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">handler</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">version</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>arg-handler.py<span class="w"> </span>Python-3
+<span class="go">version=3</span>
+</code></pre></div>
+
+  </div>
+
+</div>
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="arguably.arg.builder" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">arguably.arg.builder</span>
+
+
+<a href="#arguably.arg.builder" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">builder</span><span class="p">()</span>
+</code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Causes the arguably builder logic to be used instead of trying to instantiate the type from the input string.</p>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><span title="arguably._modifiers">mods</span>.<span title="arguably._modifiers.BuilderModifier">BuilderModifier</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A value for use with <code>Annotated[]</code>, stating that this parameter should use the builder logic.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+<p><strong>Examples:</strong></p>
+    <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">arguably</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Annotated</span>
+
+<span class="k">class</span> <span class="nc">Nic</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">subtype</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;tap&quot;</span><span class="p">)</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">TapNic</span><span class="p">(</span><span class="n">Nic</span><span class="p">):</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">subtype</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;user&quot;</span><span class="p">)</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">UserNic</span><span class="p">(</span><span class="n">Nic</span><span class="p">):</span>
+    <span class="n">hostfwd</span><span class="p">:</span> <span class="nb">str</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">qemu_style</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">nic</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Nic</span><span class="p">],</span> <span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">builder</span><span class="p">()]):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">nic</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>./readme-2.py<span class="w"> </span>--nic<span class="w"> </span>tap,model<span class="o">=</span>e1000<span class="w"> </span>--nic<span class="w"> </span>user,hostfwd<span class="o">=</span>tcp::10022-:22
+<span class="go">nic=[TapNic(model=&#39;e1000&#39;), UserNic(hostfwd=&#39;tcp::10022-:22&#39;)]</span>
+</code></pre></div>
 
   </div>
 
