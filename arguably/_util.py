@@ -303,6 +303,7 @@ def warn(message: str, function: Optional[Callable] = None) -> None:
                 source_file,
                 source_file_line,
             )
+            return
 
     warnings.warn(message, ArguablyWarning)
     return
@@ -323,11 +324,14 @@ def get_callable_methods(cls: type) -> List[Callable]:
     return callable_methods
 
 
-def load_and_run_inner(file: Path, *args: str, debug: bool) -> LoadAndRunResult:
+def load_and_run_inner(file: Path, *args: str, debug: bool, no_warn: bool) -> LoadAndRunResult:
     import arguably
 
     if debug:
         logging.basicConfig(level=logging.DEBUG, format="%(pathname)s:%(lineno)d: %(message)s")
+
+    if no_warn:
+        warnings.filterwarnings(action="ignore", category=arguably.ArguablyWarning)
 
     # Load the specified file
     spec = importlib.util.spec_from_file_location("_arguably_imported", str(file))
@@ -401,10 +405,10 @@ def load_and_run_inner(file: Path, *args: str, debug: bool) -> LoadAndRunResult:
     return LoadAndRunResult()
 
 
-def load_and_run(results: multiprocessing.Queue, file: Path, argv: List[str], debug: bool) -> None:
+def load_and_run(results: multiprocessing.Queue, file: Path, argv: List[str], debug: bool, no_warn: bool) -> None:
     """Load the specified file, register all callable top-level functions, classmethods, and staticmethods, then run"""
     try:
-        results.put(load_and_run_inner(file, *argv, debug=debug))
+        results.put(load_and_run_inner(file, *argv, debug=debug, no_warn=no_warn))
     except BaseException as e:
         results.put(LoadAndRunResult(exception=e))
 
@@ -457,4 +461,29 @@ class ArguablyWarning(UserWarning):
     when a user provides incorrect input to the CLI.
 
     Note that this is a warning - it is used with `warnings.warn`.
+
+    Examples:
+        ```python
+        def example_failed(collision_, _collision):
+            print("You should never see this")
+
+        def example_ok():
+            print("All good")
+        ```
+
+        ```console
+        user@machine:~$ python3 -m arguably-warn.py -h
+        .../arguably/etc/scripts/api-examples/arguably-warn.py:1: ArguablyWarning: Unable to add function
+        example_failed: Function parameter `_collision` in `example-failed` conflicts with `collision_`, both names
+        simplify to `collision`
+          def example_failed(collision_, _collision):
+        usage: arguably-warn [-h] command ...
+
+        positional arguments:
+          command
+            example-ok
+
+        options:
+          -h, --help    show this help message and exit
+        ```
     """
