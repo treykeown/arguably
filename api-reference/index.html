@@ -1645,6 +1645,28 @@ incorrect input to the CLI.</p>
 when a user provides incorrect input to the CLI.</p>
 <p>Note that this is a warning - it is used with <code>warnings.warn</code>.</p>
 
+<p><strong>Examples:</strong></p>
+    <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">example_failed</span><span class="p">(</span><span class="n">collision_</span><span class="p">,</span> <span class="n">_collision</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;You should never see this&quot;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">example_ok</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All good&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>-m<span class="w"> </span>arguably-warn.py<span class="w"> </span>-h
+<span class="go">.../arguably/etc/scripts/api-examples/arguably-warn.py:1: ArguablyWarning: Unable to add function</span>
+<span class="go">example_failed: Function parameter `_collision` in `example-failed` conflicts with `collision_`, both names</span>
+<span class="go">simplify to `collision`</span>
+<span class="go">  def example_failed(collision_, _collision):</span>
+<span class="go">usage: arguably-warn [-h] command ...</span>
+
+<span class="go">positional arguments:</span>
+<span class="go">  command</span>
+<span class="go">    example-ok</span>
+
+<span class="go">options:</span>
+<span class="go">  -h, --help    show this help message and exit</span>
+</code></pre></div>
+
 
 
   
