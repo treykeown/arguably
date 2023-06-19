@@ -331,9 +331,8 @@ class _Context:
 
             # Special handling for optional arguments
             if arg_.input_method is InputMethod.OPTION:
-                cli_arg_names = (
-                    (f"--{arg_.cli_arg_name}",) if arg_.alias is None else (f"-{arg_.alias}", f"--{arg_.cli_arg_name}")
-                )
+                cli_arg_names = arg_.get_options()
+                add_arg_kwargs.update(dest=arg_.cli_arg_name)
 
             # `bool` should be flags
             if issubclass(arg_.arg_value_type, bool):

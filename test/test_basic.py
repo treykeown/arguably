@@ -154,7 +154,7 @@ def test_hello_help(iobuf: StringIO, fn_hello: Callable) -> None:
     assert cli.startswith(f"usage: {test_hello_help.__name__} [-h] [-H] [-l SURNAME] name [age]")
     assert "says hello to you" in cli
     assert "your age (type: int, default: 30)" in cli
-    assert "  -H, --howdy             say howdy instead of hello (type: bool, default: False)" in cli
+    assert "  -H, --hwdy              say howdy instead of hello (type: bool, default: False)" in cli
     assert "  -l, --lastname SURNAME  your SURNAME (type: str, default: None)" in cli
 
 

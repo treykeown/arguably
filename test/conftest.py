@@ -65,7 +65,7 @@ def fn_hello(iobuf: StringIO) -> Callable:
         says hello to you
         :param name: your name
         :param age: your age
-        :param howdy: [-H] say howdy instead of hello
+        :param howdy: [-H/--hwdy] say howdy instead of hello
         :param lastname: [-l] your {SURNAME}
         """
         greeting = "Howdy" if howdy else "Hello"

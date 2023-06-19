@@ -104,9 +104,11 @@ class CommandDecoratorInfo:
 
             # Extract the alias
             arg_alias = None
-            if alias_match := re.match(r"^\[-([a-zA-Z0-9])] ", arg_description):
-                arg_description = arg_description[len(alias_match.group(0)) :]
-                arg_alias = alias_match.group(1)
+            if alias_match := re.match(r"^\[-([a-zA-Z0-9])(/--([a-zA-Z0-9]+))?]", arg_description):
+                arg_alias, desc_name = alias_match.group(1), alias_match.group(3)
+                arg_description = arg_description[len(alias_match.group(0)) :].lstrip(" ")
+                if desc_name is not None:
+                    cli_arg_name = desc_name
 
             # Extract the metavars
             metavars = None
@@ -205,7 +207,7 @@ class CommandArg:
     modifiers: List[mods.CommandArgModifier] = field(default_factory=list)
 
     def get_options(self) -> Union[Tuple[()], Tuple[str], Tuple[str, str]]:
-        if self.input_method is InputMethod.OPTION:
+        if self.input_method is not InputMethod.OPTION:
             return cast(Tuple[()], tuple())
         elif self.alias is None:
             return (f"--{self.cli_arg_name}",)
@@ -374,7 +376,7 @@ class Command:
             elif arg.input_method.is_positional and arg.is_variadic:
                 args.extend(filtered_args[arg.cli_arg_name])
             else:
-                kwargs[arg.func_arg_name] = filtered_args[arg.func_arg_name]
+                kwargs[arg.func_arg_name] = filtered_args[arg.cli_arg_name]
 
         # Call the function
         if util.is_async_callable(self.function):
