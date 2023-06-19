@@ -275,13 +275,10 @@ def log_args(logger_fn: Callable, msg: str, fn_name: str, *args: Any, **kwargs: 
     return ArgSpec(args, kwargs)
 
 
-def warn(message: str, function: Callable) -> None:
-    """Provide a warning. We avoid using logging, since we're just a library, so we issue through `warnings`."""
-
+def func_info(function: Callable) -> Optional[Tuple[str, int]]:
     source_file = inspect.getsourcefile(function)
     if source_file is None:
-        warnings.warn(message, ArguablyWarning)
-        return
+        return None
 
     # Skip lines before the `def`. Should be cleaned up in the future.
     source_lines, line_number = inspect.getsourcelines(function)
@@ -290,13 +287,25 @@ def warn(message: str, function: Callable) -> None:
             line_number += 1
         break
 
-    # Issue the warning
-    warnings.warn_explicit(
-        message,
-        ArguablyWarning,
-        source_file,
-        line_number,
-    )
+    return source_file, line_number
+
+
+def warn(message: str, function: Optional[Callable] = None) -> None:
+    """Provide a warning. We avoid using logging, since we're just a library, so we issue through `warnings`."""
+
+    if function is not None:
+        info = func_info(function)
+        if info is not None:
+            source_file, source_file_line = info
+            warnings.warn_explicit(
+                message,
+                ArguablyWarning,
+                source_file,
+                source_file_line,
+            )
+
+    warnings.warn(message, ArguablyWarning)
+    return
 
 
 def get_callable_methods(cls: type) -> List[Callable]:

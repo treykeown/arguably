@@ -3,8 +3,11 @@ from __future__ import annotations
 import asyncio
 import enum
 import inspect
+import re
 from dataclasses import dataclass, field
-from typing import Callable, Any, Union, Optional, List, Dict, Tuple
+from typing import Callable, Any, Union, Optional, List, Dict, Tuple, cast
+
+from docstring_parser import parse as docparse
 
 import arguably._modifiers as mods
 import arguably._util as util
@@ -34,12 +37,142 @@ class CommandDecoratorInfo:
     alias: Optional[str] = None
     help: bool = True
     name: str = field(init=False)
+    command: Command = field(init=False)
 
     def __post_init__(self) -> None:
         if self.function.__name__ == "__root__":
             self.name = "__root__"
         else:
             self.name = util.normalize_name(self.function.__name__)
+
+        self.command = self._process()
+
+    def _process(self) -> Command:
+        """Takes the decorator info and return a processed command"""
+
+        processed_name = self.name
+        func = self.function.__init__ if isinstance(self.function, type) else self.function  # type: ignore[misc]
+
+        # Get the description from the docstring
+        if func.__doc__ is None:
+            docs = None
+            processed_description = ""
+        else:
+            docs = docparse(func.__doc__)
+            processed_description = "" if docs.short_description is None else docs.short_description
+
+        try:
+            hints = util.get_type_hints(func, include_extras=True)
+        except NameError as e:
+            hints = {}
+            util.warn(f"Unable to resolve type hints for function {processed_name}: {str(e)}", func)
+
+        # Will be filled in as we loop over all parameters
+        processed_args: List[CommandArg] = list()
+
+        # Iterate over all parameters
+        for func_arg_name, param in inspect.signature(self.function).parameters.items():
+            cli_arg_name = util.normalize_name(func_arg_name, spaces=False)
+            arg_default = util.NoDefault if param.default is param.empty else param.default
+
+            # Handle variadic arguments
+            is_variadic = False
+            if param.kind is param.VAR_KEYWORD:
+                raise util.ArguablyException(f"`{processed_name}` is using **kwargs, which is not supported")
+            if param.kind is param.VAR_POSITIONAL:
+                is_variadic = True
+
+            # Get the type and normalize it
+            arg_value_type, modifiers = CommandArg.normalize_type(processed_name, param, hints)
+            tuple_modifiers = [m for m in modifiers if isinstance(m, mods.TupleModifier)]
+            expected_metavars = 1
+            if len(tuple_modifiers) > 0:
+                assert len(tuple_modifiers) == 1
+                expected_metavars = len(tuple_modifiers[0].tuple_arg)
+
+            # Get the description
+            arg_description = ""
+            if docs is not None and docs.params is not None:
+                ds_matches = [ds_p for ds_p in docs.params if ds_p.arg_name.lstrip("*") == param.name]
+                if len(ds_matches) > 1:
+                    raise util.ArguablyException(
+                        f"Function parameter `{param.name}` in " f"`{processed_name}` has multiple docstring entries."
+                    )
+                if len(ds_matches) == 1:
+                    ds_info = ds_matches[0]
+                    arg_description = "" if ds_info.description is None else ds_info.description
+
+            # Extract the alias
+            arg_alias = None
+            if alias_match := re.match(r"^\[-([a-zA-Z0-9])] ", arg_description):
+                arg_description = arg_description[len(alias_match.group(0)) :]
+                arg_alias = alias_match.group(1)
+
+            # Extract the metavars
+            metavars = None
+            if metavar_split := re.split(r"\{((?:[a-zA-Z0-9_-]+(?:, *)*)+)}", arg_description):
+                if len(metavar_split) == 3:
+                    # format would be: ['pre-metavar', 'METAVAR', 'post-metavar']
+                    match_items = [i.strip() for i in metavar_split[1].split(",")]
+                    if is_variadic:
+                        if len(match_items) != 1:
+                            raise util.ArguablyException(
+                                f"Function parameter `{param.name}` in `{processed_name}` should only have one item in "
+                                f"its metavar descriptor, but found {len(match_items)}: {','.join(match_items)}."
+                            )
+                    elif len(match_items) != expected_metavars:
+                        if len(match_items) == 1:
+                            match_items *= expected_metavars
+                        else:
+                            raise util.ArguablyException(
+                                f"Function parameter `{param.name}` in `{processed_name}` takes {expected_metavars} "
+                                f"items, but metavar descriptor has {len(match_items)}: {','.join(match_items)}."
+                            )
+                    metavars = [i.upper() for i in match_items]
+                    arg_description = "".join(metavar_split)  # Strips { and } from metavars for description
+                if len(metavar_split) > 3:
+                    raise util.ArguablyException(
+                        f"Function parameter `{param.name}` in `{processed_name}` has multiple metavar sequences - "
+                        f"these are denoted like {{A, B, C}}. There should be only one."
+                    )
+
+            # What kind of argument is this? Is it required-positional, optional-positional, or an option?
+            if param.kind == param.KEYWORD_ONLY:
+                input_method = InputMethod.OPTION
+            elif arg_default is util.NoDefault:
+                input_method = InputMethod.REQUIRED_POSITIONAL
+            else:
+                input_method = InputMethod.OPTIONAL_POSITIONAL
+
+            # Check modifiers
+            for modifier in modifiers:
+                modifier.check_valid(arg_value_type, param, processed_name)
+
+            # Finished processing this arg
+            processed_args.append(
+                CommandArg(
+                    func_arg_name,
+                    cli_arg_name,
+                    input_method,
+                    is_variadic,
+                    arg_value_type,
+                    arg_description,
+                    arg_alias,
+                    metavars,
+                    arg_default,
+                    modifiers,
+                )
+            )
+
+        # Return the processed command
+        return Command(
+            self.function,
+            processed_name,
+            processed_args,
+            processed_description,
+            self.alias,
+            self.help,
+        )
 
 
 @dataclass
@@ -70,6 +203,14 @@ class CommandArg:
     default: Any = util.NoDefault
 
     modifiers: List[mods.CommandArgModifier] = field(default_factory=list)
+
+    def get_options(self) -> Union[Tuple[()], Tuple[str], Tuple[str, str]]:
+        if self.input_method is InputMethod.OPTION:
+            return cast(Tuple[()], tuple())
+        elif self.alias is None:
+            return (f"--{self.cli_arg_name}",)
+        else:
+            return f"-{self.alias}", f"--{self.cli_arg_name}"
 
     @staticmethod
     def _normalize_type_union(

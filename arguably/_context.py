@@ -3,18 +3,14 @@ from __future__ import annotations
 import argparse
 import enum
 import inspect
-import re
 from contextlib import contextmanager
 from dataclasses import dataclass
-from typing import Any, TextIO, Union, Optional, List, Dict, Type, Tuple, Callable, Iterator
-
-from docstring_parser import parse as docparse
+from typing import Any, TextIO, Union, Optional, List, Dict, Type, Tuple, Callable, Iterator, cast
 
 from ._argparse_extensions import HelpFormatter, FlagAction, ArgumentParser
 from ._commands import CommandDecoratorInfo, SubtypeDecoratorInfo, Command, CommandArg, InputMethod
 from ._modifiers import TupleModifier, ListModifier
 from ._util import (
-    warn,
     logger,
     log_args,
     ArguablyException,
@@ -24,6 +20,8 @@ from ._util import (
     info_for_flags,
     get_ancestors,
     get_parser_name,
+    warn,
+    func_info,
 )
 
 
@@ -33,7 +31,7 @@ class _ContextOptions:
 
     # Behavior options
     always_subcommand: bool
-    version_flag: Union[bool, List[str]]
+    version_flag: Union[bool, Tuple[str], Tuple[str, str]]
     strict: bool
 
     # Formatting options
@@ -54,6 +52,14 @@ class _ContextOptions:
                 self.name = importlib.util.find_spec("__main__").name  # type: ignore[union-attr]
             except (ValueError, AttributeError):
                 self.name = None
+
+    def get_version_flags(self) -> Union[Tuple[()], Tuple[str], Tuple[str, str]]:
+        if self.version_flag is False:
+            return cast(Tuple[()], tuple())
+        elif self.version_flag is True:
+            return ("--version",)
+        else:
+            return self.version_flag
 
 
 class _Context:
@@ -164,133 +170,6 @@ class _Context:
             prog, max_help_position=self._options.max_description_offset, width=self._options.max_width
         )
 
-    def _process_decorator_info(self, info: CommandDecoratorInfo) -> Command:
-        """Takes the decorator info and return a processed command"""
-
-        processed_name = info.name
-        func = info.function.__init__ if isinstance(info.function, type) else info.function  # type: ignore[misc]
-
-        # Get the description from the docstring
-        if func.__doc__ is None:
-            docs = None
-            processed_description = ""
-        else:
-            docs = docparse(func.__doc__)
-            processed_description = "" if docs.short_description is None else docs.short_description
-
-        try:
-            hints = get_type_hints(func, include_extras=True)
-        except NameError as e:
-            hints = {}
-            warn(f"Unable to resolve type hints for function {processed_name}: {str(e)}", func)
-
-        # Will be filled in as we loop over all parameters
-        processed_args: List[CommandArg] = list()
-
-        # Iterate over all parameters
-        for func_arg_name, param in inspect.signature(info.function).parameters.items():
-            cli_arg_name = normalize_name(func_arg_name, spaces=False)
-            arg_default = NoDefault if param.default is param.empty else param.default
-
-            # Handle variadic arguments
-            is_variadic = False
-            if param.kind is param.VAR_KEYWORD:
-                raise ArguablyException(f"`{processed_name}` is using **kwargs, which is not supported")
-            if param.kind is param.VAR_POSITIONAL:
-                is_variadic = True
-
-            # Get the type and normalize it
-            arg_value_type, modifiers = CommandArg.normalize_type(processed_name, param, hints)
-            tuple_modifiers = [m for m in modifiers if isinstance(m, TupleModifier)]
-            expected_metavars = 1
-            if len(tuple_modifiers) > 0:
-                assert len(tuple_modifiers) == 1
-                expected_metavars = len(tuple_modifiers[0].tuple_arg)
-
-            # Get the description
-            arg_description = ""
-            if docs is not None and docs.params is not None:
-                ds_matches = [ds_p for ds_p in docs.params if ds_p.arg_name.lstrip("*") == param.name]
-                if len(ds_matches) > 1:
-                    raise ArguablyException(
-                        f"Function parameter `{param.name}` in " f"`{processed_name}` has multiple docstring entries."
-                    )
-                if len(ds_matches) == 1:
-                    ds_info = ds_matches[0]
-                    arg_description = "" if ds_info.description is None else ds_info.description
-
-            # Extract the alias
-            arg_alias = None
-            if alias_match := re.match(r"^\[-([a-zA-Z0-9])] ", arg_description):
-                arg_description = arg_description[len(alias_match.group(0)) :]
-                arg_alias = alias_match.group(1)
-
-            # Extract the metavars
-            metavars = None
-            if metavar_split := re.split(r"\{((?:[a-zA-Z0-9_-]+(?:, *)*)+)}", arg_description):
-                if len(metavar_split) == 3:
-                    # format would be: ['pre-metavar', 'METAVAR', 'post-metavar']
-                    match_items = [i.strip() for i in metavar_split[1].split(",")]
-                    if is_variadic:
-                        if len(match_items) != 1:
-                            raise ArguablyException(
-                                f"Function parameter `{param.name}` in `{processed_name}` should only have one item in "
-                                f"its metavar descriptor, but found {len(match_items)}: {','.join(match_items)}."
-                            )
-                    elif len(match_items) != expected_metavars:
-                        if len(match_items) == 1:
-                            match_items *= expected_metavars
-                        else:
-                            raise ArguablyException(
-                                f"Function parameter `{param.name}` in `{processed_name}` takes {expected_metavars} "
-                                f"items, but metavar descriptor has {len(match_items)}: {','.join(match_items)}."
-                            )
-                    metavars = [i.upper() for i in match_items]
-                    arg_description = "".join(metavar_split)  # Strips { and } from metavars for description
-                if len(metavar_split) > 3:
-                    raise ArguablyException(
-                        f"Function parameter `{param.name}` in `{processed_name}` has multiple metavar sequences - "
-                        f"these are denoted like {{A, B, C}}. There should be only one."
-                    )
-
-            # What kind of argument is this? Is it required-positional, optional-positional, or an option?
-            if param.kind == param.KEYWORD_ONLY:
-                input_method = InputMethod.OPTION
-            elif arg_default is NoDefault:
-                input_method = InputMethod.REQUIRED_POSITIONAL
-            else:
-                input_method = InputMethod.OPTIONAL_POSITIONAL
-
-            # Check modifiers
-            for modifier in modifiers:
-                modifier.check_valid(arg_value_type, param, processed_name)
-
-            # Finished processing this arg
-            processed_args.append(
-                CommandArg(
-                    func_arg_name,
-                    cli_arg_name,
-                    input_method,
-                    is_variadic,
-                    arg_value_type,
-                    arg_description,
-                    arg_alias,
-                    metavars,
-                    arg_default,
-                    modifiers,
-                )
-            )
-
-        # Return the processed command
-        return Command(
-            info.function,
-            processed_name,
-            processed_args,
-            processed_description,
-            info.alias,
-            info.help,
-        )
-
     def set_up_enum(
         self, enum_type: Type[enum.Enum], members: Optional[List[enum.Enum]] = None
     ) -> Dict[str, enum.Enum]:
@@ -315,12 +194,33 @@ class _Context:
         assert enum_type in self._enum_mapping
         return self._enum_mapping[enum_type]
 
-    def _set_up_args(self, cmd: Command) -> None:
-        """Adds all arguments to the parser for a given command"""
-
-        parser = self._parsers[cmd.name]
+    def _validate_args(self, cmd: Command, is_root_cmd: bool) -> None:
+        """Validates all arguments that will be added to the parser for a given command"""
 
         for arg_ in cmd.args:
+            arg_aliases = arg_.get_options()
+
+            # Validate no conflict with `--version` flag (or whatever it was set to)
+            if is_root_cmd:
+                version_flags = self._options.get_version_flags()
+                conflicts = [opt for opt in arg_aliases if opt in version_flags]
+                if len(conflicts) > 0:
+                    raise ArguablyException(
+                        f"Function argument `{arg_.func_arg_name}` in `{cmd.name}` conflicts with version flag."
+                        f"Conflicting items: {', '.join(conflicts)}"
+                    )
+
+            # Validate no conflicts with `-h/--help`
+            if cmd.add_help:
+                help_flags = ("-h", "--help")
+                conflicts = [opt for opt in arg_aliases if opt in help_flags]
+                if len(conflicts) > 0:
+                    raise ArguablyException(
+                        f"Function argument `{arg_.func_arg_name}` in `{cmd.name}` conflicts with help flag."
+                        f"Conflicting items: {', '.join(conflicts)}"
+                    )
+
+            # Validate positional arg names
             if arg_.input_method.is_positional:
                 if arg_.func_arg_name == self._options.command_metavar:
                     raise ArguablyException(
@@ -328,7 +228,8 @@ class _Context:
                         f"`command_metavar`. Either change the parameter name or set the `command_metavar` option to "
                         f"something other than `{arg_.func_arg_name}` when calling arguably.run()"
                     )
-            # Short-circuit, different path for enum.Flag. We add multiple options, one for each flag entry
+
+            # Validate `enum.Flag`
             if issubclass(arg_.arg_value_type, enum.Flag):
                 if arg_.input_method.is_positional:
                     raise ArguablyException(
@@ -340,6 +241,23 @@ class _Context:
                         f"Function argument `{arg_.func_arg_name}` in `{cmd.name}` is an enum.Flag. Due to "
                         f"implementation limitations, all enum.Flag parameters must have a default value."
                     )
+
+            # Validate `bool`
+            if issubclass(arg_.arg_value_type, bool):
+                if arg_.input_method is not InputMethod.OPTION or arg_.default is NoDefault:
+                    raise ArguablyException(
+                        f"Function parameter `{arg_.func_arg_name}` in `{cmd.name}` is a `bool`. Boolean parameters "
+                        f"must have a default value and be an optional, not a positional, argument."
+                    )
+
+    def _set_up_args(self, cmd: Command) -> None:
+        """Adds all arguments to the parser for a given command"""
+
+        parser = self._parsers[cmd.name]
+
+        for arg_ in cmd.args:
+            # Short-circuit, different path for enum.Flag. We add multiple options, one for each flag entry
+            if issubclass(arg_.arg_value_type, enum.Flag):
                 parser.set_defaults(**{arg_.cli_arg_name: arg_.default})
                 for entry in info_for_flags(arg_.cli_arg_name, arg_.arg_value_type):
                     argspec = log_args(
@@ -364,7 +282,6 @@ class _Context:
 
             # Show arg type?
             if self._options.show_types:
-                type_name = ""
                 list_modifiers = [m for m in arg_.modifiers if isinstance(m, ListModifier)]
                 tuple_modifiers = [m for m in arg_.modifiers if isinstance(m, TupleModifier)]
                 if len(tuple_modifiers) > 0:
@@ -420,11 +337,6 @@ class _Context:
 
             # `bool` should be flags
             if issubclass(arg_.arg_value_type, bool):
-                if arg_.input_method is not InputMethod.OPTION or arg_.default is NoDefault:
-                    raise ArguablyException(
-                        f"Function parameter `{arg_.func_arg_name}` in `{cmd.name}` is a `bool`. Boolean parameters "
-                        f"must have a default value and be an optional, not a positional, argument."
-                    )
                 # Use `store_true` or `store_false` for bools
                 add_arg_kwargs.update(action="store_true" if arg_.default is False else "store_false")
                 if "type" in add_arg_kwargs:
@@ -546,6 +458,17 @@ class _Context:
         if self._current_parser is None:
             raise ArguablyException("Unknown current parser.")
         self._current_parser.error(message)  # This will exit the script
+
+    def _soft_failure(self, msg: str, function: Optional[Callable] = None) -> None:
+        if self._options.strict:
+            if function is not None:
+                info = func_info(function)
+                if info is not None:
+                    source_file, source_file_line = info
+                    msg = f"({source_file}:{source_file_line}) {function.__name__}: {msg}"
+            raise ArguablyException(msg)
+        else:
+            warn(msg, function)
 
     def run(
         self,
@@ -676,22 +599,20 @@ class _Context:
         argparse_version_flags: Union[tuple, Tuple[str], Tuple[str, str]] = tuple()
         if self._options.version_flag:
             if not hasattr(__main__, "__version__"):
-                raise ArguablyException("__version__ must be defined if version_flag is set")
-            if isinstance(self._options.version_flag, tuple):
-                argparse_version_flags = self._options.version_flag
+                self._soft_failure("__version__ must be defined if version_flag is set")
             else:
-                argparse_version_flags = ("--version",)
-            version_string = f"%(prog)s {__main__.__version__}"
-            argspec = log_args(
-                logger.debug,
-                f"Parser({repr('__root__')}).",
-                root_parser.add_argument.__name__,
-                # Args for the call are below:
-                *argparse_version_flags,
-                action="version",
-                version=version_string,
-            )
-            root_parser.add_argument(*argspec.args, **argspec.kwargs)
+                argparse_version_flags = self._options.get_version_flags()
+                version_string = f"%(prog)s {__main__.__version__}"
+                argspec = log_args(
+                    logger.debug,
+                    f"Parser({repr('__root__')}).",
+                    root_parser.add_argument.__name__,
+                    # Args for the call are below:
+                    *argparse_version_flags,
+                    action="version",
+                    version=version_string,
+                )
+                root_parser.add_argument(*argspec.args, **argspec.kwargs)
 
         # Check the number of commands we have
         if len(self._command_decorator_info) == 0:
@@ -706,18 +627,27 @@ class _Context:
             else:
                 parent_name = self._build_subparser_tree(command_decorator_info)
 
-            # Process command and its args
-            cmd = self._process_decorator_info(command_decorator_info)
+            is_root = only_one_cmd or command_decorator_info.name == "__root__"
+            cmd = command_decorator_info.command
+
+            try:
+                self._validate_args(cmd, is_root)
+            except ArguablyException as e:
+                self._soft_failure(str(e), cmd.function)
+                continue
 
             # Save command and its alias to the dicts
             if cmd.name in self._commands:
-                raise ArguablyException(f"Name `{cmd.name}` is already taken")
+                self._soft_failure(f"Name `{cmd.name}` is already taken", cmd.function)
+                continue
             if cmd.alias is not None:
                 if cmd.alias in self._command_aliases:
-                    raise ArguablyException(
+                    self._soft_failure(
                         f"Alias `{cmd.alias}` for `{cmd.name}` is already taken by "
-                        f"`{self._command_aliases[cmd.alias]}`"
+                        f"`{self._command_aliases[cmd.alias]}`",
+                        cmd.function,
                     )
+                    continue
                 self._command_aliases[cmd.alias] = cmd.name
             self._commands[cmd.name] = cmd
 
@@ -739,23 +669,7 @@ class _Context:
                 self._parsers[cmd.name] = self._subparsers[parent_name].add_parser(*argspec.args, **argspec.kwargs)
 
             # Add the arguments to the command's parser
-            try:
-                self._set_up_args(cmd)
-            except argparse.ArgumentError as e:
-                # Special handling for version flags for __root__
-                if cmd.name != "__root__":
-                    raise e
-                if not e.message.startswith("conflicting option string"):
-                    raise e
-                # e.message == `conflicting option strings: -v, --version`
-                conflicts = e.message.split(":")[1].strip().split(", ")
-                filtered_conflicts = [c for c in conflicts if c in argparse_version_flags]
-                if len(filtered_conflicts) == 0:
-                    raise e
-                raise ArguablyException(
-                    f"Conflict due to `version_flag` being set and __root__ having a parameter with a conflicting name."
-                    f" Conflicting args: {', '.join(conflicts)}"
-                )
+            self._set_up_args(cmd)
 
         # Use the function description, not the __main__ docstring, if only one command
         if only_one_cmd:
@@ -864,18 +778,18 @@ class _Context:
         return factory(**normalized_kwargs)
 
     def resolve_subtype(
-        self, func_arg_name: str, arg_value_type: type, subtype: Optional[str], build_kwargs: Dict[str, Any]
+        self, func_arg_name: str, arg_value_type: type, subtype_: Optional[str], build_kwargs: Dict[str, Any]
     ) -> Any:
         options = self.find_subtype(arg_value_type)
         if len(options) == 0:
             options = [SubtypeDecoratorInfo(arg_value_type)]
         if len(options) == 1:
             return self._build_subtype(func_arg_name, options[0], build_kwargs)
-        matches = [op for op in options if op.alias == subtype]
+        matches = [op for op in options if op.alias == subtype_]
         if len(matches) == 0:
-            self.error(f"unknown subtype `{subtype}` for {func_arg_name}")
+            self.error(f"unknown subtype `{subtype_}` for {func_arg_name}")
         if len(matches) > 1:
-            raise ArguablyException(f"More than one match for subtype `{subtype}` of type {arg_value_type}")
+            raise ArguablyException(f"More than one match for subtype `{subtype_}` of type {arg_value_type}")
         return self._build_subtype(func_arg_name, matches[0], build_kwargs)
 
 
