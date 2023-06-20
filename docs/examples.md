@@ -6,9 +6,9 @@ the code for a subcommand next to its output.
 ## Hello, world!
 
 A "Hello, world!" script. Can accept a different name to greet, and has a `--shout` option. Because there is only one
-command, it's automatically selected - no need to specify subcommand.
+command, it's automatically selected - no need to specify a subcommand.
 
-The `*`, if you're not familiar, works similarly to `*args` - it separates positional args from keyword-only args. In
+If you're not familiar, the `*` works similarly to `*args` - it separates positional args from keyword-only args. In
 `arguably`, keyword-only args each appear as an `--option`.
 
 <div align="right" class="code-source"><sub>

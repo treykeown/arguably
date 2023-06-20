@@ -28,7 +28,7 @@ then call `arguably.run()`. If multiple functions are decorated, they'll all app
 *multiple levels* of subcommands: `def s3__ls()` becomes `s3 ls`.
 
 <div align="right"><sub>
-    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/readme-1.py">[source]</a>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/intro.py">[source]</a>
 </sub></div>
 
 ```python
@@ -54,8 +54,8 @@ if __name__ == "__main__":
 <p align="center"><b><em>becomes</em></b></p>
 
 ```console
-user@machine:~$ ./readme-1.py -h
-usage: readme-1.py [-h] [-x OPTION] required [not-required] [others ...]
+user@machine:~$ ./intro.py -h
+usage: intro.py [-h] [-x OPTION] required [not-required] [others ...]
 
 this function is on the command line!
 
@@ -89,11 +89,11 @@ functions. Using `arguably.arg.builder()`, you can even build an object to pass 
 inspired by QEMU):
 
 <div align="right"><sub>
-    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/readme-2.py">[source]</a>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/build.py">[source]</a>
 </sub></div>
 
 ```console
-user@machine:~$ ./readme-2.py --nic tap,model=e1000 --nic user,hostfwd=tcp::10022-:22
+user@machine:~$ ./build.py --nic tap,model=e1000 --nic user,hostfwd=tcp::10022-:22
 nic=[TapNic(model='e1000'), UserNic(hostfwd='tcp::10022-:22')]
 ```
 

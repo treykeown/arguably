@@ -42,6 +42,8 @@ class CommandDecoratorInfo:
     def __post_init__(self) -> None:
         if self.function.__name__ == "__root__":
             self.name = "__root__"
+        elif isinstance(self.function, type):
+            self.name = util.normalize_name(util.camel_case_to_kebab_case(self.function.__name__))
         else:
             self.name = util.normalize_name(self.function.__name__)
 

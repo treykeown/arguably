@@ -849,8 +849,8 @@ def command(
         ```
 
         ```console
-        user@machine:~$ python3 readme-1.py -h
-        usage: readme-1.py [-h] [-x OPTION] required [not-required] [others ...]
+        user@machine:~$ python3 intro.py -h
+        usage: intro.py [-h] [-x OPTION] required [not-required] [others ...]
 
         this function is on the command line!
 

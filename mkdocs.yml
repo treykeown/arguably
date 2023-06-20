@@ -67,6 +67,7 @@ plugins:
 
 nav:
   - Home: index.md
+  - Why arguably?: why.md
   - Examples: examples.md
   - Tutorial:
     - Introduction: tutorial/intro.md

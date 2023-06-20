@@ -239,7 +239,7 @@ def builder() -> mods.BuilderModifier:
         ```
 
         ```console
-        user@machine:~$ ./readme-2.py --nic tap,model=e1000 --nic user,hostfwd=tcp::10022-:22
+        user@machine:~$ ./build.py --nic tap,model=e1000 --nic user,hostfwd=tcp::10022-:22
         nic=[TapNic(model='e1000'), UserNic(hostfwd='tcp::10022-:22')]
         ```
     """

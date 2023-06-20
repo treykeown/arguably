@@ -12,6 +12,7 @@ def some_function(required, not_required=2, *others: int, option: float = 3.14):
         *others: all the other positional arguments go here
         option: [-x] an option, short name is in brackets
     """
+    print(f"{required=}, {not_required=}, {others=}, {option=}")
 
 if __name__ == "__main__":
     arguably.run()

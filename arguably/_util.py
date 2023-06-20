@@ -45,6 +45,10 @@ def is_async_callable(obj: Any) -> bool:
     return asyncio.iscoroutinefunction(obj) or (callable(obj) and asyncio.iscoroutinefunction(obj.__call__))
 
 
+def camel_case_to_kebab_case(name: str) -> str:
+    return re.sub(r"([a-z])([A-Z])", r"\1-\2", name).lower()
+
+
 def split_unquoted(unsplit: str, delimeter: str, limit: Union[int, float] = math.inf) -> List[str]:
     """Splits text at a delimiter, as long as that delimiter is not quoted (either single ' or double quotes ")."""
     assert len(delimeter) == 1
@@ -364,14 +368,15 @@ def load_and_run_inner(file: Path, *args: str, debug: bool, no_warn: bool) -> Lo
 
         # Add classmethods and staticmethods
         for callable_method in get_callable_methods(cls):
+            cls_name = camel_case_to_kebab_case(cls.__name__)
             if inspect.ismethod(callable_method):
                 # We have to set through .__func__ for the bound @classmethod
                 callable_method = cast(classmethod, callable_method)  # type: ignore[assignment]
                 real_names[callable_method] = callable_method.__name__
-                callable_method.__func__.__name__ = f"{cls.__name__}.{callable_method.__name__}"
+                callable_method.__func__.__name__ = f"{cls_name}.{callable_method.__name__}"
             else:
                 real_names[callable_method] = callable_method.__name__
-                callable_method.__name__ = f"{cls.__name__}.{callable_method.__name__}"
+                callable_method.__name__ = f"{cls_name}.{callable_method.__name__}"
             functions.append(callable_method)
 
     arguably._context.context.reset()
@@ -400,8 +405,16 @@ def load_and_run_inner(file: Path, *args: str, debug: bool, no_warn: bool) -> Lo
 
     sys.argv.extend(args)
 
+    import __main__
+
+    __main__.__doc__ = module.__doc__ or ""
+    version = False
+    if hasattr(module, "__version__"):
+        __main__.__version__ = module.__version__
+        version = True
+
     # Run and return success
-    arguably.run(name=file.stem, always_subcommand=True, strict=False)
+    arguably.run(name=file.stem, always_subcommand=True, strict=False, version_flag=version)
     return LoadAndRunResult()
 
 
