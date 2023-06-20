@@ -526,15 +526,16 @@
 
 
 <h1 id="why-arguably">Why <code>arguably</code>?<a class="headerlink" href="#why-arguably" title="Permanent link">&para;</a></h1>
-<p>With plenty of other tools out there, why use <code>arguably</code>? Aren't <code>click</code> and <code>typer</code> good enough?</p>
-<p>The short answer is: yeah, probably! They're really great tools. But they still make you write quite a bit of code.
-That's where <code>arguably</code> comes in.</p>
+<p>With plenty of other tools out there, why use <code>arguably</code>? Aren't other ones (<code>click</code>, <code>typer</code>, etc) good enough?</p>
+<p>The short answer is: yeah, probably! Python already has great tools for building CLIs. But they still make you write
+quite a bit of code. That's where <code>arguably</code> comes in.</p>
 <h2 id="an-unobtrusive-api">An unobtrusive API<a class="headerlink" href="#an-unobtrusive-api" title="Permanent link">&para;</a></h2>
-<p>What <code>arguably</code> does best is get out of your way. Set up a function signature and docstring, annotate with
-<code>@arguably.command</code>, and you've set up a CLI. That's it, that's the API. No need for <code>typer.Option()</code> or
-<code>click.option()</code>. That's because <code>arguably</code> was built from the ground-up with a focus on providing most of the features
-of these libraries (and a few extra) with few code changes necessary on your part.</p>
-<p>Your decorated functions still look and behave like regular functions.</p>
+<p>What <code>arguably</code> does best is get out of your way.</p>
+<p>Set up a <em>function signature</em> and <em>docstring</em>, annotate with <code>@arguably.command</code>, and you've set up a CLI. That's it,
+that's the API.</p>
+<p>No need for <code>typer.Option()</code> or <code>click.option()</code>. That's because <code>arguably</code> was built from the ground-up with a focus on
+providing most of the features of these libraries (and a few extra) with few code changes necessary on your part.
+Because of this, your CLI functions still look and behave like regular functions.</p>
 <div align="right" class="code-source"><sub>
     <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/intro.py">[source]</a>
 </sub></div>
@@ -558,10 +559,6 @@ of these libraries (and a few extra) with few code changes necessary on your par
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">intro</span> <span class="kn">import</span> <span class="n">some_function</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">some_function</span><span class="p">(</span><span class="s2">&quot;asdf&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="n">option</span><span class="o">=</span><span class="mf">2.71</span><span class="p">)</span>
-<span class="go">required=&#39;asdf&#39;, not_required=0, others=(7, 8, 9), option=2.71</span>
-</code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>./intro.py<span class="w"> </span>-h
 <span class="go">usage: intro.py [-h] [-x OPTION] required [not-required] [others ...]</span>
 
@@ -575,6 +572,13 @@ of these libraries (and a few extra) with few code changes necessary on your par
 <span class="go">options:</span>
 <span class="go">  -h, --help           show this help message and exit</span>
 <span class="go">  -x, --option OPTION  an option, short name is in brackets (type: float, default: 3.14)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">intro</span> <span class="kn">import</span> <span class="n">some_function</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">some_function</span><span class="p">(</span><span class="s2">&quot;asdf&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="n">option</span><span class="o">=</span><span class="mf">2.71</span><span class="p">)</span>
+<span class="go">required=&#39;asdf&#39;, not_required=0, others=(7, 8, 9), option=2.71</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>./intro.py<span class="w"> </span><span class="s2">&quot;asdf&quot;</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">7</span><span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="m">9</span><span class="w"> </span>--option<span class="w"> </span><span class="m">2</span>.71
+<span class="go">required=&#39;asdf&#39;, not_required=0, others=(7, 8, 9), option=2.71</span>
 </code></pre></div>
 <h2 id="zero-effort-cli">Zero-effort CLI<a class="headerlink" href="#zero-effort-cli" title="Permanent link">&para;</a></h2>
 <p>Taking inspiration from <a href="https://google.github.io/python-fire/guide/#version-4-fire-without-code-changes">Python Fire</a>,
