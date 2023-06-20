@@ -1,0 +1,846 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The best Python CLI library, arguably.">
+      
+      
+      
+        <link rel="canonical" href="https://treykeown.github.io/arguably/why/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../examples/">
+      
+      <link rel="icon" href="../images/arguably_tiny.png">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.16">
+    
+    
+      
+        <title>Why arguably? - arguably</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.26e3688c.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ecc896b0.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../styles/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="green">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#why-arguably" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="arguably" class="md-header__button md-logo" aria-label="arguably" data-md-component="logo">
+      
+  <img src="../images/arguably_small.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            arguably
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Why arguably?
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="green"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+            
+              <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5Z"/></svg>
+              </label>
+            
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="green" data-md-color-accent="green"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+            
+              <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9v1Z"/></svg>
+              </label>
+            
+          
+        </form>
+      
+    
+    
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/treykeown/arguably" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    treykeown/arguably
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="arguably" class="md-nav__button md-logo" aria-label="arguably" data-md-component="logo">
+      
+  <img src="../images/arguably_small.png" alt="logo">
+
+    </a>
+    arguably
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/treykeown/arguably" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    treykeown/arguably
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Why arguably?
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Why arguably?
+      </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="Page contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Page contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#an-unobtrusive-api" class="md-nav__link">
+    An unobtrusive API
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#zero-effort-cli" class="md-nav__link">
+    Zero-effort CLI
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-comparison-with-typer" class="md-nav__link">
+    A comparison with typer
+  </a>
+  
+    <nav class="md-nav" aria-label="A comparison with typer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-typer-implementation" class="md-nav__link">
+    The typer implementation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rewritten-with-arguably" class="md-nav__link">
+    Rewritten with arguably
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/" class="md-nav__link">
+        Examples
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+        
+      
+      <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          Tutorial
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Tutorial
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/intro/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/subcommands/" class="md-nav__link">
+        Subcommands
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorial/type-hints/" class="md-nav__link">
+        Type Hints
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/" class="md-nav__link">
+        API Reference
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/" class="md-nav__link">
+        Contributing
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="Page contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Page contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#an-unobtrusive-api" class="md-nav__link">
+    An unobtrusive API
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#zero-effort-cli" class="md-nav__link">
+    Zero-effort CLI
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-comparison-with-typer" class="md-nav__link">
+    A comparison with typer
+  </a>
+  
+    <nav class="md-nav" aria-label="A comparison with typer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-typer-implementation" class="md-nav__link">
+    The typer implementation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rewritten-with-arguably" class="md-nav__link">
+    Rewritten with arguably
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="why-arguably">Why <code>arguably</code>?<a class="headerlink" href="#why-arguably" title="Permanent link">&para;</a></h1>
+<p>With plenty of other tools out there, why use <code>arguably</code>? Aren't <code>click</code> and <code>typer</code> good enough?</p>
+<p>The short answer is: yeah, probably! They're really great tools. But they still make you write quite a bit of code.
+That's where <code>arguably</code> comes in.</p>
+<h2 id="an-unobtrusive-api">An unobtrusive API<a class="headerlink" href="#an-unobtrusive-api" title="Permanent link">&para;</a></h2>
+<p>What <code>arguably</code> does best is get out of your way. Set up a function signature and docstring, annotate with
+<code>@arguably.command</code>, and you've set up a CLI. That's it, that's the API. No need for <code>typer.Option()</code> or
+<code>click.option()</code>. That's because <code>arguably</code> was built from the ground-up with a focus on providing most of the features
+of these libraries (and a few extra) with few code changes necessary on your part.</p>
+<p>Your decorated functions still look and behave like regular functions.</p>
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/intro.py">[source]</a>
+</sub></div>
+
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+<span class="kn">import</span> <span class="nn">arguably</span>
+
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">some_function</span><span class="p">(</span><span class="n">required</span><span class="p">,</span> <span class="n">not_required</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">*</span><span class="n">others</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">option</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.14</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    this function is on the command line!</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        required: a required parameter</span>
+<span class="sd">        not_required: this one isn&#39;t required, since it has a default</span>
+<span class="sd">        *others: all the other positional arguments go here</span>
+<span class="sd">        option: [-x] an option, short name is in brackets</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">required</span><span class="si">=}</span><span class="s2">, </span><span class="si">{</span><span class="n">not_required</span><span class="si">=}</span><span class="s2">, </span><span class="si">{</span><span class="n">others</span><span class="si">=}</span><span class="s2">, </span><span class="si">{</span><span class="n">option</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">intro</span> <span class="kn">import</span> <span class="n">some_function</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">some_function</span><span class="p">(</span><span class="s2">&quot;asdf&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="n">option</span><span class="o">=</span><span class="mf">2.71</span><span class="p">)</span>
+<span class="go">required=&#39;asdf&#39;, not_required=0, others=(7, 8, 9), option=2.71</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>./intro.py<span class="w"> </span>-h
+<span class="go">usage: intro.py [-h] [-x OPTION] required [not-required] [others ...]</span>
+
+<span class="go">this function is on the command line!</span>
+
+<span class="go">positional arguments:</span>
+<span class="go">  required             a required parameter (type: str)</span>
+<span class="go">  not-required         this one isn&#39;t required, since it has a default (type: int, default: 2)</span>
+<span class="go">  others               all the other positional arguments go here (type: int)</span>
+
+<span class="go">options:</span>
+<span class="go">  -h, --help           show this help message and exit</span>
+<span class="go">  -x, --option OPTION  an option, short name is in brackets (type: float, default: 3.14)</span>
+</code></pre></div>
+<h2 id="zero-effort-cli">Zero-effort CLI<a class="headerlink" href="#zero-effort-cli" title="Permanent link">&para;</a></h2>
+<p>Taking inspiration from <a href="https://google.github.io/python-fire/guide/#version-4-fire-without-code-changes">Python Fire</a>,
+<code>arguably</code> is also able to execute your script directly, requiring <em>no</em> code changes - just run
+<code>python3 -m arguably your_script.py</code> to expose all functions (and your class <code>@classmethod</code>, <code>@staticmethod</code>, and
+<code>__init__</code> methods) on the CLI.</p>
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/party-trick.py">[source]</a>
+</sub></div>
+
+<div class="highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;this is the docstring for the whole script&quot;&quot;&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;2.3.4&quot;</span>  <span class="c1"># __version__ will be used if present</span>
+
+<span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    this is hello&#39;s docstring</span>
+<span class="sd">    Args:</span>
+<span class="sd">        name: argument docstrings are automatically used</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">goodbye</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;any function from a script can be called&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Goodbye, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">SomeClass</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;so can any __init__ for objects defined in the script&quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;__init__&quot;</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">func_static</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s2">&quot;Monty&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;a @staticmethod on a class can be called&quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">string</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">func_cls</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;so can a @classmethod&quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">number</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">normal</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;but normal methods can&#39;t&quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;instance method&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>-m<span class="w"> </span>arguably<span class="w"> </span>etc/scripts/party-trick.py<span class="w"> </span>-h
+<span class="go">usage: party-trick [-h] [--version] command ...</span>
+
+<span class="go">this is the docstring for the whole script</span>
+
+<span class="go">positional arguments:</span>
+<span class="go">  command</span>
+<span class="go">    hello                   this is hello&#39;s docstring</span>
+<span class="go">    goodbye                 any function from a script can be called</span>
+<span class="go">    some-class              so can any __init__ for objects defined in the script</span>
+<span class="go">    some-class.func-static  a @staticmethod on a class can be called</span>
+<span class="go">    some-class.func-cls     so can a @classmethod</span>
+
+<span class="go">options:</span>
+<span class="go">  -h, --help                show this help message and exit</span>
+<span class="go">  --version                 show program&#39;s version number and exit</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>-m<span class="w"> </span>arguably<span class="w"> </span>etc/scripts/party-trick.py<span class="w"> </span>hello<span class="w"> </span>-h
+<span class="go">usage: party-trick hello [-h] name</span>
+
+<span class="go">this is hello&#39;s docstring</span>
+
+<span class="go">positional arguments:</span>
+<span class="go">  name        argument docstrings are automatically used (type: str)</span>
+
+<span class="go">options:</span>
+<span class="go">  -h, --help  show this help message and exit</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>-m<span class="w"> </span>arguably<span class="w"> </span>etc/scripts/party-trick.py<span class="w"> </span>hello<span class="w"> </span>world
+<span class="go">Hello, world!</span>
+</code></pre></div>
+<h2 id="a-comparison-with-typer">A comparison with <code>typer</code><a class="headerlink" href="#a-comparison-with-typer" title="Permanent link">&para;</a></h2>
+<p>A quick comparison with a <code>typer</code> CLI is below. This is taken from the
+<a href="https://github.com/datarootsio/databooks"><code>databooks</code> project</a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The design for the config interface shown here for <code>arguably</code> isn't yet finalized. Development is tracked in
+<a href="https://github.com/treykeown/arguably/issues/13">https://github.com/treykeown/arguably/issues/13</a>.</p>
+</div>
+<h3 id="the-typer-implementation">The <code>typer</code> implementation<a class="headerlink" href="#the-typer-implementation" title="Permanent link">&para;</a></h3>
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/datarootsio/databooks/blob/39badd2c9cbdfa9a3174447948e6d65d78cb810f/databooks/cli.py#L378C36-L415">[source]</a>
+</sub></div>
+
+<div class="highlight"><pre><span></span><code><span class="n">app</span> <span class="o">=</span> <span class="n">Typer</span><span class="p">()</span>
+
+<span class="o">...</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">add_help_option</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">show</span><span class="p">(</span>
+    <span class="n">paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="n">Argument</span><span class="p">(</span>
+        <span class="o">...</span><span class="p">,</span> <span class="n">is_eager</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path(s) of notebook files with conflicts&quot;</span>
+    <span class="p">),</span>
+    <span class="n">ignore</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Option</span><span class="p">([</span><span class="s2">&quot;!*&quot;</span><span class="p">],</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Glob expression(s) of files to ignore&quot;</span><span class="p">),</span>
+    <span class="n">export</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ImgFmt</span><span class="p">]</span> <span class="o">=</span> <span class="n">Option</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;--export&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-x&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Export rich outputs as a string.&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">pager</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;--pager&quot;</span><span class="p">,</span> <span class="s2">&quot;-p&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Use pager instead of printing to terminal&quot;</span>
+    <span class="p">),</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Option</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span> <span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Increase verbosity for debugging&quot;</span>
+    <span class="p">),</span>
+    <span class="n">multiple</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Option</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;--yes&quot;</span><span class="p">,</span> <span class="s2">&quot;-y&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Show multiple files&quot;</span><span class="p">),</span>
+    <span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="n">Option</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;--config&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-c&quot;</span><span class="p">,</span>
+        <span class="n">is_eager</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">callback</span><span class="o">=</span><span class="n">_config_callback</span><span class="p">,</span>
+        <span class="n">resolve_path</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">exists</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Get CLI options from configuration file&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">help</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="n">Option</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;--help&quot;</span><span class="p">,</span>
+        <span class="n">is_eager</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">callback</span><span class="o">=</span><span class="n">_help_callback</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Show this message and exit&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Show rich representation of notebook.&quot;&quot;&quot;</span>
+    <span class="o">...</span>
+
+<span class="o">...</span>
+
+<span class="n">app</span><span class="p">(</span><span class="n">prog_name</span><span class="o">=</span><span class="s2">&quot;databooks&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="rewritten-with-arguably">Rewritten with <code>arguably</code><a class="headerlink" href="#rewritten-with-arguably" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">show</span><span class="p">(</span>
+    <span class="o">*</span><span class="n">paths</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="n">ignore</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;!*&quot;</span><span class="p">],</span>
+    <span class="n">export</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ImgFmt</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">pager</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">multiple</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Show rich representation of notebook.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        *paths: Path(s) of notebook files with conflicts</span>
+<span class="sd">        ignore: Glob expression(s) of files to ignore</span>
+<span class="sd">        export: [-x] Export rich outputs as a string.</span>
+<span class="sd">        pager: [-p] Use pager instead of printing to terminal</span>
+<span class="sd">        verbose: [-v] Increase verbosity for debugging</span>
+<span class="sd">        multiple: [-y/--yes] Show multiple files</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">ignore</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ignore</span> <span class="o">=</span>   <span class="c1"># Mutable argument defaults are bad</span>
+    <span class="o">...</span>
+
+<span class="o">...</span>
+
+<span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;databooks&quot;</span><span class="p">,</span> <span class="n">version_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">config_flag</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;-c&quot;</span><span class="p">,</span> <span class="s2">&quot;--config&quot;</span><span class="p">))</span>
+</code></pre></div>
+<ul>
+<li><code>--help</code> is eagerly evaluated by default in <code>arguably</code>, so no separate argument is required.</li>
+<li>Aliases for options appear first in the docstring, like <code>[-x]</code> for <code>export</code>.</li>
+<li>The function still looks and behaves the same:<ul>
+<li>No need to assign <code>typer.Option()</code> as the default value for parameters</li>
+<li>No need to put <code>Annotated[]</code> as your argument type, except in
+<a href="../tutorial/type-hints/#special-behaviors">special cases</a>.</li>
+</ul>
+</li>
+</ul>
+<p><code>arguably</code> doesn't currently cover all the features that other frameworks do. It's designed with a focus on a minimal
+API covering <em>most</em> use cases for <em>most</em> CLIs.</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href=".." class="md-footer__link md-footer__link--prev" aria-label="Previous: Home" rel="prev">
+            <div class="md-footer__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Home
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../examples/" class="md-footer__link md-footer__link--next" aria-label="Next: Examples" rel="next">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Examples
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["content.tabs.link", "content.code.annotate", "announce.dismiss", "navigation.footer", "navigation.expand"], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.a51614de.min.js"></script>
+      
+        
+          <script src="../scripts/jquery.min.js"></script>
+        
+      
+        
+          <script src="../scripts/extra.js"></script>
+        
+      
+    
+  </body>
+</html>

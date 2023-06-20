@@ -2,37 +2,42 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://treykeown.github.io/arguably/</loc>
-         <lastmod>2023-06-19</lastmod>
+         <lastmod>2023-06-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://treykeown.github.io/arguably/api-reference/</loc>
-         <lastmod>2023-06-19</lastmod>
+         <lastmod>2023-06-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://treykeown.github.io/arguably/contributing/</loc>
-         <lastmod>2023-06-19</lastmod>
+         <lastmod>2023-06-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://treykeown.github.io/arguably/examples/</loc>
-         <lastmod>2023-06-19</lastmod>
+         <lastmod>2023-06-20</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://treykeown.github.io/arguably/why/</loc>
+         <lastmod>2023-06-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://treykeown.github.io/arguably/tutorial/intro/</loc>
-         <lastmod>2023-06-19</lastmod>
+         <lastmod>2023-06-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://treykeown.github.io/arguably/tutorial/subcommands/</loc>
-         <lastmod>2023-06-19</lastmod>
+         <lastmod>2023-06-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://treykeown.github.io/arguably/tutorial/type-hints/</loc>
-         <lastmod>2023-06-19</lastmod>
+         <lastmod>2023-06-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
