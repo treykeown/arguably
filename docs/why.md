@@ -1,18 +1,20 @@
 # Why `arguably`?
 
-With plenty of other tools out there, why use `arguably`? Aren't `click` and `typer` good enough?
+With plenty of other tools out there, why use `arguably`? Aren't other ones (`click`, `typer`, etc) good enough?
 
-The short answer is: yeah, probably! They're really great tools. But they still make you write quite a bit of code.
-That's where `arguably` comes in.
+The short answer is: yeah, probably! Python already has great tools for building CLIs. But they still make you write
+quite a bit of code. That's where `arguably` comes in.
 
 ## An unobtrusive API
 
-What `arguably` does best is get out of your way. Set up a function signature and docstring, annotate with
-`@arguably.command`, and you've set up a CLI. That's it, that's the API. No need for `typer.Option()` or
-`click.option()`. That's because `arguably` was built from the ground-up with a focus on providing most of the features
-of these libraries (and a few extra) with few code changes necessary on your part.
+What `arguably` does best is get out of your way.
 
-Your decorated functions still look and behave like regular functions.
+Set up a *function signature* and *docstring*, annotate with `@arguably.command`, and you've set up a CLI. That's it,
+that's the API.
+
+No need for `typer.Option()` or `click.option()`. That's because `arguably` was built from the ground-up with a focus on
+providing most of the features of these libraries (and a few extra) with few code changes necessary on your part.
+Because of this, your CLI functions still look and behave like regular functions.
 
 <div align="right" class="code-source"><sub>
     <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/intro.py">[source]</a>
@@ -39,12 +41,6 @@ if __name__ == "__main__":
     arguably.run()
 ```
 
-```pycon
->>> from intro import some_function
->>> some_function("asdf", 0, 7, 8, 9, option=2.71)
-required='asdf', not_required=0, others=(7, 8, 9), option=2.71
-```
-
 ```console
 user@machine:~$ ./intro.py -h
 usage: intro.py [-h] [-x OPTION] required [not-required] [others ...]
@@ -59,6 +55,17 @@ positional arguments:
 options:
   -h, --help           show this help message and exit
   -x, --option OPTION  an option, short name is in brackets (type: float, default: 3.14)
+```
+
+```pycon
+>>> from intro import some_function
+>>> some_function("asdf", 0, 7, 8, 9, option=2.71)
+required='asdf', not_required=0, others=(7, 8, 9), option=2.71
+```
+
+```console
+user@machine:~$ ./intro.py "asdf" 0 7 8 9 --option 2.71
+required='asdf', not_required=0, others=(7, 8, 9), option=2.71
 ```
 
 ## Zero-effort CLI
