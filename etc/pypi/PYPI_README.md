@@ -103,19 +103,22 @@ Don't want to write any code? Simply pass any Python script to `arguably` to giv
 </sub></div>
 
 ```console
-user@machine:~$ python3 -m arguably party-trick.py
-usage: party-trick [-h] command ...
+user@machine:~$ python3 -m arguably etc/scripts/party-trick.py -h
+usage: party-trick [-h] [--version] command ...
+
+this is the docstring for the whole script
 
 positional arguments:
   command
-    hello                this is the docstring for a function in the script
-    goodbye              any function from a script can be called
-    a-class              so can any __init__ for objects defined in the script
-    a-class.func-static  a @staticmethod on a class can be called
-    a-class.func-cls     so can a @classmethod
+    hello                   this is hello's docstring
+    goodbye                 any function from a script can be called
+    some-class              so can any __init__ for objects defined in the script
+    some-class.func-static  a @staticmethod on a class can be called
+    some-class.func-cls     so can a @classmethod
 
 options:
-  -h, --help             show this help message and exit
+  -h, --help                show this help message and exit
+  --version                 show program's version number and exit
 ```
 
 ## Installation
@@ -125,6 +128,7 @@ Install using `pip install arguably`. If you want to install using `conda`, plea
 
 ## Documentation
 
+* Why arguably?: [https://treykeown.github.io/arguably/why/](https://treykeown.github.io/arguably/why/)
 * Examples: [https://treykeown.github.io/arguably/examples/](https://treykeown.github.io/arguably/examples/)
 * Tutorial: [https://treykeown.github.io/arguably/tutorial/intro/](https://treykeown.github.io/arguably/tutorial/intro/)
 * API Reference: [https://treykeown.github.io/arguably/api-reference/](https://treykeown.github.io/arguably/api-reference/)
@@ -150,4 +154,5 @@ If you have any interest in these (either as a user or implementer), please leav
 * [#8 - Display all enum options in a command group](https://github.com/treykeown/arguably/issues/8)
 * [#9 - Both positive and negative boolean flags](https://github.com/treykeown/arguably/issues/9)
 * [#10 - Take inputs from environment variables](https://github.com/treykeown/arguably/issues/10)
-* [#13 - Load configuration for a script via a `.yml`](https://github.com/treykeown/arguably/issues/13)
+* [#13 - Implement config interface](https://github.com/treykeown/arguably/issues/13)
+* [#16 - Integration with rich for formatted CLI output](https://github.com/treykeown/arguably/issues/16)

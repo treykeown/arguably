@@ -158,8 +158,8 @@ A quick comparison with a `typer` CLI is below. This is taken from the
 [`databooks` project](https://github.com/datarootsio/databooks).
 
 !!! warning
-    The design for the config interface shown here for `arguably` isn't yet finalized. Development is tracked in
-    [https://github.com/treykeown/arguably/issues/13](https://github.com/treykeown/arguably/issues/13).
+    The design for the config interface shown here for `arguably` isn't yet finalized and is still being implemented.
+    Development is tracked in [https://github.com/treykeown/arguably/issues/13](https://github.com/treykeown/arguably/issues/13).
 
 ### The `typer` implementation
 
