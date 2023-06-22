@@ -591,9 +591,10 @@
 <span class="go">Goodbye, Python!</span>
 </code></pre></div></p>
 <h3 id="name-normalization">Name normalization<a class="headerlink" href="#name-normalization" title="Permanent link">&para;</a></h3>
-<p>Single underscores <code>_</code> in a function name are converted to a dash <code>-</code>. Also, any leading or trailing underscores are
-stripped.</p>
+<p>Function names are first converted to lowercase. Single underscores <code>_</code> in a function name are converted to a dash <code>-</code>.
+Also, any leading or trailing underscores are stripped.</p>
 <ul>
+<li><code>def FOOBAR()</code> &rightarrow; <code>foobar</code></li>
 <li><code>def foo_bar():</code> &rightarrow; <code>foo-bar</code></li>
 <li><code>def list_():</code> &rightarrow; <code>list</code></li>
 <li><code>def _asdf():</code> &rightarrow; <code>asdf</code></li>

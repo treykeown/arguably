@@ -54,8 +54,8 @@
             </div>
         </aside>
         <h2>
-            <span class="text">207 statements &nbsp;</span>
-            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">186<span class="text"> run</span></button>
+            <span class="text">209 statements &nbsp;</span>
+            <button type="button" class="run button_toggle_run" value="run" data-shortcut="r" title="Toggle lines run">188<span class="text"> run</span></button>
             <button type="button" class="mis show_mis button_toggle_mis" value="mis" data-shortcut="m" title="Toggle lines missing">21<span class="text"> missing</span></button>
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="d_a93d8c4ccb61e4dc__context_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.2.7">coverage.py v7.2.7</a>,
-            created at 2023-06-22 13:03 +0000
+            created at 2023-06-22 15:29 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"/>
@@ -464,16 +464,20 @@
     <p class="pln"><span class="n"><a id="t382" href="#t382">382</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t383" href="#t383">383</a></span><span class="t">        <span class="com"># Call the function</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t384" href="#t384">384</a></span><span class="t">        <span class="key">if</span> <span class="nam">util</span><span class="op">.</span><span class="nam">is_async_callable</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">function</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t385" href="#t385">385</a></span><span class="t">            <span class="key">return</span> <span class="nam">asyncio</span><span class="op">.</span><span class="nam">get_event_loop</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">run_until_complete</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">function</span><span class="op">(</span><span class="op">*</span><span class="nam">args</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t386" href="#t386">386</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t387" href="#t387">387</a></span><span class="t">            <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">function</span><span class="op">(</span><span class="op">*</span><span class="nam">args</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t388" href="#t388">388</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t389" href="#t389">389</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_subcommand_metavar</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">command_metavar</span><span class="op">:</span> <span class="nam">str</span><span class="op">)</span> <span class="op">-></span> <span class="nam">str</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t390" href="#t390">390</a></span><span class="t">        <span class="str">"""If this command has a subparser (for subcommands of its own), this can be called to generate a unique name</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t391" href="#t391">391</a></span><span class="t"><span class="str">        for the subparser's command metavar"""</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t392" href="#t392">392</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">name</span> <span class="op">==</span> <span class="str">"__root__"</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t393" href="#t393">393</a></span><span class="t">            <span class="key">return</span> <span class="nam">command_metavar</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t394" href="#t394">394</a></span><span class="t">        <span class="key">return</span> <span class="str">f"{self.name.replace(' ', '_')}{'_' if len(self.name) > 0 else ''}{command_metavar}"</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t385" href="#t385">385</a></span><span class="t">            <span class="nam">util</span><span class="op">.</span><span class="nam">log_args</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t386" href="#t386">386</a></span><span class="t">                <span class="nam">util</span><span class="op">.</span><span class="nam">logger</span><span class="op">.</span><span class="nam">debug</span><span class="op">,</span> <span class="str">f"Calling {self.name} function async: "</span><span class="op">,</span> <span class="nam">self</span><span class="op">.</span><span class="nam">function</span><span class="op">.</span><span class="nam">__name__</span><span class="op">,</span> <span class="op">*</span><span class="nam">args</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t387" href="#t387">387</a></span><span class="t">            <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t388" href="#t388">388</a></span><span class="t">            <span class="key">return</span> <span class="nam">asyncio</span><span class="op">.</span><span class="nam">get_event_loop</span><span class="op">(</span><span class="op">)</span><span class="op">.</span><span class="nam">run_until_complete</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">function</span><span class="op">(</span><span class="op">*</span><span class="nam">args</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t389" href="#t389">389</a></span><span class="t">        <span class="key">else</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t390" href="#t390">390</a></span><span class="t">            <span class="nam">util</span><span class="op">.</span><span class="nam">log_args</span><span class="op">(</span><span class="nam">util</span><span class="op">.</span><span class="nam">logger</span><span class="op">.</span><span class="nam">debug</span><span class="op">,</span> <span class="str">f"Calling {self.name} function: "</span><span class="op">,</span> <span class="nam">self</span><span class="op">.</span><span class="nam">function</span><span class="op">.</span><span class="nam">__name__</span><span class="op">,</span> <span class="op">*</span><span class="nam">args</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t391" href="#t391">391</a></span><span class="t">            <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">function</span><span class="op">(</span><span class="op">*</span><span class="nam">args</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t392" href="#t392">392</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t393" href="#t393">393</a></span><span class="t">    <span class="key">def</span> <span class="nam">get_subcommand_metavar</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">command_metavar</span><span class="op">:</span> <span class="nam">str</span><span class="op">)</span> <span class="op">-></span> <span class="nam">str</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t394" href="#t394">394</a></span><span class="t">        <span class="str">"""If this command has a subparser (for subcommands of its own), this can be called to generate a unique name</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t395" href="#t395">395</a></span><span class="t"><span class="str">        for the subparser's command metavar"""</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t396" href="#t396">396</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">name</span> <span class="op">==</span> <span class="str">"__root__"</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t397" href="#t397">397</a></span><span class="t">            <span class="key">return</span> <span class="nam">command_metavar</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t398" href="#t398">398</a></span><span class="t">        <span class="key">return</span> <span class="str">f"{self.name.replace(' ', '_')}{'_' if len(self.name) > 0 else ''}{command_metavar}"</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
@@ -483,7 +487,7 @@
             <a id="nextFileLink" class="nav" href="d_a93d8c4ccb61e4dc__context_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.2.7">coverage.py v7.2.7</a>,
-            created at 2023-06-22 13:03 +0000
+            created at 2023-06-22 15:29 +0000
         </p>
     </div>
 </footer>

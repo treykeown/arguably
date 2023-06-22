@@ -368,6 +368,34 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#normal-types" class="md-nav__link">
+    "Normal" types
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unions-with-none" class="md-nav__link">
+    Unions with None
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tuples" class="md-nav__link">
+    Tuples
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lists" class="md-nav__link">
+    Lists
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#enumenum" class="md-nav__link">
     enum.Enum
   </a>
@@ -543,6 +571,34 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#normal-types" class="md-nav__link">
+    "Normal" types
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unions-with-none" class="md-nav__link">
+    Unions with None
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tuples" class="md-nav__link">
+    Tuples
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lists" class="md-nav__link">
+    Lists
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#enumenum" class="md-nav__link">
     enum.Enum
   </a>
@@ -649,7 +705,7 @@
 
 <h1 id="type-hints">Type hints<a class="headerlink" href="#type-hints" title="Permanent link">&para;</a></h1>
 <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
-<p><code>arguably</code> uses type hints to convert from text passed in by the CLI to the class needed by your functions.</p>
+<p><code>arguably</code> uses type hints to convert CLI input from strings to the type needed by your function.</p>
 <div align="right" class="code-source"><sub>
     <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/type-hint.py">[source]</a>
 </sub></div>
@@ -700,24 +756,73 @@
     <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </code></pre></div></p>
 <h2 id="allowed-types">Allowed types<a class="headerlink" href="#allowed-types" title="Permanent link">&para;</a></h2>
+<h3 id="normal-types">"Normal" types<a class="headerlink" href="#normal-types" title="Permanent link">&para;</a></h3>
+<p>Any type that can be constructed by passing in a single string value is allowed. This includes:</p>
 <ul>
-<li>Any type that can be constructed by passing in a single string value. This includes:<ul>
 <li>Basic built-in types like <code>str</code>, <code>int</code>, <code>float</code>, <code>bool</code></li>
 <li>Other built-ins like <code>pathlib.Path</code></li>
 <li>Any user-defined classes that also have this kind of constructor</li>
 </ul>
-</li>
-<li><code>enum.Enum</code> and <code>enum.Flag</code> - values are referenced by the lowercased name<ul>
-<li>The docstring for <code>enum.Flag</code> values is parsed as well, meaning you can create help messages for each entry and
-  specify a shorthand through <code>[-x]</code></li>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">GoodClass1</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Example of a user-defined class that can be used&quot;&quot;&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">BadClass1</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;NOT USABLE: This class won&#39;t work, since it should take in an integer&quot;&quot;&quot;</span>
+    <span class="n">age</span><span class="p">:</span> <span class="nb">int</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">BadClass2</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;NOT USABLE: This class won&#39;t work, since it takes in multiple arguments&quot;&quot;&quot;</span>
+    <span class="n">first_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">last_name</span><span class="p">:</span> <span class="nb">str</span>
+
+<span class="k">class</span> <span class="nc">GoodClass2</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Example of another user-defined class that can be used&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_int_value</span> <span class="o">=</span> <span class="n">value</span>
+</code></pre></div>
+<h3 id="unions-with-none">Unions with <code>None</code><a class="headerlink" href="#unions-with-none" title="Permanent link">&para;</a></h3>
+<p>Any union with <code>None</code> at the outermost level is ignored:</p>
+<ul>
+<li><code>Optional[int]</code> will be parsed as <code>int</code></li>
+<li><code>Tuple[str, int, float] | None</code> will be parsed as <code>Tuple[str, int, float]</code></li>
+<li><code>Tuple[Optional[str], int, float] | None</code> is not allowed - the first element can be either a <code>str</code> or <code>None</code>, which
+isn't possible to unambiguously parse.</li>
 </ul>
-</li>
-<li><code>Optional[some_type]</code> or <code>some_type | None</code> - any union with <code>None</code> is ignored, so this would be parsed as <code>some_type</code></li>
-<li><code>tuple[int, float, str]</code> - handled as comma-separated values <code>1,3.14,etc</code></li>
-<li><code>list[some_type]</code> - if positional, handled as comma-separated. As an option, can be specified multiple times.</li>
+<h3 id="tuples">Tuples<a class="headerlink" href="#tuples" title="Permanent link">&para;</a></h3>
+<p>Tuples are handled as comma-separated values. If you need to put a comma in a value itself, you can wrap it in quotes.</p>
+<ul>
+<li><code>tuple[int, int, int]</code> would take in <code>1,2,3</code></li>
+<li><code>tuple[int, float, str]</code> would take in <code>1,3.14,etc</code></li>
+<li><code>tuple[int, ...]</code> - would not work, as flexible-length tuples are not allowed (though this may change in the future)</li>
+<li><code>tuple[str, str]</code> would take in <code>'abc,"d,e,f"'</code>, which would become <code>("abc", "d,e,f")</code></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Quote double-wrapping</p>
+<p>To escape a comma, the whole argument must be wrapped in quotes - this is necessary to prevent your shell from
+parsing away the inner pair of quotes. Please discuss in <a href="https://github.com/treykeown/arguably/issues/7">#7</a> if you
+have input on a better way of doing this.</p>
+</div>
+<h3 id="lists">Lists<a class="headerlink" href="#lists" title="Permanent link">&para;</a></h3>
+<p>Lists are comma-separated, like <code>tuples</code>. However, if a list appears as an <code>--option</code>, it can be specified multiple
+times.</p>
+<ul>
+<li><code>list[int]</code> would take in <code>1,2,3,4</code></li>
+<li><code>def foo(*, bar: list[int])</code> would take in <code>--bar 1 --bar 2 --bar 3,4</code></li>
 </ul>
 <h3 id="enumenum"><code>enum.Enum</code><a class="headerlink" href="#enumenum" title="Permanent link">&para;</a></h3>
-<p>Enums are processed to allow each of the member names to be input, but no other values.</p>
+<p>Enums allow member names to be used as input. No other value is accepted.</p>
+<p>Enum names are normalized the same way as <a href="../subcommands/#name-normalization">function names</a>:</p>
+<ul>
+<li>Converted to lowercase</li>
+<li><code>_leading</code> and <code>trailing__</code> underscores <code>_</code> are stripped</li>
+<li>Underscores <code>between_words</code> are converted to dashes: <code>between-words</code></li>
+</ul>
 <div align="right" class="code-source"><sub>
     <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/enum-1.py">[source]</a>
 </sub></div>
@@ -747,7 +852,9 @@
 <span class="go">start=(100, 100) Direction.DOWN end=(100, 99)</span>
 </code></pre></div></p>
 <h3 id="enumflag"><code>enum.Flag</code><a class="headerlink" href="#enumflag" title="Permanent link">&para;</a></h3>
-<p>Flag values never appear directly. Instead, each member always appears as an <code>--option</code>.</p>
+<p>Flag values never appear directly. Instead, each member always appears as an <code>--option</code>. The docstring for <code>enum.Flag</code>
+values is parsed as well, meaning you can create help messages for each entry and specify a shorthand through <code>[-x]</code>.</p>
+<p>Flag names are processed the same way as <a href="#enumenum"><code>enum.Enum</code> names</a>.</p>
 <div align="right" class="code-source"><sub>
     <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/flag.py">[source]</a>
 </sub></div>
