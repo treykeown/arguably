@@ -382,8 +382,12 @@ class Command:
 
         # Call the function
         if util.is_async_callable(self.function):
+            util.log_args(
+                util.logger.debug, f"Calling {self.name} function async: ", self.function.__name__, *args, **kwargs
+            )
             return asyncio.get_event_loop().run_until_complete(self.function(*args, **kwargs))
         else:
+            util.log_args(util.logger.debug, f"Calling {self.name} function: ", self.function.__name__, *args, **kwargs)
             return self.function(*args, **kwargs)
 
     def get_subcommand_metavar(self, command_metavar: str) -> str:

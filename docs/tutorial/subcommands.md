@@ -48,9 +48,10 @@ Goodbye, Python!
 
 ### Name normalization
 
-Single underscores `_` in a function name are converted to a dash `-`. Also, any leading or trailing underscores are
-stripped.
+Function names are first converted to lowercase. Single underscores `_` in a function name are converted to a dash `-`.
+Also, any leading or trailing underscores are stripped.
 
+* `def FOOBAR()` &rightarrow; `foobar`
 * `def foo_bar():` &rightarrow; `foo-bar`
 * `def list_():` &rightarrow; `list`
 * `def _asdf():` &rightarrow; `asdf`

@@ -2,7 +2,7 @@
 
 ## Introduction
 
-`arguably` uses type hints to convert from text passed in by the CLI to the class needed by your functions.
+`arguably` uses type hints to convert CLI input from strings to the type needed by your function.
 
 <div align="right" class="code-source"><sub>
     <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/type-hint.py">[source]</a>
@@ -65,20 +65,79 @@ if __name__ == "__main__":
 
 ## Allowed types
 
-* Any type that can be constructed by passing in a single string value. This includes:
-    * Basic built-in types like `str`, `int`, `float`, `bool`
-    * Other built-ins like `pathlib.Path`
-    * Any user-defined classes that also have this kind of constructor
-* `enum.Enum` and `enum.Flag` - values are referenced by the lowercased name
-    * The docstring for `enum.Flag` values is parsed as well, meaning you can create help messages for each entry and
-  specify a shorthand through `[-x]`
-* `Optional[some_type]` or `some_type | None` - any union with `None` is ignored, so this would be parsed as `some_type`
-* `tuple[int, float, str]` - handled as comma-separated values `1,3.14,etc`
-* `list[some_type]` - if positional, handled as comma-separated. As an option, can be specified multiple times.
+### "Normal" types
+
+Any type that can be constructed by passing in a single string value is allowed. This includes:
+
+* Basic built-in types like `str`, `int`, `float`, `bool`
+* Other built-ins like `pathlib.Path`
+* Any user-defined classes that also have this kind of constructor
+
+```python
+@dataclass
+class GoodClass1:
+    """Example of a user-defined class that can be used"""
+    name: str
+
+@dataclass
+class BadClass1:
+    """NOT USABLE: This class won't work, since it should take in an integer"""
+    age: int
+
+@dataclass
+class BadClass2:
+    """NOT USABLE: This class won't work, since it takes in multiple arguments"""
+    first_name: str
+    last_name: str
+
+class GoodClass2:
+    """Example of another user-defined class that can be used"""
+    def __init__(self, value: str | int):
+        if isinstance(value, str):
+            value = int(str)
+        self._int_value = value
+```
+
+### Unions with `None`
+
+Any union with `None` at the outermost level is ignored:
+
+* `Optional[int]` will be parsed as `int`
+* `Tuple[str, int, float] | None` will be parsed as `Tuple[str, int, float]`
+* `Tuple[Optional[str], int, float] | None` is not allowed - the first element can be either a `str` or `None`, which
+isn't possible to unambiguously parse.
+
+### Tuples
+
+Tuples are handled as comma-separated values. If you need to put a comma in a value itself, you can wrap it in quotes.
+
+* `tuple[int, int, int]` would take in `1,2,3`
+* `tuple[int, float, str]` would take in `1,3.14,etc`
+* `tuple[int, ...]` - would not work, as flexible-length tuples are not allowed (though this may change in the future)
+* `tuple[str, str]` would take in `'abc,"d,e,f"'`, which would become `("abc", "d,e,f")`
+
+!!! note "Quote double-wrapping"
+    To escape a comma, the whole argument must be wrapped in quotes - this is necessary to prevent your shell from
+    parsing away the inner pair of quotes. Please discuss in [#7](https://github.com/treykeown/arguably/issues/7) if you
+    have input on a better way of doing this.
+
+### Lists
+
+Lists are comma-separated, like `tuples`. However, if a list appears as an `--option`, it can be specified multiple
+times.
+
+* `list[int]` would take in `1,2,3,4`
+* `def foo(*, bar: list[int])` would take in `--bar 1 --bar 2 --bar 3,4`
 
 ### `enum.Enum`
 
-Enums are processed to allow each of the member names to be input, but no other values.
+Enums allow member names to be used as input. No other value is accepted.
+
+Enum names are normalized the same way as [function names](../subcommands/#name-normalization):
+
+* Converted to lowercase
+* `_leading` and `trailing__` underscores `_` are stripped
+* Underscores `between_words` are converted to dashes: `between-words`
 
 <div align="right" class="code-source"><sub>
     <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/enum-1.py">[source]</a>
@@ -115,7 +174,10 @@ start=(100, 100) Direction.DOWN end=(100, 99)
 
 ### `enum.Flag`
 
-Flag values never appear directly. Instead, each member always appears as an `--option`.
+Flag values never appear directly. Instead, each member always appears as an `--option`. The docstring for `enum.Flag`
+values is parsed as well, meaning you can create help messages for each entry and specify a shorthand through `[-x]`.
+
+Flag names are processed the same way as [`enum.Enum` names](#enumenum).
 
 <div align="right" class="code-source"><sub>
     <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/flag.py">[source]</a>
