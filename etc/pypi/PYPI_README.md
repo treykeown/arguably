@@ -16,8 +16,8 @@
 </p>
 <hr>
 
-`arguably` turns functions into command line interfaces (CLIs). `arguably` has a tiny API and is extremely easy to
-integrate. You can also use it directly through `python3 -m arguably your_script.py`, more on that
+`arguably` turns functions and docstrings into command line interfaces (CLIs). `arguably` has a tiny API and is
+extremely easy to integrate. You can also use it directly through `python3 -m arguably your_script.py`, more on that
 [here](#no-integration-required).
 
 To use `arguably` in a script, decorate any functions that should appear on the command line with `@arguably.command`,
@@ -38,11 +38,12 @@ def some_function(required, not_required=2, *others: int, option: float = 3.14):
     this function is on the command line!
 
     Args:
-        required: a required parameter
-        not_required: this one isn't required, since it has a default
+        required: a required argument
+        not_required: this one isn't required, since it has a default value
         *others: all the other positional arguments go here
-        option: [-x] an option, short name is in brackets
+        option: [-x] keyword-only args are options, short name is in brackets
     """
+    print(f"{required=}, {not_required=}, {others=}, {option=}")
 
 if __name__ == "__main__":
     arguably.run()
@@ -57,23 +58,27 @@ usage: intro.py [-h] [-x OPTION] required [not-required] [others ...]
 this function is on the command line!
 
 positional arguments:
-  required             a required parameter (type: str)
-  not-required         this one isn't required, since it has a default (type: int, default: 2)
+  required             a required argument (type: str)
+  not-required         this one isn't required, since it has a default value (type: int, default: 2)
   others               all the other positional arguments go here (type: int)
 
 options:
   -h, --help           show this help message and exit
-  -x, --option OPTION  an option, short name is in brackets (type: float, default: 3.14)
+  -x, --option OPTION  keyword-only args are options, short name is in brackets (type: float, default: 3.14)
 ```
 
-`arguably` looks at any decorated functions and maps their arguments from Python to the CLI:
+Arguments to the CLI look just like calling the Python function.
 
-| This Python ...                                | ... becomes this on the CLI.                   |
-|------------------------------------------------|------------------------------------------------|
-| positional args, no default `required`         | positional CLI args, required `required`       |
-| positional args, with default `not_required=2` | positional CLI args, optional `[not-required]` |
-| positional args, variadic `*others`            | any extra positional CLI args `[others ...]`   |
-| keyword-only arguments `option`                | command-line options `[-x OPTION]`             |
+```pycon
+>>> from intro import some_function
+>>> some_function("asdf", 0, 7, 8, 9, option=2.71)
+required='asdf', not_required=0, others=(7, 8, 9), option=2.71
+```
+
+```console
+user@machine:~$ ./intro.py asdf 0 7 8 9 --option 2.71
+required='asdf', not_required=0, others=(7, 8, 9), option=2.71
+```
 
 `arguably` uses your docstrings to automatically generate help messages. It supports all major formats for docstrings:
 reStructuredText, Google, Numpydoc, and Epydoc.

@@ -838,10 +838,10 @@ def command(
             this function is on the command line!
 
             Args:
-                required: a required parameter
-                not_required: this one isn't required, since it has a default
+                required: a required argument
+                not_required: this one isn't required, since it has a default value
                 *others: all the other positional arguments go here
-                option: [-x] an option, short name is in brackets
+                option: [-x] keyword-only args are options, short name is in brackets
             \"\"\"
 
         if __name__ == "__main__":
@@ -855,13 +855,13 @@ def command(
         this function is on the command line!
 
         positional arguments:
-          required             a required parameter (type: str)
-          not-required         this one isn't required, since it has a default (type: int, default: 2)
+          required             a required argument (type: str)
+          not-required         this one isn't required, since it has a default value (type: int, default: 2)
           others               all the other positional arguments go here (type: int)
 
         options:
           -h, --help           show this help message and exit
-          -x, --option OPTION  an option, short name is in brackets (type: float, default: 3.14)
+          -x, --option OPTION  keyword-only args are options, short name is in brackets (type: float, default: 3.14)
         ```
 
         Or, with multiple commands:

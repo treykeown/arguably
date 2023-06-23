@@ -196,14 +196,16 @@ Google, Numpydoc, or Epydoc. We'll use Google's style for this example.
 
 ```python
 @arguably.command
-def hello(*, name="world"):
+def hello(*from_, name="world"):
     """
     this will say hello to someone
 
     Args:
+        from_: greetings are sent from these people
         name: is who this will greet
     """
     print(f"Hello, {name}!")
+    print(f"From: {', '.join(from_)}")
 ```
 
 ```console
@@ -220,19 +222,15 @@ options:
   --name NAME  is who this will greet (type: str, default: world)
 ```
 
-### Short names and metavars
+### Option names
 
-There are two special things you can put in your docstring that `arguably` will use.
+By default, any `--options` will have a long name which is a [normalized version](../subcommands/#name-normalization)
+of their Python name. Options do not have a short name by default.
 
-| Format          | Applies to...   | Function                     |
-|-----------------|-----------------|------------------------------|
-| `[-n] ...`      | `--option` only | Short name for an `--option` |
-| `... {WHO} ...` | any argument    | Metavar for an argument      |
+Option names can be controlled by prefixing their description with a value in square brackets `[]`:
 
-A metavar is what gets printed in the usage string to represent the user-provided value. More explanation for that
-[here](https://docs.python.org/3/library/argparse.html#metavar).
-
-An example of using these directives to alias `--name` to `-n`, and to make its metavar `who`:
+* `[-t]` &rightarrow; `-t` is the short name
+* `[-t/--to]` &rightarrow; `-t` is the short name and `--to` is the long name
 
 <div align="right" class="code-source"><sub>
     <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/hello-6.py">[source]</a>
@@ -246,7 +244,7 @@ def hello(*from_, name="world"):
 
     Args:
         from_: greetings are sent from these people
-        name: [-n] is {who} this will greet
+        name: [-t/--to] is who this will greet
     """
     print(f"Hello, {name}!")
     print(f"From: {', '.join(from_)}")
@@ -254,21 +252,93 @@ def hello(*from_, name="world"):
 
 ```console
 user@machine:~$ python3 hello-6.py -h
-usage: hello-6.py [-h] [-n WHO] [from ...]
+usage: hello-6.py [-h] [-t TO] [from ...]
 
 this will say hello to someone
 
 positional arguments:
-  from            greetings are sent from these people (type: str)
+  from         greetings are sent from these people (type: str)
 
 options:
-  -h, --help      show this help message and exit
-  -n, --name WHO  is who this will greet (type: str, default: world)
+  -h, --help   show this help message and exit
+  -t, --to TO  is who this will greet (type: str, default: world)
+```
+
+### Metavars
+
+A metavar is what gets printed in the usage string to represent the user-provided value. More explanation for that
+[here](https://docs.python.org/3/library/argparse.html#metavar).
+
+By default, the metavar for any argument is the uppercase version of its name. To change the metavar, wrap any word in
+its description in curly braces `{}`. Tuples can specify one value or a number of comma-separated values equal to the
+tuple length.
+
+* `{who}` &rightarrow; `WHO` is the metavar
+* `{x,y,z}` &rightarrow; `X`, `Y`, and `Z` are the metavars for a tuple of length 3
+
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/hello-7.py">[source]</a>
+</sub></div>
+
+```python
+@arguably.command
+def hello(*from_, name="world"):
+    """
+    this will say hello to someone
+
+    Args:
+        from_: greetings are sent from these people
+        name: [-t/--to] is {who} this will greet
+    """
+    print(f"Hello, {name}!")
+    print(f"From: {', '.join(from_)}")
+```
+
+```console
+user@machine:~$ python3 hello-7.py -h
+usage: hello-7.py [-h] [-t WHO] [from ...]
+
+this will say hello to someone
+
+positional arguments:
+  from          greetings are sent from these people (type: str)
+
+options:
+  -h, --help    show this help message and exit
+  -t, --to WHO  is who this will greet (type: str, default: world)
 ```
 
 Compare the last line with how it was before:
 
 ```console
-Before:  --name NAME     is who this will greet (type: str, default: world)
-After:   -n, --name WHO  is who this will greet (type: str, default: world)
+Before:  -t, --to TO   is who this will greet (type: str, default: world)
+After:   -t, --to WHO  is who this will greet (type: str, default: world)
 ```
+
+## Summary
+
+`arguably` looks at all decorated functions and maps their arguments from Python to the CLI.
+
+```python
+@arguably.command
+def some_function(required, not_required=2, *others: int, option: float = 3.14):
+    ...
+```
+
+```console
+user@machine:~$ ./intro.py -h
+usage: intro.py [-h] [-x OPTION] required [not-required] [others ...]
+...
+```
+
+| This Python ...                                | ... becomes this on the CLI.                   |
+|------------------------------------------------|------------------------------------------------|
+| positional args, no default `required`         | positional CLI args, required `required`       |
+| positional args, with default `not_required=2` | positional CLI args, optional `[not-required]` |
+| positional args, variadic `*others`            | any extra positional CLI args `[others ...]`   |
+| keyword-only arguments `option`                | command-line options `[-x OPTION]`             |
+
+Docstrings are used for command and argument help messages. They can also:
+
+* Change the short `-n` and long name `--name` of an `--option` by prefixing its description with `[-n/--name]`
+* Change the metavar of an argument to `SOMETHING` wrapping a word in curly braces `{something}`
