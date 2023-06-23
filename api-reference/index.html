@@ -1218,30 +1218,30 @@ conflicting argument name.</p>
 
 <p><strong>Examples:</strong></p>
     <div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
-<span class="s2">&quot;&quot;&quot;description for this script&#39;&#39;&#39;</span>
-<span class="s2">from io import StringIO</span>
+<span class="sd">&quot;&quot;&quot;description for this script&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
 
-<span class="s2">import arguably</span>
+<span class="kn">import</span> <span class="nn">arguably</span>
 
-<span class="s2">__version__ = &quot;1.2.3&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;1.2.3&quot;</span>
 
-<span class="s2">@arguably.command</span>
-<span class="s2">def example(): ...</span>
+<span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">example</span><span class="p">():</span> <span class="o">...</span>
 
-<span class="s2">if __name__ == &quot;__main__&quot;:</span>
-<span class="s2">    output = StringIO()</span>
-<span class="s2">    try:</span>
-<span class="s2">        arguably.run(</span>
-<span class="s2">            name=&quot;myname&quot;,</span>
-<span class="s2">            always_subcommand=True,</span>
-<span class="s2">            version_flag=True,</span>
-<span class="s2">            command_metavar=&quot;mycmd&quot;,</span>
-<span class="s2">            output=output</span>
-<span class="s2">        )</span>
-<span class="s2">    finally:</span>
-<span class="s2">        print(f&quot;Captured output length: {len(output.getvalue())=}&quot;)</span>
-<span class="s2">        print()</span>
-<span class="s2">        print(output.getvalue(), end=&quot;&quot;)</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;myname&quot;</span><span class="p">,</span>
+            <span class="n">always_subcommand</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">version_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">command_metavar</span><span class="o">=</span><span class="s2">&quot;mycmd&quot;</span><span class="p">,</span>
+            <span class="n">output</span><span class="o">=</span><span class="n">output</span>
+        <span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Captured output length: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">getvalue</span><span class="p">(),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>run.py<span class="w"> </span>-h
 <span class="go">Captured output length: len(output.getvalue())=222</span>
@@ -1957,11 +1957,11 @@ this parameter.</p>
 <span class="k">def</span> <span class="nf">move</span><span class="p">(</span>
     <span class="n">direction</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">arguably</span><span class="o">.</span><span class="n">arg</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="s2">&quot;up&quot;</span><span class="p">,</span> <span class="s2">&quot;down&quot;</span><span class="p">)]</span>
 <span class="p">):</span>
-    <span class="s2">&quot;&quot;&quot;An enum is usually recommended for cases like this&#39;&#39;&#39;</span>
-<span class="s2">    print(f&quot;{direction=}&quot;)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;An enum is usually recommended for cases like this&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">direction</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="s2">if __name__ == &quot;__main__&quot;:</span>
-<span class="s2">    arguably.run()</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">arguably</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>arg-choices.py<span class="w"> </span>north
 <span class="go">usage: arg-choices.py [-h] {left,right,up,down}</span>

@@ -623,7 +623,7 @@ Because of this, your CLI functions still look and behave like regular functions
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;but normal methods can&#39;t&quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;instance method&quot;</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>-m<span class="w"> </span>arguably<span class="w"> </span>etc/scripts/party-trick.py<span class="w"> </span>-h
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>-m<span class="w"> </span>arguably<span class="w"> </span>party-trick.py<span class="w"> </span>-h
 <span class="go">usage: party-trick [-h] [--version] command ...</span>
 
 <span class="go">this is the docstring for the whole script</span>
@@ -640,7 +640,7 @@ Because of this, your CLI functions still look and behave like regular functions
 <span class="go">  -h, --help                show this help message and exit</span>
 <span class="go">  --version                 show program&#39;s version number and exit</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>-m<span class="w"> </span>arguably<span class="w"> </span>etc/scripts/party-trick.py<span class="w"> </span>hello<span class="w"> </span>-h
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>-m<span class="w"> </span>arguably<span class="w"> </span>party-trick.py<span class="w"> </span>hello<span class="w"> </span>-h
 <span class="go">usage: party-trick hello [-h] name</span>
 
 <span class="go">this is hello&#39;s docstring</span>
@@ -651,7 +651,7 @@ Because of this, your CLI functions still look and behave like regular functions
 <span class="go">options:</span>
 <span class="go">  -h, --help  show this help message and exit</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>-m<span class="w"> </span>arguably<span class="w"> </span>etc/scripts/party-trick.py<span class="w"> </span>hello<span class="w"> </span>world
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>-m<span class="w"> </span>arguably<span class="w"> </span>party-trick.py<span class="w"> </span>hello<span class="w"> </span>world
 <span class="go">Hello, world!</span>
 </code></pre></div>
 <h2 id="a-comparison-with-typer">A comparison with <code>typer</code><a class="headerlink" href="#a-comparison-with-typer" title="Permanent link">&para;</a></h2>
