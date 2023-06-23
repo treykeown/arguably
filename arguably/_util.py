@@ -470,8 +470,11 @@ class ArguablyException(Exception):
 
 class ArguablyWarning(UserWarning):
     """
-    Emitted when a decorated function is incorrectly set up in some way, but arguably can continue. Will *not* be raised
-    when a user provides incorrect input to the CLI.
+    If strict checks are disabled through `arguably.run(strict=False)` this is emitted when a decorated function is
+    incorrectly set up in some way, but arguably can continue. Will *not* be raised when a user provides incorrect input
+    to the CLI.
+
+    When `arguably` is directly invoked through `python3 -m arguably ...`, `strict=False` is always set.
 
     Note that this is a warning - it is used with `warnings.warn`.
 
@@ -485,7 +488,7 @@ class ArguablyWarning(UserWarning):
         ```
 
         ```console
-        user@machine:~$ python3 -m arguably-warn.py -h
+        user@machine:~$ python3 -m arguably arguably-warn.py -h
         .../arguably/etc/scripts/api-examples/arguably-warn.py:1: ArguablyWarning: Unable to add function
         example_failed: Function parameter `_collision` in `example-failed` conflicts with `collision_`, both names
         simplify to `collision`
