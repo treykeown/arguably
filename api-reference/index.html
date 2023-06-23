@@ -1656,8 +1656,10 @@ incorrect input to the CLI.</p>
         Bases: <code>UserWarning</code></p>
 
   
-      <p>Emitted when a decorated function is incorrectly set up in some way, but arguably can continue. Will <em>not</em> be raised
-when a user provides incorrect input to the CLI.</p>
+      <p>If strict checks are disabled through <code>arguably.run(strict=False)</code> this is emitted when a decorated function is
+incorrectly set up in some way, but arguably can continue. Will <em>not</em> be raised when a user provides incorrect input
+to the CLI.</p>
+<p>When <code>arguably</code> is directly invoked through <code>python3 -m arguably ...</code>, <code>strict=False</code> is always set.</p>
 <p>Note that this is a warning - it is used with <code>warnings.warn</code>.</p>
 
 <p><strong>Examples:</strong></p>
@@ -1667,7 +1669,7 @@ when a user provides incorrect input to the CLI.</p>
 <span class="k">def</span> <span class="nf">example_ok</span><span class="p">():</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All good&quot;</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>-m<span class="w"> </span>arguably-warn.py<span class="w"> </span>-h
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>-m<span class="w"> </span>arguably<span class="w"> </span>arguably-warn.py<span class="w"> </span>-h
 <span class="go">.../arguably/etc/scripts/api-examples/arguably-warn.py:1: ArguablyWarning: Unable to add function</span>
 <span class="go">example_failed: Function parameter `_collision` in `example-failed` conflicts with `collision_`, both names</span>
 <span class="go">simplify to `collision`</span>

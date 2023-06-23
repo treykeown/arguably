@@ -65,7 +65,7 @@
             <a id="nextFileLink" class="nav" href="d_a93d8c4ccb61e4dc_arg_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.2.7">coverage.py v7.2.7</a>,
-            created at 2023-06-23 09:21 +0000
+            created at 2023-06-23 09:42 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"/>
@@ -552,36 +552,39 @@
     <p class="pln"><span class="n"><a id="t470" href="#t470">470</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t471" href="#t471">471</a></span><span class="t"><span class="key">class</span> <span class="nam">ArguablyWarning</span><span class="op">(</span><span class="nam">UserWarning</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t472" href="#t472">472</a></span><span class="t">    <span class="str">"""</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t473" href="#t473">473</a></span><span class="t"><span class="str">    Emitted when a decorated function is incorrectly set up in some way, but arguably can continue. Will *not* be raised</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t474" href="#t474">474</a></span><span class="t"><span class="str">    when a user provides incorrect input to the CLI.</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t475" href="#t475">475</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t476" href="#t476">476</a></span><span class="t"><span class="str">    Note that this is a warning - it is used with `warnings.warn`.</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t477" href="#t477">477</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t478" href="#t478">478</a></span><span class="t"><span class="str">    Examples:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t479" href="#t479">479</a></span><span class="t"><span class="str">        ```python</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t480" href="#t480">480</a></span><span class="t"><span class="str">        def example_failed(collision_, _collision):</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t481" href="#t481">481</a></span><span class="t"><span class="str">            print("You should never see this")</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t482" href="#t482">482</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t483" href="#t483">483</a></span><span class="t"><span class="str">        def example_ok():</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t484" href="#t484">484</a></span><span class="t"><span class="str">            print("All good")</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t485" href="#t485">485</a></span><span class="t"><span class="str">        ```</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t486" href="#t486">486</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t487" href="#t487">487</a></span><span class="t"><span class="str">        ```console</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t488" href="#t488">488</a></span><span class="t"><span class="str">        user@machine:~$ python3 -m arguably-warn.py -h</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t489" href="#t489">489</a></span><span class="t"><span class="str">        .../arguably/etc/scripts/api-examples/arguably-warn.py:1: ArguablyWarning: Unable to add function</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t490" href="#t490">490</a></span><span class="t"><span class="str">        example_failed: Function parameter `_collision` in `example-failed` conflicts with `collision_`, both names</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t491" href="#t491">491</a></span><span class="t"><span class="str">        simplify to `collision`</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t492" href="#t492">492</a></span><span class="t"><span class="str">          def example_failed(collision_, _collision):</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t493" href="#t493">493</a></span><span class="t"><span class="str">        usage: arguably-warn [-h] command ...</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t494" href="#t494">494</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t495" href="#t495">495</a></span><span class="t"><span class="str">        positional arguments:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t496" href="#t496">496</a></span><span class="t"><span class="str">          command</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t497" href="#t497">497</a></span><span class="t"><span class="str">            example-ok</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t498" href="#t498">498</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t499" href="#t499">499</a></span><span class="t"><span class="str">        options:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t500" href="#t500">500</a></span><span class="t"><span class="str">          -h, --help    show this help message and exit</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t501" href="#t501">501</a></span><span class="t"><span class="str">        ```</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t502" href="#t502">502</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t473" href="#t473">473</a></span><span class="t"><span class="str">    If strict checks are disabled through `arguably.run(strict=False)` this is emitted when a decorated function is</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t474" href="#t474">474</a></span><span class="t"><span class="str">    incorrectly set up in some way, but arguably can continue. Will *not* be raised when a user provides incorrect input</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t475" href="#t475">475</a></span><span class="t"><span class="str">    to the CLI.</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t476" href="#t476">476</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t477" href="#t477">477</a></span><span class="t"><span class="str">    When `arguably` is directly invoked through `python3 -m arguably ...`, `strict=False` is always set.</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t478" href="#t478">478</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t479" href="#t479">479</a></span><span class="t"><span class="str">    Note that this is a warning - it is used with `warnings.warn`.</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t480" href="#t480">480</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t481" href="#t481">481</a></span><span class="t"><span class="str">    Examples:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t482" href="#t482">482</a></span><span class="t"><span class="str">        ```python</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t483" href="#t483">483</a></span><span class="t"><span class="str">        def example_failed(collision_, _collision):</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t484" href="#t484">484</a></span><span class="t"><span class="str">            print("You should never see this")</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t485" href="#t485">485</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t486" href="#t486">486</a></span><span class="t"><span class="str">        def example_ok():</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t487" href="#t487">487</a></span><span class="t"><span class="str">            print("All good")</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t488" href="#t488">488</a></span><span class="t"><span class="str">        ```</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t489" href="#t489">489</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t490" href="#t490">490</a></span><span class="t"><span class="str">        ```console</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t491" href="#t491">491</a></span><span class="t"><span class="str">        user@machine:~$ python3 -m arguably arguably-warn.py -h</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t492" href="#t492">492</a></span><span class="t"><span class="str">        .../arguably/etc/scripts/api-examples/arguably-warn.py:1: ArguablyWarning: Unable to add function</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t493" href="#t493">493</a></span><span class="t"><span class="str">        example_failed: Function parameter `_collision` in `example-failed` conflicts with `collision_`, both names</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t494" href="#t494">494</a></span><span class="t"><span class="str">        simplify to `collision`</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t495" href="#t495">495</a></span><span class="t"><span class="str">          def example_failed(collision_, _collision):</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t496" href="#t496">496</a></span><span class="t"><span class="str">        usage: arguably-warn [-h] command ...</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t497" href="#t497">497</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t498" href="#t498">498</a></span><span class="t"><span class="str">        positional arguments:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t499" href="#t499">499</a></span><span class="t"><span class="str">          command</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t500" href="#t500">500</a></span><span class="t"><span class="str">            example-ok</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t501" href="#t501">501</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t502" href="#t502">502</a></span><span class="t"><span class="str">        options:</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t503" href="#t503">503</a></span><span class="t"><span class="str">          -h, --help    show this help message and exit</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t504" href="#t504">504</a></span><span class="t"><span class="str">        ```</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t505" href="#t505">505</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
 </main>
 <footer>
     <div class="content">
@@ -591,7 +594,7 @@
             <a id="nextFileLink" class="nav" href="d_a93d8c4ccb61e4dc_arg_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.2.7">coverage.py v7.2.7</a>,
-            created at 2023-06-23 09:21 +0000
+            created at 2023-06-23 09:42 +0000
         </p>
     </div>
 </footer>
