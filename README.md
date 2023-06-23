@@ -106,7 +106,7 @@ Don't want to write any code? Simply pass any Python script to `arguably` to giv
 </sub></div>
 
 ```console
-user@machine:~$ python3 -m arguably etc/scripts/party-trick.py -h
+user@machine:~$ python3 -m arguably party-trick.py -h
 usage: party-trick [-h] [--version] command ...
 
 this is the docstring for the whole script

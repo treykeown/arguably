@@ -510,7 +510,7 @@ class _Context:
         Examples:
             ```python
             #!/usr/bin/env python3
-            \"\"\"description for this script'''
+            \"\"\"description for this script\"\"\"
             from io import StringIO
 
             import arguably

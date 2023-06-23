@@ -114,7 +114,7 @@ def choices(*choices: Union[str, enum.Enum]) -> mods.ChoicesModifier:
         def move(
             direction: Annotated[str, arguably.arg.choices("left", "right", "up", "down")]
         ):
-            \"\"\"An enum is usually recommended for cases like this'''
+            \"\"\"An enum is usually recommended for cases like this\"\"\"
             print(f"{direction=}")
 
         if __name__ == "__main__":
