@@ -932,10 +932,10 @@ that follows.</p>
 <span class="sd">    this function is on the command line!</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        required: a required parameter</span>
-<span class="sd">        not_required: this one isn&#39;t required, since it has a default</span>
+<span class="sd">        required: a required argument</span>
+<span class="sd">        not_required: this one isn&#39;t required, since it has a default value</span>
 <span class="sd">        *others: all the other positional arguments go here</span>
-<span class="sd">        option: [-x] an option, short name is in brackets</span>
+<span class="sd">        option: [-x] keyword-only args are options, short name is in brackets</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
@@ -947,13 +947,13 @@ that follows.</p>
 <span class="go">this function is on the command line!</span>
 
 <span class="go">positional arguments:</span>
-<span class="go">  required             a required parameter (type: str)</span>
-<span class="go">  not-required         this one isn&#39;t required, since it has a default (type: int, default: 2)</span>
+<span class="go">  required             a required argument (type: str)</span>
+<span class="go">  not-required         this one isn&#39;t required, since it has a default value (type: int, default: 2)</span>
 <span class="go">  others               all the other positional arguments go here (type: int)</span>
 
 <span class="go">options:</span>
 <span class="go">  -h, --help           show this help message and exit</span>
-<span class="go">  -x, --option OPTION  an option, short name is in brackets (type: float, default: 3.14)</span>
+<span class="go">  -x, --option OPTION  keyword-only args are options, short name is in brackets (type: float, default: 3.14)</span>
 </code></pre></div>
 <p>Or, with multiple commands:</p>
 <div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>

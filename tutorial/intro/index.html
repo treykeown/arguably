@@ -361,14 +361,28 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#short-names-and-metavars" class="md-nav__link">
-    Short names and metavars
+  <a href="#option-names" class="md-nav__link">
+    Option names
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metavars" class="md-nav__link">
+    Metavars
   </a>
   
 </li>
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    Summary
+  </a>
   
 </li>
       
@@ -510,14 +524,28 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#short-names-and-metavars" class="md-nav__link">
-    Short names and metavars
+  <a href="#option-names" class="md-nav__link">
+    Option names
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metavars" class="md-nav__link">
+    Metavars
   </a>
   
 </li>
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    Summary
+  </a>
   
 </li>
       
@@ -697,14 +725,16 @@ Google, Numpydoc, or Epydoc. We'll use Google's style for this example.</p>
 </sub></div>
 
 <div class="highlight"><pre><span></span><code><span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
-<span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;world&quot;</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="o">*</span><span class="n">from_</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;world&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    this will say hello to someone</span>
 
 <span class="sd">    Args:</span>
+<span class="sd">        from_: greetings are sent from these people</span>
 <span class="sd">        name: is who this will greet</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;From: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">from_</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>hello-5.py<span class="w"> </span>-h
 <span class="go">usage: hello-5.py [-h] [--name NAME] [from ...]</span>
@@ -718,32 +748,14 @@ Google, Numpydoc, or Epydoc. We'll use Google's style for this example.</p>
 <span class="go">  -h, --help   show this help message and exit</span>
 <span class="go">  --name NAME  is who this will greet (type: str, default: world)</span>
 </code></pre></div>
-<h3 id="short-names-and-metavars">Short names and metavars<a class="headerlink" href="#short-names-and-metavars" title="Permanent link">&para;</a></h3>
-<p>There are two special things you can put in your docstring that <code>arguably</code> will use.</p>
-<table>
-<thead>
-<tr>
-<th>Format</th>
-<th>Applies to...</th>
-<th>Function</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>[-n] ...</code></td>
-<td><code>--option</code> only</td>
-<td>Short name for an <code>--option</code></td>
-</tr>
-<tr>
-<td><code>... {WHO} ...</code></td>
-<td>any argument</td>
-<td>Metavar for an argument</td>
-</tr>
-</tbody>
-</table>
-<p>A metavar is what gets printed in the usage string to represent the user-provided value. More explanation for that
-<a href="https://docs.python.org/3/library/argparse.html#metavar">here</a>.</p>
-<p>An example of using these directives to alias <code>--name</code> to <code>-n</code>, and to make its metavar <code>who</code>:</p>
+<h3 id="option-names">Option names<a class="headerlink" href="#option-names" title="Permanent link">&para;</a></h3>
+<p>By default, any <code>--options</code> will have a long name which is a <a href="../subcommands/#name-normalization">normalized version</a>
+of their Python name. Options do not have a short name by default.</p>
+<p>Option names can be controlled by prefixing their description with a value in square brackets <code>[]</code>:</p>
+<ul>
+<li><code>[-t]</code> &rightarrow; <code>-t</code> is the short name</li>
+<li><code>[-t/--to]</code> &rightarrow; <code>-t</code> is the short name and <code>--to</code> is the long name</li>
+</ul>
 <div align="right" class="code-source"><sub>
     <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/hello-6.py">[source]</a>
 </sub></div>
@@ -755,27 +767,106 @@ Google, Numpydoc, or Epydoc. We'll use Google's style for this example.</p>
 
 <span class="sd">    Args:</span>
 <span class="sd">        from_: greetings are sent from these people</span>
-<span class="sd">        name: [-n] is {who} this will greet</span>
+<span class="sd">        name: [-t/--to] is who this will greet</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;From: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">from_</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>hello-6.py<span class="w"> </span>-h
-<span class="go">usage: hello-6.py [-h] [-n WHO] [from ...]</span>
+<span class="go">usage: hello-6.py [-h] [-t TO] [from ...]</span>
 
 <span class="go">this will say hello to someone</span>
 
 <span class="go">positional arguments:</span>
-<span class="go">  from            greetings are sent from these people (type: str)</span>
+<span class="go">  from         greetings are sent from these people (type: str)</span>
 
 <span class="go">options:</span>
-<span class="go">  -h, --help      show this help message and exit</span>
-<span class="go">  -n, --name WHO  is who this will greet (type: str, default: world)</span>
+<span class="go">  -h, --help   show this help message and exit</span>
+<span class="go">  -t, --to TO  is who this will greet (type: str, default: world)</span>
+</code></pre></div>
+<h3 id="metavars">Metavars<a class="headerlink" href="#metavars" title="Permanent link">&para;</a></h3>
+<p>A metavar is what gets printed in the usage string to represent the user-provided value. More explanation for that
+<a href="https://docs.python.org/3/library/argparse.html#metavar">here</a>.</p>
+<p>By default, the metavar for any argument is the uppercase version of its name. To change the metavar, wrap any word in
+its description in curly braces <code>{}</code>. Tuples can specify one value or a number of comma-separated values equal to the
+tuple length.</p>
+<ul>
+<li><code>{who}</code> &rightarrow; <code>WHO</code> is the metavar</li>
+<li><code>{x,y,z}</code> &rightarrow; <code>X</code>, <code>Y</code>, and <code>Z</code> are the metavars for a tuple of length 3</li>
+</ul>
+<div align="right" class="code-source"><sub>
+    <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/hello-7.py">[source]</a>
+</sub></div>
+
+<div class="highlight"><pre><span></span><code><span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="o">*</span><span class="n">from_</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;world&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    this will say hello to someone</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        from_: greetings are sent from these people</span>
+<span class="sd">        name: [-t/--to] is {who} this will greet</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;From: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">from_</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>hello-7.py<span class="w"> </span>-h
+<span class="go">usage: hello-7.py [-h] [-t WHO] [from ...]</span>
+
+<span class="go">this will say hello to someone</span>
+
+<span class="go">positional arguments:</span>
+<span class="go">  from          greetings are sent from these people (type: str)</span>
+
+<span class="go">options:</span>
+<span class="go">  -h, --help    show this help message and exit</span>
+<span class="go">  -t, --to WHO  is who this will greet (type: str, default: world)</span>
 </code></pre></div>
 <p>Compare the last line with how it was before:</p>
-<div class="highlight"><pre><span></span><code><span class="go">Before:  --name NAME     is who this will greet (type: str, default: world)</span>
-<span class="go">After:   -n, --name WHO  is who this will greet (type: str, default: world)</span>
+<div class="highlight"><pre><span></span><code><span class="go">Before:  -t, --to TO   is who this will greet (type: str, default: world)</span>
+<span class="go">After:   -t, --to WHO  is who this will greet (type: str, default: world)</span>
 </code></pre></div>
+<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<p><code>arguably</code> looks at all decorated functions and maps their arguments from Python to the CLI.</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
+<span class="k">def</span> <span class="nf">some_function</span><span class="p">(</span><span class="n">required</span><span class="p">,</span> <span class="n">not_required</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">*</span><span class="n">others</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">option</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.14</span><span class="p">):</span>
+    <span class="o">...</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>./intro.py<span class="w"> </span>-h
+<span class="go">usage: intro.py [-h] [-x OPTION] required [not-required] [others ...]</span>
+<span class="go">...</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>This Python ...</th>
+<th>... becomes this on the CLI.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>positional args, no default <code>required</code></td>
+<td>positional CLI args, required <code>required</code></td>
+</tr>
+<tr>
+<td>positional args, with default <code>not_required=2</code></td>
+<td>positional CLI args, optional <code>[not-required]</code></td>
+</tr>
+<tr>
+<td>positional args, variadic <code>*others</code></td>
+<td>any extra positional CLI args <code>[others ...]</code></td>
+</tr>
+<tr>
+<td>keyword-only arguments <code>option</code></td>
+<td>command-line options <code>[-x OPTION]</code></td>
+</tr>
+</tbody>
+</table>
+<p>Docstrings are used for command and argument help messages. They can also:</p>
+<ul>
+<li>Change the short <code>-n</code> and long name <code>--name</code> of an <code>--option</code> by prefixing its description with <code>[-n/--name]</code></li>
+<li>Change the metavar of an argument to <code>SOMETHING</code> wrapping a word in curly braces <code>{something}</code></li>
+</ul>
 
 
 

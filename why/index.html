@@ -549,10 +549,10 @@ Because of this, your CLI functions still look and behave like regular functions
 <span class="sd">    this function is on the command line!</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        required: a required parameter</span>
-<span class="sd">        not_required: this one isn&#39;t required, since it has a default</span>
+<span class="sd">        required: a required argument</span>
+<span class="sd">        not_required: this one isn&#39;t required, since it has a default value</span>
 <span class="sd">        *others: all the other positional arguments go here</span>
-<span class="sd">        option: [-x] an option, short name is in brackets</span>
+<span class="sd">        option: [-x] keyword-only args are options, short name is in brackets</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">required</span><span class="si">=}</span><span class="s2">, </span><span class="si">{</span><span class="n">not_required</span><span class="si">=}</span><span class="s2">, </span><span class="si">{</span><span class="n">others</span><span class="si">=}</span><span class="s2">, </span><span class="si">{</span><span class="n">option</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -565,13 +565,13 @@ Because of this, your CLI functions still look and behave like regular functions
 <span class="go">this function is on the command line!</span>
 
 <span class="go">positional arguments:</span>
-<span class="go">  required             a required parameter (type: str)</span>
-<span class="go">  not-required         this one isn&#39;t required, since it has a default (type: int, default: 2)</span>
+<span class="go">  required             a required argument (type: str)</span>
+<span class="go">  not-required         this one isn&#39;t required, since it has a default value (type: int, default: 2)</span>
 <span class="go">  others               all the other positional arguments go here (type: int)</span>
 
 <span class="go">options:</span>
 <span class="go">  -h, --help           show this help message and exit</span>
-<span class="go">  -x, --option OPTION  an option, short name is in brackets (type: float, default: 3.14)</span>
+<span class="go">  -x, --option OPTION  keyword-only args are options, short name is in brackets (type: float, default: 3.14)</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">intro</span> <span class="kn">import</span> <span class="n">some_function</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">some_function</span><span class="p">(</span><span class="s2">&quot;asdf&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="n">option</span><span class="o">=</span><span class="mf">2.71</span><span class="p">)</span>
