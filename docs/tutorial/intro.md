@@ -340,5 +340,5 @@ usage: intro.py [-h] [-x OPTION] required [not-required] [others ...]
 
 Docstrings are used for command and argument help messages. They can also:
 
-* Change the short `-n` and long name `--name` of an `--option` by prefixing its description with `[-n/--name]`
-* Change the metavar of an argument to `SOMETHING` wrapping a word in curly braces `{something}`
+* Change the short (`-n`) and long name (`--name`) of an `--option` by prefixing its description with `[-n/--name]`
+* Change the metavar of an argument to `SOMETHING` by wrapping a word in curly braces: `{something}`
