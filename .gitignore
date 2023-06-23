@@ -1,5 +1,3 @@
-test_scripts/
-
 .ruff_cache/
 coverage.json
 
