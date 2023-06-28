@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 import abc
 import asyncio
 import dataclasses
 import io
+import re
 import sys
 from io import StringIO
 from pathlib import Path
@@ -328,6 +331,13 @@ def scope_annotated(iobuf: StringIO) -> Dict[str, Callable]:
     class Complex:
         foo: int
         bar: str
+
+    # Insert classes into the global namespace, needed because we test with `from __future__ import annotations`
+    # From https://stackoverflow.com/a/69034361:
+    #   For the uncommon case of classes defined in a locals scope one has to explicitly provide the namespace.
+    for local_name, local_item in locals().items():
+        if re.match("^[A-Z]", local_name):
+            globals()[local_name] = local_item
 
     @arguably.command
     def log(message: str = "Howdy, there!", *, logger: Annotated[Logger, arguably.arg.builder()] = NoLogger()) -> None:
