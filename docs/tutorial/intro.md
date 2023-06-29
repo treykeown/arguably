@@ -230,7 +230,9 @@ of their Python name. Options do not have a short name by default.
 Option names can be controlled by prefixing their description with a value in square brackets `[]`:
 
 * `[-t]` &rightarrow; `-t` is the short name
+* `[--to]` &rightarrow; `--to` is the long name
 * `[-t/--to]` &rightarrow; `-t` is the short name and `--to` is the long name
+* `[-t/]` &rightarrow; `-t` is the short name, the long name is *removed*.
 
 <div align="right" class="code-source"><sub>
     <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/hello-6.py">[source]</a>
@@ -238,30 +240,28 @@ Option names can be controlled by prefixing their description with a value in sq
 
 ```python
 @arguably.command
-def hello(*from_, name="world"):
+def hello(*, from_="me", name="world"):
     """
     this will say hello to someone
 
     Args:
-        from_: greetings are sent from these people
-        name: [-t/--to] is who this will greet
+        from_: [-f/] the sender of these greetings
+        name: [-t/--to] the receiver of these greetings
     """
     print(f"Hello, {name}!")
-    print(f"From: {', '.join(from_)}")
+    print(f"From: {from_}")
 ```
 
 ```console
-user@machine:~$ python3 hello-6.py -h
-usage: hello-6.py [-h] [-t TO] [from ...]
+user@machine:~$ python3 etc/scripts/hello-6.py -h
+usage: hello-6.py [-h] [-f FROM] [-t TO]
 
 this will say hello to someone
 
-positional arguments:
-  from         greetings are sent from these people (type: str)
-
 options:
   -h, --help   show this help message and exit
-  -t, --to TO  is who this will greet (type: str, default: world)
+  -f FROM      the sender of these greetings (type: str, default: me)
+  -t, --to TO  the receiver of these greetings (type: str, default: world)
 ```
 
 ### Metavars
@@ -282,37 +282,35 @@ tuple length.
 
 ```python
 @arguably.command
-def hello(*from_, name="world"):
+def hello(*, from_="me", name="world"):
     """
     this will say hello to someone
 
     Args:
-        from_: greetings are sent from these people
-        name: [-t/--to] is {who} this will greet
+        from_: [-f/] the {sender} of these greetings
+        name: [-t/--to] the {receiver} of these greetings
     """
     print(f"Hello, {name}!")
-    print(f"From: {', '.join(from_)}")
+    print(f"From: {from_}")
 ```
 
 ```console
-user@machine:~$ python3 hello-7.py -h
-usage: hello-7.py [-h] [-t WHO] [from ...]
+user@machine:~$ python3 etc/scripts/hello-7.py -h
+usage: hello-7.py [-h] [-f SENDER] [-t RECEIVER]
 
 this will say hello to someone
 
-positional arguments:
-  from          greetings are sent from these people (type: str)
-
 options:
-  -h, --help    show this help message and exit
-  -t, --to WHO  is who this will greet (type: str, default: world)
+  -h, --help         show this help message and exit
+  -f SENDER          the sender of these greetings (type: str, default: me)
+  -t, --to RECEIVER  the receiver of these greetings (type: str, default: world)
 ```
 
 Compare the last line with how it was before:
 
 ```console
-Before:  -t, --to TO   is who this will greet (type: str, default: world)
-After:   -t, --to WHO  is who this will greet (type: str, default: world)
+Before:  -t, --to TO  the receiver of these greetings (type: str, default: world)
+After:   -t, --to RECEIVER  the receiver of these greetings (type: str, default: world)
 ```
 
 ## Summary
@@ -340,5 +338,9 @@ usage: intro.py [-h] [-x OPTION] required [not-required] [others ...]
 
 Docstrings are used for command and argument help messages. They can also:
 
-* Change the short (`-n`) and long name (`--name`) of an `--option` by prefixing its description with `[-n/--name]`
+* Change option names:
+    * Set the short name with `[-n]`
+    * Change the long name with `[--name]`
+    * Set the short and long names with `[-n/--name]`
+    * Set the short name and remove the long name with `[-n/]`
 * Change the metavar of an argument to `SOMETHING` by wrapping a word in curly braces: `{something}`
