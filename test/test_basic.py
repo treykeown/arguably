@@ -219,6 +219,88 @@ def test_version_flags(iobuf: StringIO) -> None:
     assert f"{test_version_flags.__name__} 1.2.3\n" == cli
 
 
+def test_option_flag(iobuf: StringIO) -> None:
+    @arguably.command
+    def foo(*, bar_: str = "bar"):
+        """
+        foo
+        Args:
+            bar_: [-b] bar desc
+        """
+
+    argv = ["-h"]
+
+    sys.argv.extend(argv)
+    with pytest.raises(SystemExit):
+        arguably.run(output=iobuf)
+    cli = get_and_clear_io(iobuf)
+    print(cli)
+
+    assert cli.startswith(f"usage: {test_option_flag.__name__} [-h] [-b BAR]")
+    assert "  -b, --bar BAR  bar desc (type: str, default: bar)" in cli
+
+
+def test_option_flag_rename(iobuf: StringIO) -> None:
+    @arguably.command
+    def foo(*, bar_: str = "bar"):
+        """
+        foo
+        Args:
+            bar_: [-b/--bat] bar desc
+        """
+
+    argv = ["-h"]
+
+    sys.argv.extend(argv)
+    with pytest.raises(SystemExit):
+        arguably.run(output=iobuf)
+    cli = get_and_clear_io(iobuf)
+
+    assert cli.startswith(f"usage: {test_option_flag_rename.__name__} [-h] [-b BAT]")
+    assert "  -b, --bat BAT  bar desc (type: str, default: bar)" in cli
+
+
+def test_option_flag_rename_reversed(iobuf: StringIO) -> None:
+    @arguably.command
+    def foo(*, bar_: str = "bar"):
+        """
+        foo
+        Args:
+            bar_: [--bat/-b] bar desc
+        """
+
+    argv = ["-h"]
+
+    sys.argv.extend(argv)
+    with pytest.raises(SystemExit):
+        arguably.run(output=iobuf)
+    cli = get_and_clear_io(iobuf)
+
+    assert cli.startswith(f"usage: {test_option_flag_rename_reversed.__name__} [-h] [-b BAT]")
+    assert "  -b, --bat BAT  bar desc (type: str, default: bar)" in cli
+
+
+def test_option_flag_short_only(iobuf: StringIO) -> None:
+    @arguably.command
+    def foo(*, bar_: str = "bar"):
+        """
+        foo
+        Args:
+            bar_: [-b/] bar desc
+        """
+
+    argv = ["-h"]
+
+    sys.argv.extend(argv)
+    with pytest.raises(SystemExit):
+        arguably.run(output=iobuf)
+    cli = get_and_clear_io(iobuf)
+    print(cli)
+
+    assert cli.startswith(f"usage: {test_option_flag_short_only.__name__} [-h] [-b BAR]")
+    assert "  -b BAR      bar desc (type: str, default: bar)" in cli
+
+
 ########################################################################################################################
 # async_hello()
 

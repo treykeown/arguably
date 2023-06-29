@@ -63,11 +63,11 @@ def test_missing_key(iobuf: StringIO, scope_annotated: Dict[str, Callable]) -> N
 def test_raw_tuple(iobuf: StringIO) -> None:
     with pytest.raises(
         arguably.ArguablyException,
-        match="Function parameter `a` in `foo` is a tuple but doesn't specify the type of its items, which arguably "
+        match="Function argument `a` in `foo` is a tuple but doesn't specify the type of its items, which arguably "
         "requires.",
     ):
 
-        @arguably.command()
+        @arguably.command
         def foo(a: tuple):
             pass
 

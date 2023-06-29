@@ -155,7 +155,6 @@ def info_for_flags(cli_arg_name: str, flag_class: Type[enum.Flag]) -> List[EnumF
     docs = docparse(flag_class.__doc__ or "")
     enum_member_docs = get_enum_member_docs(flag_class)
     for item in flag_class:
-        options = [f"--{normalize_name(cast(str, item.name))}"]
         arg_description = ""
 
         # `docstring_parser` does not specially parse out attibutes declared in the docstring - we have to do that
@@ -178,14 +177,41 @@ def info_for_flags(cli_arg_name: str, flag_class: Type[enum.Flag]) -> List[EnumF
             arg_description = enum_member_docs[item.name]
 
         # Extract the alias from the docstring for the flag item
-        if alias_match := re.match(r"^\[-([a-zA-Z0-9])] ", arg_description):
-            arg_description = arg_description[len(alias_match.group(0)) :]
-            options.insert(0, f"-{alias_match.group(1)}")
+        options = list()
+        long_name: Optional[str] = normalize_name(cast(str, item.name))
+        arg_description, short_name, long_name = parse_short_and_long_name(long_name, arg_description, flag_class)
+        if short_name is not None:
+            options.append(f"-{short_name}")
+        if long_name is not None:
+            options.append(f"--{long_name}")
 
         result.append(
             EnumFlagInfo(cast(Union[Tuple[str], Tuple[str, str]], tuple(options)), cli_arg_name, item, arg_description)
         )
     return result
+
+
+def parse_short_and_long_name(
+    long_name: Optional[str], arg_description: str, func_or_class: Callable
+) -> Tuple[str, Optional[str], Optional[str]]:
+    """Extracts the short and long name for an option"""
+    short_name = None
+    if alias_match := re.match(r"^\[-([a-zA-Z0-9])(/--([a-zA-Z0-9][a-zA-Z0-9\-]*))?]", arg_description):
+        short_name, maybe_long_name = alias_match.group(1), alias_match.group(3)
+        arg_description = arg_description[len(alias_match.group(0)) :].lstrip(" ")
+        if maybe_long_name is not None:
+            long_name = maybe_long_name
+    elif alias_match := re.match(r"^\[--([a-zA-Z0-9][a-zA-Z0-9\-]*)(/-([a-zA-Z0-9]))?]", arg_description):
+        long_name, short_name = alias_match.group(1), alias_match.group(3)
+        arg_description = arg_description[len(alias_match.group(0)) :].lstrip(" ")
+    elif alias_match := re.match(r"^\[-([a-zA-Z0-9])/]", arg_description):
+        short_name = alias_match.group(1)
+        long_name = None
+        arg_description = arg_description[len(alias_match.group(0)) :].lstrip(" ")
+    elif arg_description.startswith("["):
+        # TODO: Should this be an exception?
+        warn(f"Description for {long_name} starts with `[`, but doesn't match any known option formats.", func_or_class)
+    return arg_description, short_name, long_name
 
 
 ########################################################################################################################
@@ -279,26 +305,26 @@ def log_args(logger_fn: Callable, msg: str, fn_name: str, *args: Any, **kwargs: 
     return ArgSpec(args, kwargs)
 
 
-def func_info(function: Callable) -> Optional[Tuple[str, int]]:
-    source_file = inspect.getsourcefile(function)
+def func_or_class_info(func_or_class: Callable) -> Optional[Tuple[str, int]]:
+    source_file = inspect.getsourcefile(func_or_class)
     if source_file is None:
         return None
 
     # Skip lines before the `def`. Should be cleaned up in the future.
-    source_lines, line_number = inspect.getsourcelines(function)
+    source_lines, line_number = inspect.getsourcelines(func_or_class)
     for line in source_lines:
-        if "def " not in line:
-            line_number += 1
-        break
+        if "def " in line or "class " in line:
+            break
+        line_number += 1
 
     return source_file, line_number
 
 
-def warn(message: str, function: Optional[Callable] = None) -> None:
+def warn(message: str, func_or_class: Optional[Callable] = None) -> None:
     """Provide a warning. We avoid using logging, since we're just a library, so we issue through `warnings`."""
 
-    if function is not None:
-        info = func_info(function)
+    if func_or_class is not None:
+        info = func_or_class_info(func_or_class)
         if info is not None:
             source_file, source_file_line = info
             warnings.warn_explicit(
@@ -462,7 +488,7 @@ class ArguablyException(Exception):
           File "<string>", line 9, in __init__
           File ".../arguably/arguably/_commands.py", line 214, in __post_init__
             raise util.ArguablyException(
-        arguably._util.ArguablyException: Function parameter `_collision` in `example` conflicts with `collision_`, both
+        arguably._util.ArguablyException: Function argument `_collision` in `example` conflicts with `collision_`, both
         names simplify to `collision`
         ```
     """
@@ -490,7 +516,7 @@ class ArguablyWarning(UserWarning):
         ```console
         user@machine:~$ python3 -m arguably arguably-warn.py -h
         .../arguably/etc/scripts/api-examples/arguably-warn.py:1: ArguablyWarning: Unable to add function
-        example_failed: Function parameter `_collision` in `example-failed` conflicts with `collision_`, both names
+        example_failed: Function argument `_collision` in `example-failed` conflicts with `collision_`, both names
         simplify to `collision`
           def example_failed(collision_, _collision):
         usage: arguably-warn [-h] command ...

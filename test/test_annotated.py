@@ -72,6 +72,7 @@ def test_high_five_required(iobuf: StringIO, scope_annotated: Dict[str, Callable
     with pytest.raises(SystemExit):
         arguably.run(output=iobuf, name="advanced")
     cli = get_and_clear_io(iobuf)
+    print(cli)
 
     assert cli.startswith("usage: advanced high-five [-h] people [people ...]")
     assert "error: the following arguments are required: people\n" in cli

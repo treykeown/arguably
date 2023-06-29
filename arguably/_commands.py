@@ -5,7 +5,7 @@ import enum
 import inspect
 import re
 from dataclasses import dataclass, field
-from typing import Callable, Any, Union, Optional, List, Dict, Tuple, cast
+from typing import Callable, Any, Union, Optional, List, Dict, Tuple, cast, Set
 
 from docstring_parser import parse as docparse
 
@@ -92,13 +92,21 @@ class CommandDecoratorInfo:
                 assert len(tuple_modifiers) == 1
                 expected_metavars = len(tuple_modifiers[0].tuple_arg)
 
+            # What kind of argument is this? Is it required-positional, optional-positional, or an option?
+            if param.kind == param.KEYWORD_ONLY:
+                input_method = InputMethod.OPTION
+            elif arg_default is util.NoDefault:
+                input_method = InputMethod.REQUIRED_POSITIONAL
+            else:
+                input_method = InputMethod.OPTIONAL_POSITIONAL
+
             # Get the description
             arg_description = ""
             if docs is not None and docs.params is not None:
                 ds_matches = [ds_p for ds_p in docs.params if ds_p.arg_name.lstrip("*") == param.name]
                 if len(ds_matches) > 1:
                     raise util.ArguablyException(
-                        f"Function parameter `{param.name}` in " f"`{processed_name}` has multiple docstring entries."
+                        f"Function argument `{param.name}` in " f"`{processed_name}` has multiple docstring entries."
                     )
                 if len(ds_matches) == 1:
                     ds_info = ds_matches[0]
@@ -106,11 +114,23 @@ class CommandDecoratorInfo:
 
             # Extract the alias
             arg_alias = None
-            if alias_match := re.match(r"^\[-([a-zA-Z0-9])(/--([a-zA-Z0-9]+))?]", arg_description):
-                arg_alias, desc_name = alias_match.group(1), alias_match.group(3)
-                arg_description = arg_description[len(alias_match.group(0)) :].lstrip(" ")
-                if desc_name is not None:
-                    cli_arg_name = desc_name
+            has_long_name = True
+            if input_method == InputMethod.OPTION:
+                arg_description, arg_alias, long_name = util.parse_short_and_long_name(
+                    cli_arg_name, arg_description, func
+                )
+                if long_name is None:
+                    has_long_name = False
+                else:
+                    cli_arg_name = long_name
+            else:
+                if arg_description.startswith("["):
+                    util.warn(
+                        f"Function argument `{param.name}` in `{processed_name}` is a positional argument, but starts "
+                        f"with a `[`, which is used to specify --option names. To make this argument an --option, make "
+                        f"it into be a keyword-only argument.",
+                        func,
+                    )
 
             # Extract the metavars
             metavars = None
@@ -121,7 +141,7 @@ class CommandDecoratorInfo:
                     if is_variadic:
                         if len(match_items) != 1:
                             raise util.ArguablyException(
-                                f"Function parameter `{param.name}` in `{processed_name}` should only have one item in "
+                                f"Function argument `{param.name}` in `{processed_name}` should only have one item in "
                                 f"its metavar descriptor, but found {len(match_items)}: {','.join(match_items)}."
                             )
                     elif len(match_items) != expected_metavars:
@@ -129,24 +149,16 @@ class CommandDecoratorInfo:
                             match_items *= expected_metavars
                         else:
                             raise util.ArguablyException(
-                                f"Function parameter `{param.name}` in `{processed_name}` takes {expected_metavars} "
+                                f"Function argument `{param.name}` in `{processed_name}` takes {expected_metavars} "
                                 f"items, but metavar descriptor has {len(match_items)}: {','.join(match_items)}."
                             )
                     metavars = [i.upper() for i in match_items]
                     arg_description = "".join(metavar_split)  # Strips { and } from metavars for description
                 if len(metavar_split) > 3:
                     raise util.ArguablyException(
-                        f"Function parameter `{param.name}` in `{processed_name}` has multiple metavar sequences - "
+                        f"Function argument `{param.name}` in `{processed_name}` has multiple metavar sequences - "
                         f"these are denoted like {{A, B, C}}. There should be only one."
                     )
-
-            # What kind of argument is this? Is it required-positional, optional-positional, or an option?
-            if param.kind == param.KEYWORD_ONLY:
-                input_method = InputMethod.OPTION
-            elif arg_default is util.NoDefault:
-                input_method = InputMethod.REQUIRED_POSITIONAL
-            else:
-                input_method = InputMethod.OPTIONAL_POSITIONAL
 
             # Check modifiers
             for modifier in modifiers:
@@ -162,6 +174,7 @@ class CommandDecoratorInfo:
                     arg_value_type,
                     arg_description,
                     arg_alias,
+                    has_long_name,
                     metavars,
                     arg_default,
                     modifiers,
@@ -202,19 +215,24 @@ class CommandArg:
 
     description: str
     alias: Optional[str] = None
+    has_long_name: bool = True
     metavars: Optional[List[str]] = None
 
     default: Any = util.NoDefault
 
     modifiers: List[mods.CommandArgModifier] = field(default_factory=list)
 
+    def __post_init__(self) -> None:
+        if not self.has_long_name and self.alias is None:
+            raise ValueError("CommandArg has no short or long name")
+
     def get_options(self) -> Union[Tuple[()], Tuple[str], Tuple[str, str]]:
-        if self.input_method is not InputMethod.OPTION:
-            return cast(Tuple[()], tuple())
-        elif self.alias is None:
-            return (f"--{self.cli_arg_name}",)
-        else:
-            return f"-{self.alias}", f"--{self.cli_arg_name}"
+        options = list()
+        if self.alias is not None:
+            options.append(f"-{self.alias}")
+        if self.has_long_name:
+            options.append(f"--{self.cli_arg_name}")
+        return cast(Union[Tuple[()], Tuple[str], Tuple[str, str]], tuple(options))
 
     @staticmethod
     def _normalize_type_union(
@@ -230,7 +248,7 @@ class CommandArg:
             filtered_types = [x for x in util.get_args(value_type) if x is not type(None)]
             if len(filtered_types) != 1:
                 raise util.ArguablyException(
-                    f"Function parameter `{param.name}` in `{function_name}` is an unsupported type. It must be either "
+                    f"Function argument `{param.name}` in `{function_name}` is an unsupported type. It must be either "
                     f"a single, non-generic type or a Union with None."
                 )
             value_type = filtered_types[0]
@@ -272,15 +290,13 @@ class CommandArg:
         if util.get_origin(value_type) == util.Annotated:
             type_args = util.get_args(value_type)
             if len(type_args) == 0:
-                raise util.ArguablyException(
-                    f"Function parameter `{param.name}` is Annotated, but no type is specified"
-                )
+                raise util.ArguablyException(f"Function argument `{param.name}` is Annotated, but no type is specified")
             else:
                 value_type = type_args[0]
             for type_arg in type_args[1:]:
                 if not isinstance(type_arg, mods.CommandArgModifier):
                     raise util.ArguablyException(
-                        f"Function parameter `{param.name}` has an invalid annotation value: {type_arg}"
+                        f"Function argument `{param.name}` has an invalid annotation value: {type_arg}"
                     )
                 modifiers.append(type_arg)
 
@@ -297,7 +313,7 @@ class CommandArg:
                 value_type = str
             elif len(type_args) > 1:
                 raise util.ArguablyException(
-                    f"Function parameter `{param.name}` in `{function_name}` has too many items passed to List[...]."
+                    f"Function argument `{param.name}` in `{function_name}` has too many items passed to List[...]."
                     f"There should be exactly one item between the square brackets."
                 )
             else:
@@ -308,18 +324,18 @@ class CommandArg:
         ):
             if param.kind in [param.VAR_KEYWORD, param.VAR_POSITIONAL]:
                 raise util.ArguablyException(
-                    f"Function parameter `{param.name}` in `{function_name}` is an *args or **kwargs, which should "
+                    f"Function argument `{param.name}` in `{function_name}` is an *args or **kwargs, which should "
                     f"be annotated with what only one of its items should be."
                 )
             type_args = util.get_args(value_type)
             if len(type_args) == 0:
                 raise util.ArguablyException(
-                    f"Function parameter `{param.name}` in `{function_name}` is a tuple but doesn't specify the "
+                    f"Function argument `{param.name}` in `{function_name}` is a tuple but doesn't specify the "
                     f"type of its items, which arguably requires."
                 )
             if type_args[-1] is Ellipsis:
                 raise util.ArguablyException(
-                    f"Function parameter `{param.name}` in `{function_name}` is a variable-length tuple, which is "
+                    f"Function argument `{param.name}` in `{function_name}` is a variable-length tuple, which is "
                     f"not supported."
                 )
             value_type = type(None)
@@ -327,11 +343,11 @@ class CommandArg:
         elif origin is not None:
             if param.kind in [param.VAR_KEYWORD, param.VAR_POSITIONAL]:
                 raise util.ArguablyException(
-                    f"Function parameter `{param.name}` in `{function_name}` is an *args or **kwargs, which should "
+                    f"Function argument `{param.name}` in `{function_name}` is an *args or **kwargs, which should "
                     f"be annotated with what only one of its items should be."
                 )
             raise util.ArguablyException(
-                f"Function parameter `{param.name}` in `{function_name}` is a generic type "
+                f"Function argument `{param.name}` in `{function_name}` is a generic type "
                 f"(`{util.get_origin(value_type)}`), which is not supported."
             )
 
@@ -349,19 +365,21 @@ class Command:
     alias: Optional[str] = None
     add_help: bool = True
 
-    arg_map: Dict[str, CommandArg] = field(init=False)
+    func_arg_names: Set[str] = field(default_factory=set)
+    cli_arg_map: Dict[str, CommandArg] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
-        self.arg_map = dict()
+        self.cli_arg_map = dict()
         for arg in self.args:
-            assert arg.func_arg_name not in self.arg_map
-            if arg.cli_arg_name in self.arg_map:
+            assert arg.func_arg_name not in self.func_arg_names
+            self.func_arg_names.add(arg.func_arg_name)
+
+            if arg.cli_arg_name in self.cli_arg_map:
                 raise util.ArguablyException(
-                    f"Function parameter `{arg.func_arg_name}` in `{self.name}` conflicts with "
-                    f"`{self.arg_map[arg.cli_arg_name].func_arg_name}`, both names simplify to `{arg.cli_arg_name}`"
+                    f"Function argument `{arg.func_arg_name}` in `{self.name}` conflicts with "
+                    f"`{self.cli_arg_map[arg.cli_arg_name].func_arg_name}`, both have the CLI name `{arg.cli_arg_name}`"
                 )
-            self.arg_map[arg.cli_arg_name] = arg
-            self.arg_map[arg.func_arg_name] = arg
+            self.cli_arg_map[arg.cli_arg_name] = arg
 
     def call(self, parsed_args: Dict[str, Any]) -> Any:
         """Filters arguments from argparse to only include the ones used by this command, then calls it"""
@@ -369,16 +387,16 @@ class Command:
         args = list()
         kwargs = dict()
 
-        filtered_args = {k: v for k, v in parsed_args.items() if k in self.arg_map}
+        filtered_args = {k: v for k, v in parsed_args.items() if k in self.func_arg_names}
 
         # Add to either args or kwargs
         for arg in self.args:
             if arg.input_method.is_positional and not arg.is_variadic:
-                args.append(filtered_args[arg.cli_arg_name])
+                args.append(filtered_args[arg.func_arg_name])
             elif arg.input_method.is_positional and arg.is_variadic:
-                args.extend(filtered_args[arg.cli_arg_name])
+                args.extend(filtered_args[arg.func_arg_name])
             else:
-                kwargs[arg.func_arg_name] = filtered_args[arg.cli_arg_name]
+                kwargs[arg.func_arg_name] = filtered_args[arg.func_arg_name]
 
         # Call the function
         if util.is_async_callable(self.function):

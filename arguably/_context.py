@@ -21,7 +21,7 @@ from ._util import (
     get_ancestors,
     get_parser_name,
     warn,
-    func_info,
+    func_or_class_info,
 )
 
 
@@ -246,7 +246,7 @@ class _Context:
             if issubclass(arg_.arg_value_type, bool):
                 if arg_.input_method is not InputMethod.OPTION or arg_.default is NoDefault:
                     raise ArguablyException(
-                        f"Function parameter `{arg_.func_arg_name}` in `{cmd.name}` is a `bool`. Boolean parameters "
+                        f"Function argument `{arg_.func_arg_name}` in `{cmd.name}` is a `bool`. Boolean parameters "
                         f"must have a default value and be an optional, not a positional, argument."
                     )
 
@@ -275,7 +275,7 @@ class _Context:
                 continue
 
             # Optional kwargs for parser.add_argument
-            add_arg_kwargs: Dict[str, Any] = dict(type=arg_.arg_value_type)
+            add_arg_kwargs: Dict[str, Any] = dict(type=arg_.arg_value_type, action="store")
 
             arg_description = arg_.description
             description_extras = []
@@ -327,12 +327,12 @@ class _Context:
                 mapping = self.set_up_enum(arg_.arg_value_type)
                 add_arg_kwargs.update(choices=[n for n in mapping])
 
-            cli_arg_names: Tuple[str, ...] = (arg_.cli_arg_name,)
+            name_spec: Tuple[str, ...] = (arg_.func_arg_name,)
 
             # Special handling for optional arguments
             if arg_.input_method is InputMethod.OPTION:
-                cli_arg_names = arg_.get_options()
-                add_arg_kwargs.update(dest=arg_.cli_arg_name)
+                name_spec = arg_.get_options()
+                add_arg_kwargs.update(dest=arg_.func_arg_name)
 
             # `bool` should be flags
             if issubclass(arg_.arg_value_type, bool):
@@ -352,13 +352,23 @@ class _Context:
             for modifier in arg_.modifiers:
                 modifier.modify_arg_dict(cmd, arg_, add_arg_kwargs)
 
+            if (
+                "choices" not in add_arg_kwargs
+                and "metavar" not in add_arg_kwargs
+                and add_arg_kwargs["action"] not in ["store_true", "store_false", "count", "help", "version"]
+            ):
+                if arg_.input_method is InputMethod.OPTION:
+                    add_arg_kwargs.update(metavar=arg_.cli_arg_name.upper())
+                else:
+                    add_arg_kwargs.update(metavar=arg_.cli_arg_name)
+
             # Add the argument to the parser
             argspec = log_args(
                 logger.debug,
                 f"Parser({repr(get_parser_name(parser.prog))}).",
                 parser.add_argument.__name__,
                 # Args for the call are below:
-                *cli_arg_names,
+                *name_spec,
                 **add_arg_kwargs,
             )
             parser.add_argument(*argspec.args, **argspec.kwargs)
@@ -461,7 +471,7 @@ class _Context:
     def _soft_failure(self, msg: str, function: Optional[Callable] = None) -> None:
         if self._options.strict:
             if function is not None:
-                info = func_info(function)
+                info = func_or_class_info(function)
                 if info is not None:
                     source_file, source_file_line = info
                     msg = f"({source_file}:{source_file_line}) {function.__name__}: {msg}"
