@@ -234,7 +234,6 @@ def test_option_flag(iobuf: StringIO) -> None:
     with pytest.raises(SystemExit):
         arguably.run(output=iobuf)
     cli = get_and_clear_io(iobuf)
-    print(cli)
 
     assert cli.startswith(f"usage: {test_option_flag.__name__} [-h] [-b BAR]")
     assert "  -b, --bar BAR  bar desc (type: str, default: bar)" in cli
@@ -295,7 +294,6 @@ def test_option_flag_short_only(iobuf: StringIO) -> None:
     with pytest.raises(SystemExit):
         arguably.run(output=iobuf)
     cli = get_and_clear_io(iobuf)
-    print(cli)
 
     assert cli.startswith(f"usage: {test_option_flag_short_only.__name__} [-h] [-b BAR]")
     assert "  -b BAR      bar desc (type: str, default: bar)" in cli
