@@ -787,35 +787,35 @@ of their Python name. Options do not have a short name by default.</p>
 <p>Option names can be controlled by prefixing their description with a value in square brackets <code>[]</code>:</p>
 <ul>
 <li><code>[-t]</code> &rightarrow; <code>-t</code> is the short name</li>
+<li><code>[--to]</code> &rightarrow; <code>--to</code> is the long name</li>
 <li><code>[-t/--to]</code> &rightarrow; <code>-t</code> is the short name and <code>--to</code> is the long name</li>
+<li><code>[-t/]</code> &rightarrow; <code>-t</code> is the short name, the long name is <em>removed</em>.</li>
 </ul>
 <div align="right" class="code-source"><sub>
     <a href="https://github.com/treykeown/arguably/blob/main/etc/scripts/hello-6.py">[source]</a>
 </sub></div>
 
 <div class="highlight"><pre><span></span><code><span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
-<span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="o">*</span><span class="n">from_</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;world&quot;</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">from_</span><span class="o">=</span><span class="s2">&quot;me&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;world&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    this will say hello to someone</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        from_: greetings are sent from these people</span>
-<span class="sd">        name: [-t/--to] is who this will greet</span>
+<span class="sd">        from_: [-f/] the sender of these greetings</span>
+<span class="sd">        name: [-t/--to] the receiver of these greetings</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;From: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">from_</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;From: </span><span class="si">{</span><span class="n">from_</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>hello-6.py<span class="w"> </span>-h
-<span class="go">usage: hello-6.py [-h] [-t TO] [from ...]</span>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>etc/scripts/hello-6.py<span class="w"> </span>-h
+<span class="go">usage: hello-6.py [-h] [-f FROM] [-t TO]</span>
 
 <span class="go">this will say hello to someone</span>
 
-<span class="go">positional arguments:</span>
-<span class="go">  from         greetings are sent from these people (type: str)</span>
-
 <span class="go">options:</span>
 <span class="go">  -h, --help   show this help message and exit</span>
-<span class="go">  -t, --to TO  is who this will greet (type: str, default: world)</span>
+<span class="go">  -f FROM      the sender of these greetings (type: str, default: me)</span>
+<span class="go">  -t, --to TO  the receiver of these greetings (type: str, default: world)</span>
 </code></pre></div>
 <h3 id="metavars">Metavars<a class="headerlink" href="#metavars" title="Permanent link">&para;</a></h3>
 <p>A metavar is what gets printed in the usage string to represent the user-provided value. More explanation for that
@@ -832,32 +832,30 @@ tuple length.</p>
 </sub></div>
 
 <div class="highlight"><pre><span></span><code><span class="nd">@arguably</span><span class="o">.</span><span class="n">command</span>
-<span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="o">*</span><span class="n">from_</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;world&quot;</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">from_</span><span class="o">=</span><span class="s2">&quot;me&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;world&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    this will say hello to someone</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        from_: greetings are sent from these people</span>
-<span class="sd">        name: [-t/--to] is {who} this will greet</span>
+<span class="sd">        from_: [-f/] the {sender} of these greetings</span>
+<span class="sd">        name: [-t/--to] the {receiver} of these greetings</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;From: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">from_</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;From: </span><span class="si">{</span><span class="n">from_</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>hello-7.py<span class="w"> </span>-h
-<span class="go">usage: hello-7.py [-h] [-t WHO] [from ...]</span>
+<div class="highlight"><pre><span></span><code><span class="gp">user@machine:~$ </span>python3<span class="w"> </span>etc/scripts/hello-7.py<span class="w"> </span>-h
+<span class="go">usage: hello-7.py [-h] [-f SENDER] [-t RECEIVER]</span>
 
 <span class="go">this will say hello to someone</span>
 
-<span class="go">positional arguments:</span>
-<span class="go">  from          greetings are sent from these people (type: str)</span>
-
 <span class="go">options:</span>
-<span class="go">  -h, --help    show this help message and exit</span>
-<span class="go">  -t, --to WHO  is who this will greet (type: str, default: world)</span>
+<span class="go">  -h, --help         show this help message and exit</span>
+<span class="go">  -f SENDER          the sender of these greetings (type: str, default: me)</span>
+<span class="go">  -t, --to RECEIVER  the receiver of these greetings (type: str, default: world)</span>
 </code></pre></div>
 <p>Compare the last line with how it was before:</p>
-<div class="highlight"><pre><span></span><code><span class="go">Before:  -t, --to TO   is who this will greet (type: str, default: world)</span>
-<span class="go">After:   -t, --to WHO  is who this will greet (type: str, default: world)</span>
+<div class="highlight"><pre><span></span><code><span class="go">Before:  -t, --to TO  the receiver of these greetings (type: str, default: world)</span>
+<span class="go">After:   -t, --to RECEIVER  the receiver of these greetings (type: str, default: world)</span>
 </code></pre></div>
 <h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
 <p><code>arguably</code> looks at all decorated functions and maps their arguments from Python to the CLI.</p>
@@ -897,7 +895,13 @@ tuple length.</p>
 </table>
 <p>Docstrings are used for command and argument help messages. They can also:</p>
 <ul>
-<li>Change the short (<code>-n</code>) and long name (<code>--name</code>) of an <code>--option</code> by prefixing its description with <code>[-n/--name]</code></li>
+<li>Change option names:<ul>
+<li>Set the short name with <code>[-n]</code></li>
+<li>Change the long name with <code>[--name]</code></li>
+<li>Set the short and long names with <code>[-n/--name]</code></li>
+<li>Set the short name and remove the long name with <code>[-n/]</code></li>
+</ul>
+</li>
 <li>Change the metavar of an argument to <code>SOMETHING</code> by wrapping a word in curly braces: <code>{something}</code></li>
 </ul>
 
