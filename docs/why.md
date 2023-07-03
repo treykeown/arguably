@@ -239,8 +239,6 @@ def show(
         verbose: [-v] Increase verbosity for debugging
         multiple: [-y/--yes] Show multiple files
     """
-    if ignore is None:
-        ignore =   # Mutable argument defaults are bad
     ...
 
 ...
