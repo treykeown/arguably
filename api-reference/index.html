@@ -1668,7 +1668,7 @@ in every other case.</p>
 
 
 <a href="#arguably.subtype" class="headerlink" title="Permanent link">&para;</a></h3>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">subtype</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">alias</span><span class="p">)</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">subtype</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">alias</span><span class="p">,</span> <span class="n">factory</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 
   <div class="doc doc-contents ">
@@ -1716,6 +1716,21 @@ any time an applicable arg is given a string starting with <code>foo,...</code><
           </td>
           <td>
               <em>required</em>
+          </td>
+        </tr>
+        <tr class="doc-section-item">
+          <td><code>factory</code></td>
+          <td>
+                <code>Callable | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>What should be called to actually build the subtype. This should only be needed if the default behavior
+doesn't work.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
           </td>
         </tr>
     </tbody>
