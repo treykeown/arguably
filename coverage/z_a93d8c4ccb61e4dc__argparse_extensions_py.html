@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Coverage for arguably/_argparse_extensions.py: 89%</title>
-    <link rel="icon" sizes="32x32" href="favicon_32.png">
-    <link rel="stylesheet" href="style.css" type="text/css">
-    <script type="text/javascript" src="coverage_html.js" defer></script>
+    <link rel="icon" sizes="32x32" href="favicon_32_cb_58284776.png">
+    <link rel="stylesheet" href="style_cb_8e611ae1.css" type="text/css">
+    <script src="coverage_html_cb_da166b87.js" defer></script>
 </head>
 <body class="pyfile">
 <header>
@@ -17,7 +17,7 @@
         <aside id="help_panel_wrapper">
             <input id="help_panel_state" type="checkbox">
             <label for="help_panel_state">
-                <img id="keyboard_icon" src="keybd_closed.png" alt="Show/hide keyboard shortcuts" />
+                <img id="keyboard_icon" src="keybd_closed_cb_ce680311.png" alt="Show/hide keyboard shortcuts">
             </label>
             <div id="help_panel">
                 <p class="legend">Shortcuts on this page</p>
@@ -60,22 +60,22 @@
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
-            <a id="prevFileLink" class="nav" href="d_a93d8c4ccb61e4dc___main___py.html">&#xab; prev</a> &nbsp; &nbsp;
+            <a id="prevFileLink" class="nav" href="z_a93d8c4ccb61e4dc___main___py.html">&#xab; prev</a> &nbsp; &nbsp;
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
-            <a id="nextFileLink" class="nav" href="d_a93d8c4ccb61e4dc__commands_py.html">&#xbb; next</a>
+            <a id="nextFileLink" class="nav" href="z_a93d8c4ccb61e4dc__commands_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.2.7">coverage.py v7.2.7</a>,
-            created at 2023-07-03 15:17 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.5.1">coverage.py v7.5.1</a>,
+            created at 2024-05-10 00:34 +0000
         </p>
         <aside class="hidden">
-            <button type="button" class="button_next_chunk" data-shortcut="j"/>
-            <button type="button" class="button_prev_chunk" data-shortcut="k"/>
-            <button type="button" class="button_top_of_page" data-shortcut="0"/>
-            <button type="button" class="button_first_chunk" data-shortcut="1"/>
-            <button type="button" class="button_prev_file" data-shortcut="["/>
-            <button type="button" class="button_next_file" data-shortcut="]"/>
-            <button type="button" class="button_to_index" data-shortcut="u"/>
-            <button type="button" class="button_show_hide_help" data-shortcut="?"/>
+            <button type="button" class="button_next_chunk" data-shortcut="j"></button>
+            <button type="button" class="button_prev_chunk" data-shortcut="k"></button>
+            <button type="button" class="button_top_of_page" data-shortcut="0"></button>
+            <button type="button" class="button_first_chunk" data-shortcut="1"></button>
+            <button type="button" class="button_prev_file" data-shortcut="["></button>
+            <button type="button" class="button_next_file" data-shortcut="]"></button>
+            <button type="button" class="button_to_index" data-shortcut="u"></button>
+            <button type="button" class="button_show_hide_help" data-shortcut="?"></button>
         </aside>
     </div>
 </header>
@@ -312,14 +312,14 @@
     <p class="run"><span class="n"><a id="t230" href="#t230">230</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">_is_builder</span> <span class="op">=</span> <span class="nam">any</span><span class="op">(</span><span class="nam">isinstance</span><span class="op">(</span><span class="nam">m</span><span class="op">,</span> <span class="nam">mods</span><span class="op">.</span><span class="nam">BuilderModifier</span><span class="op">)</span> <span class="key">for</span> <span class="nam">m</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_command_arg</span><span class="op">.</span><span class="nam">modifiers</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t231" href="#t231">231</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t232" href="#t232">232</a></span><span class="t">        <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_is_tuple</span> <span class="key">and</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_is_builder</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t233" href="#t233">233</a></span><span class="t">            <span class="key">raise</span> <span class="nam">util</span><span class="op">.</span><span class="nam">ArguablyException</span><span class="op">(</span><span class="str">f"{'/'.join(self.option_strings)} cannot use both tuple and builder"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t233" href="#t233">233</a></span><span class="t">            <span class="key">raise</span> <span class="nam">util</span><span class="op">.</span><span class="nam">ArguablyException</span><span class="op">(</span><span class="fst">f"</span><span class="op">{</span><span class="str">'/'</span><span class="op">.</span><span class="nam">join</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">option_strings</span><span class="op">)</span><span class="op">}</span><span class="fst"> cannot use both tuple and builder</span><span class="fst">"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t234" href="#t234">234</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t235" href="#t235">235</a></span><span class="t">        <span class="com"># Validate that type is callable</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t236" href="#t236">236</a></span><span class="t">        <span class="nam">check_type_list</span> <span class="op">=</span> <span class="nam">self</span><span class="op">.</span><span class="nam">type</span> <span class="key">if</span> <span class="nam">isinstance</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">type</span><span class="op">,</span> <span class="nam">list</span><span class="op">)</span> <span class="key">else</span> <span class="op">[</span><span class="nam">self</span><span class="op">.</span><span class="nam">type</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t237" href="#t237">237</a></span><span class="t">        <span class="key">for</span> <span class="nam">type_</span> <span class="key">in</span> <span class="nam">check_type_list</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t238" href="#t238">238</a></span><span class="t">            <span class="key">if</span> <span class="key">not</span> <span class="nam">callable</span><span class="op">(</span><span class="nam">type_</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t239" href="#t239">239</a></span><span class="t">                <span class="nam">type_name</span> <span class="op">=</span> <span class="str">f"{self.type}"</span> <span class="key">if</span> <span class="key">not</span> <span class="nam">isinstance</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">type</span><span class="op">,</span> <span class="nam">list</span><span class="op">)</span> <span class="key">else</span> <span class="str">f"{type_} in {self.type}"</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t240" href="#t240">240</a></span><span class="t">                <span class="key">raise</span> <span class="nam">util</span><span class="op">.</span><span class="nam">ArguablyException</span><span class="op">(</span><span class="str">f"{'/'.join(self.option_strings)} type {type_name} is not callable"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t239" href="#t239">239</a></span><span class="t">                <span class="nam">type_name</span> <span class="op">=</span> <span class="fst">f"</span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">type</span><span class="op">}</span><span class="fst">"</span> <span class="key">if</span> <span class="key">not</span> <span class="nam">isinstance</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">type</span><span class="op">,</span> <span class="nam">list</span><span class="op">)</span> <span class="key">else</span> <span class="fst">f"</span><span class="op">{</span><span class="nam">type_</span><span class="op">}</span><span class="fst"> in </span><span class="op">{</span><span class="nam">self</span><span class="op">.</span><span class="nam">type</span><span class="op">}</span><span class="fst">"</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t240" href="#t240">240</a></span><span class="t">                <span class="key">raise</span> <span class="nam">util</span><span class="op">.</span><span class="nam">ArguablyException</span><span class="op">(</span><span class="fst">f"</span><span class="op">{</span><span class="str">'/'</span><span class="op">.</span><span class="nam">join</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">option_strings</span><span class="op">)</span><span class="op">}</span><span class="fst"> type </span><span class="op">{</span><span class="nam">type_name</span><span class="op">}</span><span class="fst"> is not callable</span><span class="fst">"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t241" href="#t241">241</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t242" href="#t242">242</a></span><span class="t">        <span class="com"># Keep track of the real type and real nargs, lie to argparse to take in a single (comma-separated) string</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t243" href="#t243">243</a></span><span class="t">        <span class="key">assert</span> <span class="nam">isinstance</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">type</span><span class="op">,</span> <span class="nam">type</span><span class="op">)</span> <span class="key">or</span> <span class="nam">isinstance</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">type</span><span class="op">,</span> <span class="nam">list</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -346,7 +346,7 @@
     <p class="run"><span class="n"><a id="t264" href="#t264">264</a></span><span class="t">            <span class="key">if</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_is_tuple</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t265" href="#t265">265</a></span><span class="t">                <span class="key">assert</span> <span class="nam">isinstance</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">_real_type</span><span class="op">,</span> <span class="nam">list</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t266" href="#t266">266</a></span><span class="t">                <span class="key">if</span> <span class="nam">len</span><span class="op">(</span><span class="nam">split_value_str</span><span class="op">)</span> <span class="op">!=</span> <span class="nam">len</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">_real_type</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="mis show_mis"><span class="n"><a id="t267" href="#t267">267</a></span><span class="t">                    <span class="key">raise</span> <span class="nam">argparse</span><span class="op">.</span><span class="nam">ArgumentError</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="str">f"expected {len(self._real_type)} values"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p class="mis show_mis"><span class="n"><a id="t267" href="#t267">267</a></span><span class="t">                    <span class="key">raise</span> <span class="nam">argparse</span><span class="op">.</span><span class="nam">ArgumentError</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="fst">f"</span><span class="fst">expected </span><span class="op">{</span><span class="nam">len</span><span class="op">(</span><span class="nam">self</span><span class="op">.</span><span class="nam">_real_type</span><span class="op">)</span><span class="op">}</span><span class="fst"> values</span><span class="fst">"</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t268" href="#t268">268</a></span><span class="t">                <span class="nam">value</span> <span class="op">=</span> <span class="nam">tuple</span><span class="op">(</span><span class="nam">type_</span><span class="op">(</span><span class="nam">str_</span><span class="op">)</span> <span class="key">for</span> <span class="nam">str_</span><span class="op">,</span> <span class="nam">type_</span> <span class="key">in</span> <span class="nam">zip</span><span class="op">(</span><span class="nam">split_value_str</span><span class="op">,</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_real_type</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t269" href="#t269">269</a></span><span class="t">                <span class="nam">values</span><span class="op">.</span><span class="nam">append</span><span class="op">(</span><span class="nam">value</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t270" href="#t270">270</a></span><span class="t">            <span class="key">elif</span> <span class="nam">self</span><span class="op">.</span><span class="nam">_is_builder</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -391,7 +391,7 @@
     <p class="run"><span class="n"><a id="t309" href="#t309">309</a></span><span class="t">            <span class="nam">key</span><span class="op">,</span> <span class="nam">eq</span><span class="op">,</span> <span class="nam">value</span> <span class="op">=</span> <span class="nam">kwarg_str</span><span class="op">.</span><span class="nam">partition</span><span class="op">(</span><span class="str">"="</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t310" href="#t310">310</a></span><span class="t">            <span class="key">if</span> <span class="nam">len</span><span class="op">(</span><span class="nam">eq</span><span class="op">)</span> <span class="op">==</span> <span class="num">0</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t311" href="#t311">311</a></span><span class="t">                <span class="key">raise</span> <span class="nam">argparse</span><span class="op">.</span><span class="nam">ArgumentError</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
-    <p class="pln"><span class="n"><a id="t312" href="#t312">312</a></span><span class="t">                    <span class="nam">self</span><span class="op">,</span> <span class="str">f"type arguments should be of form key=value, {value} does not match"</span>&nbsp;</span><span class="r"></span></p>
+    <p class="pln"><span class="n"><a id="t312" href="#t312">312</a></span><span class="t">                    <span class="nam">self</span><span class="op">,</span> <span class="fst">f"</span><span class="fst">type arguments should be of form key=value, </span><span class="op">{</span><span class="nam">value</span><span class="op">}</span><span class="fst"> does not match</span><span class="fst">"</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t313" href="#t313">313</a></span><span class="t">                <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t314" href="#t314">314</a></span><span class="t">            <span class="key">if</span> <span class="nam">key</span> <span class="key">in</span> <span class="nam">kwargs</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="mis show_mis"><span class="n"><a id="t315" href="#t315">315</a></span><span class="t">                <span class="key">if</span> <span class="key">not</span> <span class="nam">isinstance</span><span class="op">(</span><span class="nam">kwargs</span><span class="op">[</span><span class="nam">key</span><span class="op">]</span><span class="op">,</span> <span class="nam">list</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -428,12 +428,12 @@
 <footer>
     <div class="content">
         <p>
-            <a id="prevFileLink" class="nav" href="d_a93d8c4ccb61e4dc___main___py.html">&#xab; prev</a> &nbsp; &nbsp;
-            <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
-            <a id="nextFileLink" class="nav" href="d_a93d8c4ccb61e4dc__commands_py.html">&#xbb; next</a>
+            <a class="nav" href="z_a93d8c4ccb61e4dc___main___py.html">&#xab; prev</a> &nbsp; &nbsp;
+            <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
+            <a class="nav" href="z_a93d8c4ccb61e4dc__commands_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.2.7">coverage.py v7.2.7</a>,
-            created at 2023-07-03 15:17 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.5.1">coverage.py v7.5.1</a>,
+            created at 2024-05-10 00:34 +0000
         </p>
     </div>
 </footer>
