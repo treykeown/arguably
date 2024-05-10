@@ -20,11 +20,7 @@ from typing import Callable, cast, Any, Union, Optional, List, Dict, Type, Tuple
 
 from docstring_parser import parse as docparse
 
-# Annotated is 3.9 and up
-if sys.version_info >= (3, 9):
-    from typing import Annotated, get_type_hints, get_args, get_origin  # noqa
-else:  # pragma: no cover
-    from typing_extensions import Annotated, get_type_hints, get_args, get_origin  # noqa
+from typing import Annotated, get_type_hints, get_args, get_origin  # noqa
 
 # UnionType is the new type for the `A | B` type syntax, which is 3.10 and up
 if sys.version_info >= (3, 10):

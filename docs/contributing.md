@@ -55,17 +55,17 @@ If you want to invoke them manually, from the project root directory:
 ### Testing
 
 Originally, tests were only conducted through directly running `pytest`. Now, in order to support multiple Python
-versions, `nox` is used to automatically test Python 3.8 through 3.11. Running all the tests for all versions takes a
+versions, `nox` is used to automatically test Python 3.9 through 3.12. Running all the tests for all versions takes a
 bit of time, so during normal development I directly run `pytest` and only run `nox` at the very end, before pushing. To
 invoke each, from the project root directory:
 
 * `pytest test --cov arguably --cov-report html` (will put a coverage report in the `htmlcov/` directory)
 * `nox` (automatically runs `noxfile.py`)
 
-`nox` will require extra setup. You'll need to install Python versions 3.8 through 3.11 using `pyenv`:
+`nox` will require extra setup. You'll need to install Python versions 3.9 through 3.12 using `pyenv`:
 
-* `pyenv install 3.11 3.10 3.9 3.8`
-* `pyenv global 3.11 3.10 3.9 3.8`
+* `pyenv install 3.12 3.11 3.10 3.9`
+* `pyenv global 3.12 3.11 3.10 3.9`
 
 ### Building Docs
 

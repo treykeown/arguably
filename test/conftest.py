@@ -15,11 +15,7 @@ import pytest
 import arguably
 from . import MANUAL, Permissions, PermissionsAlt, HiBye
 
-# Annotated is 3.9 and up
-if sys.version_info >= (3, 9):
-    from typing import Annotated
-else:
-    from typing_extensions import Annotated
+from typing_extensions import Annotated
 
 
 ########################################################################################################################

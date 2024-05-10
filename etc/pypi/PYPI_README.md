@@ -140,10 +140,9 @@ Install using `pip install arguably`. If you want to install using `conda`, plea
 
 ## Dependencies
 
-All of `arguably` is built on top of `argparse`. It has two dependencies:
+All of `arguably` is built on top of `argparse`. It has one dependency:
 
 * `docstring-parser` for parsing function docstrings
-* `typing-extensions` for `Annotated[]` support in Python 3.8 (only needed for that version)
 
 ## Contributing
 

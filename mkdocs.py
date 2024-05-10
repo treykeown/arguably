@@ -27,16 +27,11 @@ import inspect
 import os
 import shutil
 import subprocess
-import sys
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Tuple, Iterator, List
 
-# Annotated is 3.9 and up
-if sys.version_info >= (3, 9):
-    from typing import Annotated
-else:
-    from typing_extensions import Annotated
+from typing import Annotated
 
 import arguably
 
