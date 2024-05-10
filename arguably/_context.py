@@ -938,6 +938,7 @@ def subtype(
     *,
     # Arguments below are passed through to `SubtypeDecoratorInfo`
     alias: str,
+    factory: Callable | None = None,
 ) -> Union[Callable[[type], type], type]:
     """
     Mark a decorated class as a subtype that should be buildable for a parameter using arg.builder(). The alias
@@ -947,6 +948,8 @@ def subtype(
         cls: The target class.
         alias: An alias for this class. For example, `@arguably.subtype(alias="foo")` would cause this class to be built
             any time an applicable arg is given a string starting with `foo,...`
+        factory: What should be called to actually build the subtype. This should only be needed if the default behavior
+            doesn't work.
 
     Returns:
         If called with parens `@arguably.subtype(...)`, returns the decorated class. If called without parens
@@ -990,7 +993,7 @@ def subtype(
             raise ArguablyException(
                 f"Decorated value {cls_} is not a type, which is required for `@arguably.subtype()`"
             )
-        context.add_subtype(type_=cls_, alias=alias)
+        context.add_subtype(type_=cls_, alias=alias, factory=factory)
         return cls_
 
     # Handle being called as either @arguably.subtype or @arguably.subtype()

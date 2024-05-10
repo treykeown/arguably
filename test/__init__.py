@@ -34,7 +34,12 @@ def run_cli_and_manual(
         arguably_kwargs = dict()
 
     if is_async:
-        asyncio.get_event_loop().run_until_complete(func(*args, **kwargs))
+        try:
+            loop = asyncio.get_running_loop()
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(func(*args, **kwargs))
     else:
         func(*args, **kwargs)
     manual = get_and_clear_io(iobuf)
