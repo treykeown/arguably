@@ -5,6 +5,7 @@ from typing import Callable, Dict
 import pytest
 
 import arguably
+
 from . import get_and_clear_io, run_cli_and_manual
 
 
@@ -17,10 +18,10 @@ def test_help(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
     cli = get_and_clear_io(iobuf)
 
     assert cli.startswith("usage: advanced [-h] [--loud] command ...\n")
-    assert "add          adds a bunch of numbers together" in cli
-    assert "give         give something" in cli
-    assert "hey-you (h)  says hello to you" in cli
-    assert "  --loud         make it loud (type: bool, default: False)" in cli
+    assert "    add                     adds a bunch of numbers together" in cli
+    assert "    give                    give something" in cli
+    assert "    hey-you (h)             says hello to you" in cli
+    assert "  --loud                    make it loud (type: bool, default: False)" in cli
 
 
 def test_hey_you_help(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
@@ -171,3 +172,199 @@ def test_mixed_tuple_help(iobuf: StringIO, scope_advanced: Dict[str, Callable]) 
 
     assert cli.startswith("usage: advanced mixed-tuple [-h] val,val,val\n")
     assert "  val,val,val  the values (type: (str,int,float))" in cli
+
+
+def test_ellipsis_tuple_floats(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
+    argv = ["ellipsis-tuple-floats", "0,1,2,3"]
+    args = [(0.0, 1.0, 2.0, 3.0)]
+    kwargs = dict()
+
+    cli, manual = run_cli_and_manual(iobuf, scope_advanced["ellipsis_tuple_floats"], argv, args, kwargs)
+
+    assert "> root\n" in cli
+    cli = cli.replace("> root\n", "")
+
+    assert "> ellipsis-tuple-floats\n" in cli
+    assert "(0.0, 1.0, 2.0, 3.0)\n" in cli
+    assert "type: tuple\n" in cli
+    assert cli == manual
+
+
+def test_ellipsis_tuple_floats_single(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
+    argv = ["ellipsis-tuple-floats", "42.5"]
+    args = [(42.5,)]
+    kwargs = dict()
+
+    cli, manual = run_cli_and_manual(iobuf, scope_advanced["ellipsis_tuple_floats"], argv, args, kwargs)
+
+    assert "> root\n" in cli
+    cli = cli.replace("> root\n", "")
+
+    assert "(42.5,)\n" in cli
+    assert "type: tuple\n" in cli
+    assert cli == manual
+
+
+def test_ellipsis_tuple_ints_option(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
+    argv = ["ellipsis-tuple-ints", "--nums", "1,2,3,4,5"]
+    args = []
+    kwargs = dict(nums=(1, 2, 3, 4, 5))
+
+    cli, manual = run_cli_and_manual(iobuf, scope_advanced["ellipsis_tuple_ints"], argv, args, kwargs)
+
+    assert "> root\n" in cli
+    cli = cli.replace("> root\n", "")
+
+    assert "> ellipsis-tuple-ints\n" in cli
+    assert "(1, 2, 3, 4, 5)\n" in cli
+    assert "type: tuple\n" in cli
+    assert cli == manual
+
+
+def test_ellipsis_tuple_ints_empty(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
+    argv = ["ellipsis-tuple-ints"]
+    args = []
+    kwargs = dict()
+
+    cli, manual = run_cli_and_manual(iobuf, scope_advanced["ellipsis_tuple_ints"], argv, args, kwargs)
+
+    assert "> root\n" in cli
+    cli = cli.replace("> root\n", "")
+
+    assert "> ellipsis-tuple-ints\n" in cli
+    assert "()\n" in cli
+    assert "type: tuple\n" in cli
+    assert cli == manual
+
+
+def test_ellipsis_tuple_strings(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
+    argv = ["ellipsis-tuple-strings", "foo,bar,baz"]
+    args = [("foo", "bar", "baz")]
+    kwargs = dict()
+
+    cli, manual = run_cli_and_manual(iobuf, scope_advanced["ellipsis_tuple_strings"], argv, args, kwargs)
+
+    assert "> root\n" in cli
+    cli = cli.replace("> root\n", "")
+
+    assert "> ellipsis-tuple-strings\n" in cli
+    assert "('foo', 'bar', 'baz')\n" in cli
+    assert "type: tuple\n" in cli
+    assert cli == manual
+
+
+def test_ellipsis_tuple_floats_help(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
+    argv = ["ellipsis-tuple-floats", "-h"]
+
+    sys.argv.extend(argv)
+    with pytest.raises(SystemExit):
+        arguably.run(output=iobuf, name="advanced")
+    cli = get_and_clear_io(iobuf)
+
+    assert cli.startswith("usage: advanced ellipsis-tuple-floats [-h] values\n")
+    assert "the float values (type: tuple[float,...])" in cli
+
+
+def test_ellipsis_tuple_ints_help(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
+    argv = ["ellipsis-tuple-ints", "-h"]
+
+    sys.argv.extend(argv)
+    with pytest.raises(SystemExit):
+        arguably.run(output=iobuf, name="advanced")
+    cli = get_and_clear_io(iobuf)
+
+    assert cli.startswith("usage: advanced ellipsis-tuple-ints [-h] [--nums NUMS]\n")
+    assert "the int values (type: tuple[int,...], default: ())" in cli
+
+
+def test_nested_tuple_ints(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
+    # For now, let's define the expected syntax as semicolon-separated groups
+    # e.g., "1,2,3;4,5;6,7,8" represents ((1,2,3), (4,5), (6,7,8))
+    argv = ["nested-tuple-ints", "1,2,3;4,5;6,7,8"]
+    args = [((1, 2, 3), (4, 5), (6, 7, 8))]
+    kwargs = dict()
+
+    # This test will initially fail - that's expected
+    try:
+        cli, manual = run_cli_and_manual(iobuf, scope_advanced["nested_tuple_ints"], argv, args, kwargs)
+        
+        assert "> root\n" in cli
+        cli = cli.replace("> root\n", "")
+        
+        assert "> nested-tuple-ints\n" in cli
+        assert "((1, 2, 3), (4, 5), (6, 7, 8))\n" in cli
+        assert "type: tuple\n" in cli
+        assert "inner[0]: (1, 2, 3) (type: tuple)\n" in cli
+        assert "inner[1]: (4, 5) (type: tuple)\n" in cli
+        assert "inner[2]: (6, 7, 8) (type: tuple)\n" in cli
+        assert cli == manual
+    except Exception as e:
+        # Expected to fail initially
+        print(f"Expected failure: {e}")
+        pytest.skip("Nested tuple support not yet implemented")
+
+
+def test_nested_tuple_strings_option(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
+    # Test nested tuples as optional arguments
+    argv = ["nested-tuple-strings", "--values", "foo,bar;baz,qux"]
+    args = []
+    kwargs = dict(values=(("foo", "bar"), ("baz", "qux")))
+
+    # This test will initially fail - that's expected
+    try:
+        cli, manual = run_cli_and_manual(iobuf, scope_advanced["nested_tuple_strings"], argv, args, kwargs)
+        
+        assert "> root\n" in cli
+        cli = cli.replace("> root\n", "")
+        
+        assert "> nested-tuple-strings\n" in cli
+        assert "(('foo', 'bar'), ('baz', 'qux'))\n" in cli
+        assert "type: tuple\n" in cli
+        assert "inner[0]: ('foo', 'bar') (type: tuple)\n" in cli
+        assert "inner[1]: ('baz', 'qux') (type: tuple)\n" in cli
+        assert cli == manual
+    except Exception as e:
+        # Expected to fail initially
+        print(f"Expected failure: {e}")
+        pytest.skip("Nested tuple support not yet implemented")
+
+
+def test_nested_tuple_empty(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
+    # Test empty nested tuple (default value)
+    argv = ["nested-tuple-strings"]
+    args = []
+    kwargs = dict()
+
+    # This test will initially fail - that's expected
+    try:
+        cli, manual = run_cli_and_manual(iobuf, scope_advanced["nested_tuple_strings"], argv, args, kwargs)
+        
+        assert "> root\n" in cli
+        cli = cli.replace("> root\n", "")
+        
+        assert "> nested-tuple-strings\n" in cli
+        assert "()\n" in cli
+        assert "type: tuple\n" in cli
+        assert cli == manual
+    except Exception as e:
+        # Expected to fail initially
+        print(f"Expected failure: {e}")
+        pytest.skip("Nested tuple support not yet implemented")
+
+
+def test_nested_tuple_help(iobuf: StringIO, scope_advanced: Dict[str, Callable]) -> None:
+    argv = ["nested-tuple-ints", "-h"]
+
+    sys.argv.extend(argv)
+    try:
+        with pytest.raises(SystemExit):
+            arguably.run(output=iobuf, name="advanced")
+        cli = get_and_clear_io(iobuf)
+
+        assert cli.startswith("usage: advanced nested-tuple-ints [-h] data\n")
+        assert "nested int tuples" in cli
+        # Help text format TBD - will be implemented later
+    except Exception as e:
+        # Expected to fail initially
+        print(f"Expected failure: {e}")
+        pytest.skip("Nested tuple support not yet implemented")

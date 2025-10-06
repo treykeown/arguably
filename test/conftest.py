@@ -217,6 +217,70 @@ def scope_advanced(iobuf: StringIO) -> Dict[str, Callable]:
         iobuf.write(f"{repr(val[0])}, {repr(val[1])}, {repr(val[2])}\n")
 
     @arguably.command
+    def ellipsis_tuple_floats(values: tuple[float, ...]) -> None:
+        """
+        ellipsis tuple of floats
+        :param values: the float values
+        """
+        if not MANUAL:
+            assert arguably.is_target()
+        iobuf.write("> ellipsis-tuple-floats\n")
+        iobuf.write(f"{values}\n")
+        iobuf.write(f"type: {type(values).__name__}\n")
+
+    @arguably.command
+    def ellipsis_tuple_ints(*, nums: tuple[int, ...] = ()) -> None:
+        """
+        ellipsis tuple of ints as option
+        :param nums: the int values
+        """
+        if not MANUAL:
+            assert arguably.is_target()
+        iobuf.write("> ellipsis-tuple-ints\n")
+        iobuf.write(f"{nums}\n")
+        iobuf.write(f"type: {type(nums).__name__}\n")
+
+    @arguably.command
+    def ellipsis_tuple_strings(values: tuple[str, ...]) -> None:
+        """
+        ellipsis tuple of strings
+        :param values: the string values
+        """
+        if not MANUAL:
+            assert arguably.is_target()
+        iobuf.write("> ellipsis-tuple-strings\n")
+        iobuf.write(f"{values}\n")
+        iobuf.write(f"type: {type(values).__name__}\n")
+
+    @arguably.command
+    def nested_tuple_ints(data: tuple[tuple[int, ...], ...]) -> None:
+        """
+        nested tuple of ints
+        :param data: nested int tuples
+        """
+        if not MANUAL:
+            assert arguably.is_target()
+        iobuf.write("> nested-tuple-ints\n")
+        iobuf.write(f"{data}\n")
+        iobuf.write(f"type: {type(data).__name__}\n")
+        for i, inner_tuple in enumerate(data):
+            iobuf.write(f"inner[{i}]: {inner_tuple} (type: {type(inner_tuple).__name__})\n")
+
+    @arguably.command
+    def nested_tuple_strings(*, values: tuple[tuple[str, ...], ...] = ()) -> None:
+        """
+        nested tuple of strings as option
+        :param values: nested string tuples
+        """
+        if not MANUAL:
+            assert arguably.is_target()
+        iobuf.write("> nested-tuple-strings\n")
+        iobuf.write(f"{values}\n")
+        iobuf.write(f"type: {type(values).__name__}\n")
+        for i, inner_tuple in enumerate(values):
+            iobuf.write(f"inner[{i}]: {inner_tuple} (type: {type(inner_tuple).__name__})\n")
+
+    @arguably.command
     def give(
         *,
         slowly: bool = False,

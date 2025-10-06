@@ -5,6 +5,7 @@ from typing import Callable, Dict
 import pytest
 
 import arguably
+
 from . import get_and_clear_io
 
 
@@ -69,6 +70,19 @@ def test_raw_tuple(iobuf: StringIO) -> None:
 
         @arguably.command
         def foo(a: tuple):
+            pass
+
+        arguably.run()
+
+
+def test_target3_tuple_method(iobuf: StringIO) -> None:
+    with pytest.raises(
+        arguably.ArguablyException,
+        match="Function argument `a` in `tuple-method` is a tuple with an unsupported union type: int | None",
+    ):
+
+        @arguably.command
+        def tuple_method(a: tuple[str, int | None]):
             pass
 
         arguably.run()

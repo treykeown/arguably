@@ -5,7 +5,7 @@ import enum
 import inspect
 import re
 from dataclasses import dataclass, field
-from typing import Callable, Any, Union, Optional, List, Dict, Tuple, cast, Set
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Union, cast
 
 from docstring_parser import parse as docparse
 
@@ -106,7 +106,7 @@ class CommandDecoratorInfo:
                 ds_matches = [ds_p for ds_p in docs.params if ds_p.arg_name.lstrip("*") == param.name]
                 if len(ds_matches) > 1:
                     raise util.ArguablyException(
-                        f"Function argument `{param.name}` in " f"`{processed_name}` has multiple docstring entries."
+                        f"Function argument `{param.name}` in `{processed_name}` has multiple docstring entries."
                     )
                 if len(ds_matches) == 1:
                     ds_info = ds_matches[0]
@@ -266,12 +266,12 @@ class CommandArg:
           * SomeType                    ->  value_type=SomeType, modifiers=[]
           * int | None                  ->  value_type=int, modifiers=[]
           * Tuple[float, float]         ->  value_type=type(None), modifiers=[_TupleModifier([float, float])]
+          * tuple[float, ...]           ->  value_type=float, modifiers=[_EllipsisTupleModifier(float)]
           * List[str]                   ->  value_type=str, modifiers=[_ListModifier()]
           * Annotated[int, arg.count()] ->  value_type=int, modifiers=[_CountedModifier()]
 
         Things that will cause an exception:
-          * Parameterized type other than a Optional[] or Tuple[]
-          * Flexible-length Tuple[SomeType, ...]
+          * Parameterized type other than Optional[], List[], Tuple[], or tuple[..., ...]
           * Parameter lacking an annotation
         """
 
@@ -334,12 +334,33 @@ class CommandArg:
                     f"type of its items, which arguably requires."
                 )
             if type_args[-1] is Ellipsis:
-                raise util.ArguablyException(
-                    f"Function argument `{param.name}` in `{function_name}` is a variable-length tuple, which is "
-                    f"not supported."
-                )
-            value_type = type(None)
-            modifiers.append(mods.TupleModifier(list(type_args)))
+                # Handle variable-length tuple (e.g., tuple[float, ...])
+                if len(type_args) != 2:
+                    raise util.ArguablyException(
+                        f"Function argument `{param.name}` in `{function_name}` is a variable-length tuple with "
+                        f"invalid syntax. Expected tuple[Type, ...], got {value_type}"
+                    )
+                element_type = type_args[0]
+                # Check if element type is a union (not supported)
+                if isinstance(element_type, util.UnionType) or util.get_origin(element_type) is Union:
+                    raise util.ArguablyException(
+                        f"Function argument `{param.name}` in `{function_name}` is a variable-length tuple with an "
+                        f"unsupported union type: {element_type}"
+                    )
+                value_type = element_type
+                modifiers.append(mods.EllipsisTupleModifier(element_type))
+            else:
+                # Handle fixed-length tuple (e.g., tuple[int, int, int])
+                for type_arg in type_args:
+                    # unions in tuples are not supported
+                    if isinstance(type_arg, util.UnionType) or util.get_origin(type_arg) is Union:
+                        raise util.ArguablyException(
+                            f"Function argument `{param.name}` in `{function_name}` is a tuple with an unsupported "
+                            f"union type: {type_arg}"
+                        )
+
+                value_type = type(None)
+                modifiers.append(mods.TupleModifier(list(type_args)))
         elif origin is not None:
             if param.kind in [param.VAR_KEYWORD, param.VAR_POSITIONAL]:
                 raise util.ArguablyException(

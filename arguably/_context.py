@@ -5,23 +5,23 @@ import enum
 import inspect
 from contextlib import contextmanager
 from dataclasses import dataclass
-from typing import Any, TextIO, Union, Optional, List, Dict, Type, Tuple, Callable, Iterator, cast
+from typing import Any, Callable, Dict, Iterator, List, Optional, TextIO, Tuple, Type, Union, cast
 
-from ._argparse_extensions import HelpFormatter, FlagAction, ArgumentParser
-from ._commands import CommandDecoratorInfo, SubtypeDecoratorInfo, Command, CommandArg, InputMethod
-from ._modifiers import TupleModifier, ListModifier
+from ._argparse_extensions import ArgumentParser, FlagAction, HelpFormatter
+from ._commands import Command, CommandArg, CommandDecoratorInfo, InputMethod, SubtypeDecoratorInfo
+from ._modifiers import ListModifier, TupleModifier, EllipsisTupleModifier
 from ._util import (
-    logger,
-    log_args,
     ArguablyException,
-    normalize_name,
     NoDefault,
-    get_type_hints,
-    info_for_flags,
+    func_or_class_info,
     get_ancestors,
     get_parser_name,
+    get_type_hints,
+    info_for_flags,
+    log_args,
+    logger,
+    normalize_name,
     warn,
-    func_or_class_info,
 )
 
 
@@ -230,7 +230,7 @@ class _Context:
                     )
 
             # Validate `enum.Flag`
-            if issubclass(arg_.arg_value_type, enum.Flag):
+            if isinstance(arg_.arg_value_type, type) and issubclass(arg_.arg_value_type, enum.Flag):
                 if arg_.input_method.is_positional:
                     raise ArguablyException(
                         f"Function argument `{arg_.func_arg_name}` in `{cmd.name}` is both positional and an enum.Flag."
@@ -243,7 +243,7 @@ class _Context:
                     )
 
             # Validate `bool`
-            if issubclass(arg_.arg_value_type, bool):
+            if isinstance(arg_.arg_value_type, type) and issubclass(arg_.arg_value_type, bool):
                 if arg_.input_method is not InputMethod.OPTION or arg_.default is NoDefault:
                     raise ArguablyException(
                         f"Function argument `{arg_.func_arg_name}` in `{cmd.name}` is a `bool`. Boolean parameters "
@@ -257,7 +257,7 @@ class _Context:
 
         for arg_ in cmd.args:
             # Short-circuit, different path for enum.Flag. We add multiple options, one for each flag entry
-            if issubclass(arg_.arg_value_type, enum.Flag):
+            if isinstance(arg_.arg_value_type, type) and issubclass(arg_.arg_value_type, enum.Flag):
                 parser.set_defaults(**{arg_.cli_arg_name: arg_.default})
                 for entry in info_for_flags(arg_.cli_arg_name, arg_.arg_value_type):
                     argspec = log_args(
@@ -284,9 +284,13 @@ class _Context:
             if self._options.show_types:
                 list_modifiers = [m for m in arg_.modifiers if isinstance(m, ListModifier)]
                 tuple_modifiers = [m for m in arg_.modifiers if isinstance(m, TupleModifier)]
+                ellipsis_tuple_modifiers = [m for m in arg_.modifiers if isinstance(m, EllipsisTupleModifier)]
                 if len(tuple_modifiers) > 0:
                     assert len(tuple_modifiers) == 1
                     type_name = f"({','.join(t.__name__ for t in tuple_modifiers[0].tuple_arg)})"
+                elif len(ellipsis_tuple_modifiers) > 0:
+                    assert len(ellipsis_tuple_modifiers) == 1
+                    type_name = f"tuple[{ellipsis_tuple_modifiers[0].element_type.__name__},...]"
                 else:
                     type_name = arg_.arg_value_type.__name__
                 if len(list_modifiers) > 0:
@@ -323,7 +327,7 @@ class _Context:
                     add_arg_kwargs.update(metavar=tuple(arg_.metavars))
 
             # Possible choices `choices`?
-            if issubclass(arg_.arg_value_type, enum.Enum):
+            if isinstance(arg_.arg_value_type, type) and issubclass(arg_.arg_value_type, enum.Enum):
                 mapping = self.set_up_enum(arg_.arg_value_type)
                 add_arg_kwargs.update(choices=[n for n in mapping])
 
@@ -335,7 +339,7 @@ class _Context:
                 add_arg_kwargs.update(dest=arg_.func_arg_name)
 
             # `bool` should be flags
-            if issubclass(arg_.arg_value_type, bool):
+            if isinstance(arg_.arg_value_type, type) and issubclass(arg_.arg_value_type, bool):
                 # Use `store_true` or `store_false` for bools
                 add_arg_kwargs.update(action="store_true" if arg_.default is False else "store_false")
                 if "type" in add_arg_kwargs:
@@ -372,6 +376,66 @@ class _Context:
                 **add_arg_kwargs,
             )
             parser.add_argument(*argspec.args, **argspec.kwargs)
+
+    def _is_optional_type(self, type_hint: Any) -> bool:
+        """
+        Check if a type hint represents an Optional type (Union with None).
+        Returns True for types like Optional[List[str]], List[str] | None, etc.
+        """
+        if type_hint is None:
+            return False
+        
+        # Import here to avoid circular imports
+        from . import _util as util
+        
+        # Check for Union types (including | syntax in Python 3.10+)
+        if isinstance(type_hint, util.UnionType) or util.get_origin(type_hint) is Union:
+            args = util.get_args(type_hint)
+            # Check if None is one of the union members
+            return type(None) in args
+        
+        return False
+
+    def _apply_list_tuple_defaults(self, parsed_args: Dict[str, Any]) -> None:
+        """
+        Apply actual defaults for list/tuple arguments that have value None.
+        This is needed because we set default=None in argparse to avoid accumulating with defaults.
+        """
+        for cmd in self._commands.values():
+            # Get original type hints to check for Optional types
+            func = cmd.function.__init__ if isinstance(cmd.function, type) else cmd.function
+            try:
+                hints = util.get_type_hints(func, include_extras=True)
+            except NameError:
+                hints = {}
+            
+            # Fallback to __annotations__ if get_type_hints fails
+            if not hints:
+                hints = getattr(func, '__annotations__', {})
+            
+            for arg in cmd.args:
+                # Check if this argument has a list or tuple modifier
+                has_list_tuple_modifier = any(
+                    isinstance(m, (ListModifier, EllipsisTupleModifier)) for m in arg.modifiers
+                )
+                
+                if has_list_tuple_modifier and arg.func_arg_name in parsed_args:
+                    # If the value is None, we need to apply the default
+                    if parsed_args[arg.func_arg_name] is None:
+                        # Determine if it's a list or tuple for empty default
+                        is_tuple = any(isinstance(m, EllipsisTupleModifier) for m in arg.modifiers)
+                        empty_default = tuple() if is_tuple else list()
+                        
+                        if arg.default is not NoDefault and arg.default is not None:
+                            # Use the explicit non-None default (e.g., [2, 3, 5])
+                            parsed_args[arg.func_arg_name] = arg.default
+                        elif arg.default is None and self._is_optional_type(hints.get(arg.func_arg_name)):
+                            # If the default is None and the type annotation allows None, preserve None
+                            parsed_args[arg.func_arg_name] = None
+                        else:
+                            # For no default or non-Optional None default, use empty list/tuple
+                            # This maintains backward compatibility
+                            parsed_args[arg.func_arg_name] = empty_default
 
     def _build_subparser_tree(self, command_decorator_info: CommandDecoratorInfo) -> str:
         """Builds up the subparser tree for a given `_CommandDecoratorInfo`. Inserts dummy entries to `self._parsers`
@@ -686,6 +750,9 @@ class _Context:
 
         # Make the magic happen
         parsed_args = vars(root_parser.parse_args())
+
+        # Apply defaults for list/tuple arguments that weren't provided
+        self._apply_list_tuple_defaults(parsed_args)
 
         # Resolve the command that needs to be called
         if only_one_cmd:

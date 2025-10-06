@@ -75,7 +75,9 @@ class ListModifier(CommandArgModifier):
         if arg_.input_method is cmds.InputMethod.OPTIONAL_POSITIONAL:
             kwargs_dict.update(nargs="?")
         if arg_.input_method is not cmds.InputMethod.REQUIRED_POSITIONAL:
-            kwargs_dict.update(default=list())
+            # Set default to None so that we can detect first call and avoid accumulating with default
+            # The real default will be applied after parsing if the value is still None
+            kwargs_dict.update(default=None)
         if (arg_.default is util.NoDefault and arg_.input_method is cmds.InputMethod.OPTION) or RequiredModifier in [
             type(mod) for mod in arg_.modifiers
         ]:
@@ -93,6 +95,26 @@ class TupleModifier(CommandArgModifier):
         if arg_.metavars is None:
             kwargs_dict.update(metavar=",".join([arg_.cli_arg_name] * len(self.tuple_arg)))
         kwargs_dict.update(action=ap_ext.ListTupleBuilderAction, command_arg=arg_, type=self.tuple_arg)
+
+
+@dataclass(frozen=True)
+class EllipsisTupleModifier(CommandArgModifier):
+    """Sets up arguably variable-length tuple handling (e.g., tuple[float, ...])"""
+
+    element_type: type
+
+    def modify_arg_dict(self, command: cmds.Command, arg_: cmds.CommandArg, kwargs_dict: Dict[str, Any]) -> None:
+        if arg_.input_method is cmds.InputMethod.OPTIONAL_POSITIONAL:
+            kwargs_dict.update(nargs="?")
+        if arg_.input_method is not cmds.InputMethod.REQUIRED_POSITIONAL:
+            # Set default to None so that we can detect first call and avoid accumulating with default
+            # The real default will be applied after parsing if the value is still None
+            kwargs_dict.update(default=None)
+        if (arg_.default is util.NoDefault and arg_.input_method is cmds.InputMethod.OPTION) or RequiredModifier in [
+            type(mod) for mod in arg_.modifiers
+        ]:
+            kwargs_dict.update(required=True)
+        kwargs_dict.update(action=ap_ext.ListTupleBuilderAction, command_arg=arg_, type=self.element_type)
 
 
 @dataclass(frozen=True)
