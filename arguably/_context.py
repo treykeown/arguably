@@ -929,7 +929,7 @@ def command(
 
     # Handle being called as either @arguably.command or @arguably.command()
     # We have type: ignore due to https://github.com/python/mypy/issues/10740
-    return wrap if func is None else wrap(func)  # type: ignore[return-value]
+    return wrap if func is None else wrap(func)
 
 
 def subtype(
