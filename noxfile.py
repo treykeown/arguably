@@ -9,7 +9,7 @@ import nox
 nox.options.sessions = ["test"]
 
 
-@nox.session(python=["3.9", "3.10", "3.11", "3.12"])
+@nox.session(python=["3.9", "3.10", "3.11", "3.12", "3.13", "3.14", "3.15"])
 def test(session: nox.Session) -> None:
     session.run("poetry", "install", external=True)
     session.run("ruff", "check", ".")
