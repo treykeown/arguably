@@ -9,18 +9,21 @@ from typing import (
     cast,
     Any,
     TextIO,
-    IO,
     Sequence,
     Union,
     Optional,
     List,
     Dict,
     Tuple,
+    TYPE_CHECKING,
 )
 
 import arguably._context as ctx
 import arguably._modifiers as mods
 import arguably._util as util
+
+if TYPE_CHECKING:
+    from _typeshed import SupportsWrite
 
 
 def normalize_action_input(values: Union[str, Sequence[Any], None]) -> List[str]:
@@ -141,7 +144,7 @@ class ArgumentParser(argparse.ArgumentParser):
         super().__init__(*args, **kwargs)
         self._output = output
 
-    def _print_message(self, message: str, file: Optional[IO[str]] = None) -> None:
+    def _print_message(self, message: str, file: "Optional[SupportsWrite[str]]" = None) -> None:
         """Allows redirecting all prints"""
         if message:
             # argparse.ArgumentParser defaults to sys.stderr in this function, though most seems to go to stdout
