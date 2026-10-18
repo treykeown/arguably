@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import ast
-import asyncio
 import enum
 import functools
 import importlib.util
@@ -38,7 +37,7 @@ def is_async_callable(obj: Any) -> bool:
     """Checks if an object is an async callable - https://stackoverflow.com/a/72682939"""
     while isinstance(obj, functools.partial):
         obj = obj.func
-    return asyncio.iscoroutinefunction(obj) or (callable(obj) and asyncio.iscoroutinefunction(obj.__call__))
+    return inspect.iscoroutinefunction(obj) or (callable(obj) and inspect.iscoroutinefunction(obj.__call__))
 
 
 def camel_case_to_kebab_case(name: str) -> str:
@@ -405,11 +404,11 @@ def load_and_run_inner(file: Path, *args: str, debug: bool, no_warn: bool) -> Lo
 
     # Add all functions to arguably
     for function in functions:
-        try:
-            # Heuristic for determining what is close enough to a class or function
-            inspect.signature(function)
-            get_type_hints(function, include_extras=True)
-        except TypeError:
+        if (
+            not inspect.isclass(function)
+            and not inspect.ismethod(function)
+            and not inspect.isfunction(function)
+        ):
             continue
 
         try:
