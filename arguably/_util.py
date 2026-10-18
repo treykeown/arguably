@@ -404,11 +404,11 @@ def load_and_run_inner(file: Path, *args: str, debug: bool, no_warn: bool) -> Lo
 
     # Add all functions to arguably
     for function in functions:
-        try:
-            # Heuristic for determining what is close enough to a class or function
-            inspect.signature(function)
-            get_type_hints(function, include_extras=True)
-        except TypeError:
+        if (
+            not inspect.isclass(function)
+            and not inspect.ismethod(function)
+            and not inspect.isfunction(function)
+        ):
             continue
 
         try:
