@@ -55,7 +55,7 @@ If you want to invoke them manually, from the project root directory:
 ### Testing
 
 Originally, tests were only conducted through directly running `pytest`. Now, in order to support multiple Python
-versions, `nox` is used to automatically test Python 3.9 through 3.12. Running all the tests for all versions takes a
+versions, `nox` is used to automatically test Python 3.9 through 3.15. Running all the tests for all versions takes a
 bit of time, so during normal development I directly run `pytest` and only run `nox` at the very end, before pushing. To
 invoke each, from the project root directory:
 
@@ -64,8 +64,8 @@ invoke each, from the project root directory:
 
 `nox` will require extra setup. You'll need to install Python versions 3.9 through 3.12 using `pyenv`:
 
-* `pyenv install 3.12 3.11 3.10 3.9`
-* `pyenv global 3.12 3.11 3.10 3.9`
+* `pyenv install 3.15 3.14 3.13 3.12 3.11 3.10 3.9`
+* `pyenv global 3.15 3.14 3.13 3.12 3.11 3.10 3.9`
 
 ### Building Docs
 
